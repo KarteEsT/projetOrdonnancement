@@ -16,7 +16,6 @@
 
 Les bonnes manières avant de travailler
 
-        Il est toujours bon de rappeler les bases du workflow Git pour une collaboration efficace :
         Mettez vous dans le dossier corresponsant cd Logiciel-d-ordonnance-du-projet.
         
         Récupérer les dernières modif : Avant de commencer à travailler, exécutez git pull origin main (ou git pull origin <nom-de-la-branche-principale>)
