@@ -122,4 +122,5 @@ public class Graphe {
     public double calculerMargeTotale() {
         return 0.0;
     }
+    //FIN TEST HISTORIQUE GIT 
 }
