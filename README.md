@@ -32,3 +32,7 @@ Les bonnes manières avant de travailler
         
         Fusionner la Pull Request : Une fois approuvée, la Pull Request est fusionnée dans la branche principale.
         Récupérer les modifications fusionnées : Les autres membres de l'équipe doivent exécuter git pull origin main pour intégrer les changements.
+
+
+
+        -----------------------------------------------------------------------------------------------------------------------------------------------
