@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Graphe.java                                           14 mai 2025
  * IUT de Rodez, Info1 2024-2025 TP2, pas de copyright
@@ -122,5 +123,4 @@ public class Graphe {
     public double calculerMargeTotale() {
         return 0.0;
     }
-    //FIN TEST HISTORIQUE GIT 
 }
