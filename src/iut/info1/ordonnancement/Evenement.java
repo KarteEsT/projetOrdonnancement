@@ -5,8 +5,8 @@
 package iut.info1.ordonnancement;
 
 /**
- * Cette classe est utiliser pour créer des événements
- * utilisé en suite dans la classe Graphe
+ * Cette classe est utilisée pour créer des événements
+ * Utilisée ensuite dans la classe Graphe
  * @author Gabriel Robache
  * @author Gabriel Le Goff
  * @author Mael Massicard

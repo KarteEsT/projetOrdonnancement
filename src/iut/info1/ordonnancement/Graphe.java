@@ -1,9 +1,9 @@
-<<<<<<< HEAD
 /*
  * Graphe.java                                           14 mai 2025
  * IUT de Rodez, Info1 2024-2025 TP2, pas de copyright
  */
 package iut.info1.ordonnancement;
+
 
 /**
  * Représenter et gère un graphe PERT 
