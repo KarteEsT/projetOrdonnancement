@@ -51,14 +51,14 @@ public class ChargeurCSV {
     /**
      * Enregistre des données dans un fichier CSV avec des valeurs séparées par des points-virgules
      * @param cheminFichier le chemin vers le fichier à lire
-     * @param donnees une liste de lignes, où chaque ligne est un tableau de chaînes
+     * @param donnees une liste de lignes, où chaque ligne est un tableau de chaînes de caractères
      */
 	public static void lireCSV(String cheminFichier, ArrayList<String[]> donnees) {
 		try {
 			BufferedReader lecture = new BufferedReader(new FileReader(cheminFichier));
 			String ligne;
 			
-			// Lecture du fichier ligne par ligne
+			/* Lecture du fichier ligne par ligne */
 			while ((ligne = lecture.readLine()) != null) {
 				String[] valeurs = ligne.split(";");
 				donnees.add(valeurs);
@@ -78,12 +78,14 @@ public class ChargeurCSV {
 
         // Exemple de données qui vont être écrites dans le fichier CSV
         ArrayList<String[]> nouvellesDonnees = new ArrayList<>();
-        nouvellesDonnees.add(new String[] {"Nom", "Prenom", "Age"});
-        nouvellesDonnees.add(new String[] {"Durand", "Alice", "20"});
-        nouvellesDonnees.add(new String[] {"Martin", "Bob", "22"});
+        nouvellesDonnees.add(new String[] {"EtapePrecedente", "Tache", "EtapeSuivante"});
+        nouvellesDonnees.add(new String[] {"0", "a", "2"});
+        nouvellesDonnees.add(new String[] {"1", "c", "3"});
+        nouvellesDonnees.add(new String[] {"2", "j", "3"});
 
-        // Saisie du chemin d’écriture du fichier CSV
-        System.out.print("Entrez le chemin du fichier CSV dans lequel écrire les données : ");
+        /* Saisie du chemin d’écriture du fichier CSV */
+        System.out.print("Entrez le chemin du fichier CSV dans lequel écrire les données "
+        		           + "(les données présentes dans ce fichier seront écrasées) : ");
         String cheminEcriture = scanner.nextLine();
 
         ecrireCSV(cheminEcriture, nouvellesDonnees);
@@ -98,8 +100,8 @@ public class ChargeurCSV {
         System.out.println("Données lues :\n");
 		
         // Affichage des données lues
-        for (int nbLigne = 0; nbLigne < donneesLues.size(); nbLigne++) {
-			String[] ligne = donneesLues.get(nbLigne);
+        for (int nbValeurs = 0; nbValeurs < donneesLues.size(); nbValeurs++) {
+			String[] ligne = donneesLues.get(nbValeurs);
 			for (int i = 0; i < ligne.length; i++) {
 				System.out.print(ligne[i]);
 				if (i < ligne.length - 1) {
