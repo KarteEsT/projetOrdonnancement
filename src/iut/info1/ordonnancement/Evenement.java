@@ -65,7 +65,7 @@ public class Evenement {
 	}
 	
 	/** retourne la tâche au plus tard d'un événement */
-	public double getTacheAyPlusTard() {
+	public double getTacheAusPlusTard() {
 		return tacheAuPlusTard;
 	}
 	
@@ -79,13 +79,29 @@ public class Evenement {
 		return event_initial;
 	}
 	
-	public double getMargeTotale() {
-		//TODO
-		return 0.0; //STUB
+	public boolean estCritique() {
+		if (tacheAuPlusTot == tacheAuPlusTard) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
-	public boolean estCritique() {
-		//TODO 
-		return false; //STUB
+	@Override
+    public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Evenement))
+			return false;
+		Evenement evenement = (Evenement) o;
+		return id == evenement.id && Double.compare(evenement.tacheAuPlusTot, tacheAuPlusTot) == 0
+				&& Double.compare(evenement.tacheAuPlusTard, tacheAuPlusTard) == 0;
+	}
+	
+	@Override
+    public int hashCode() {
+		int result = Integer.hashCode(id);
+        result = 31 * result + Double.hashCode(tacheAuPlusTot);
+        result = 31 * result + Double.hashCode(tacheAuPlusTard);
+        return result;
 	}
 }
