@@ -4,7 +4,6 @@
  */
 package iut.info1.ordonnancement;
 
-
 /**
  * Représenter et gère un graphe PERT 
  * (Program Evaluation Review Technique).
@@ -97,30 +96,6 @@ public class Graphe {
      * @return date de fin de projet
      */
     public double calculerFinProjet() {
-        return 0.0;
-    }
-    
-    /**
-     * TODO commenter le rôle de cette méthode (SRP)
-     * @return le(s) chemin(s) critique(s)
-     */
-    public double calculerCheminCritique() {
-        return 0.0;
-    }
-
-    /**
-     * TODO commenter le rôle de cette méthode (SRP)
-     * @return la marge libre
-     */
-    public double calculerMargeLibre() {
-        return 0.0;
-    }
-    
-    /**
-     * TODO commenter le rôle de cette méthode (SRP)
-     * @return la marge totale
-     */
-    public double calculerMargeTotale() {
         return 0.0;
     }
 }
