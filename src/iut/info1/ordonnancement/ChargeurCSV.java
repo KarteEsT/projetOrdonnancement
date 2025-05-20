@@ -112,7 +112,7 @@ public class ChargeurCSV {
         lireCSV(cheminLecture, donneesLues);
         System.out.println("Données lues :\n");
 
-        // Affichage des données lues
+        // Affichage données lues
         for (int nbValeurs = 0; nbValeurs < donneesLues.size(); nbValeurs++) {
             String[] ligne = donneesLues.get(nbValeurs);
             for (int i = 0; i < ligne.length; i++) {
