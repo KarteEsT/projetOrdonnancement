@@ -6,7 +6,7 @@ package iut.info1.ordonnancement;
 
 /**
  * Cette classe est utilisée pour créer des événements
- * Utilisée ensuite dans la classe Graphe
+ * Les événements sont ensuite utilisées dans la classe Graphe
  * @author Gabriel Robache
  * @author Gabriel Le Goff
  * @author Mael Massicard
@@ -25,7 +25,7 @@ public class Evenement {
 	/** Tâche au plus tard d'un événement */
 	private double tacheAuPlusTard;
 	
-	/** Ensemble des événements prédécesseurs */
+	/** Ensemble des événements prédécesseurs de l'événement */
 	private Evenement[] evenementPredecesseur;
 	
 	/** 
@@ -34,7 +34,10 @@ public class Evenement {
 	 */
 	private Evenement event_initial;
 	
-	/** Constructeur par défaut */
+	/**
+	 * Constructeur par défaut
+	 * @param event_initial Evenement initial
+	 */
 	public Evenement(Evenement event_initial) {
 		this.event_initial = event_initial;
 	}
@@ -54,31 +57,53 @@ public class Evenement {
 		
 	}
 	
-	/** retourne l'identifiant d'un événement */
+	/** 
+	 * Retourne l'identifiant d'un événement 
+	 * @return id Identifiant de l'événement
+	 */
 	public int getId() {
 		return id;
 	}
 	
-	/** retourne la tache au plus tôt d'un événement */
+	/** 
+	 * Retourne la tache au plus tôt d'un événement 
+	 * @return tacheAuPlusTot Tâche au plus tôt d'un événement
+	 */
 	public double getTacheAuPlusTot() {
 		return tacheAuPlusTot;
 	}
 	
-	/** retourne la tâche au plus tard d'un événement */
+	/** 
+	 * Retourne la tâche au plus tard d'un événement 
+	 * @return tacheAuPlusTard Tâche au plus tard d'un événement
+	 */
 	public double getTacheAusPlusTard() {
 		return tacheAuPlusTard;
 	}
 	
-	/** retourne les événements prédécesseurs d'un événement */
+	/**
+	 * Retourne les événements prédécesseurs d'un événement 
+	 * @return evenementPredecesseur Ensemble des événements prédécesseurs
+	 */
 	public Evenement[] getEvenementPredecesseur() {
 		return evenementPredecesseur;
 	}
 	
-	/** retourne l'événement initial du graphe */
+	/**
+	 * Retourne l'événement initial du graphe 
+	 * @return event_initial Événement initial
+	 */
 	public Evenement getEvenementInitial() {
 		return event_initial;
 	}
 	
+	/**
+	 * Cette méthode permet de savoir si un événement est critique.
+	 * Un événement est critique si la tâche au plus tôt et la tâche au plus tard
+	 * sont égales.
+	 * @return true si l'événement est critique
+	 * @return false si l'événement n'est pas critique
+	 */
 	public boolean estCritique() {
 		if (tacheAuPlusTot == tacheAuPlusTard) {
 			return true;

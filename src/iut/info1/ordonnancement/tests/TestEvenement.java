@@ -81,6 +81,7 @@ class TestEvenement {
 	@Test
 	void testGetId() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
+		
 		assertEquals(1, Evenement1.getId());
 	}
 
@@ -90,6 +91,7 @@ class TestEvenement {
 	@Test
 	void testGetTacheAuPlusTot() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
+		
 		assertEquals(0.0, Evenement1.getTacheAuPlusTot());
 	}
 
@@ -99,6 +101,7 @@ class TestEvenement {
 	@Test
 	void testGetTacheAusPlusTard() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
+		
 		assertEquals(5.0, Evenement1.getTacheAusPlusTard());
 	}
 
@@ -109,6 +112,7 @@ class TestEvenement {
 	void testGetEvenementPredecesseur() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
 		Evenement Evenement2 = new Evenement(2, 1.0, 4.0, new Evenement[] { Evenement1 });
+		
 		assertArrayEquals(new Evenement[] { null }, Evenement1.getEvenementPredecesseur());
 		assertArrayEquals(new Evenement[] { Evenement1 }, Evenement2.getEvenementPredecesseur());
 	}
@@ -138,7 +142,7 @@ class TestEvenement {
 		assertFalse(Evenement3.estCritique());
 	}
 
-	   /**
+	/**
      * Test method for {@link iut.info1.ordonnancement.Evenement#equals(java.lang.Object)}.
      */
     @Test
