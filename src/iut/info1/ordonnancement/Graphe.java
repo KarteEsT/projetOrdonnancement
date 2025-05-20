@@ -39,7 +39,7 @@ public class Graphe {
      * @param taches composant le graphe
      * @param evenements composant le graphe
      */
-    public Graphe(String titre, String unite, Taches[] taches, 
+    public Graphe(String titre, String unite, Tache[] taches, 
                   Evenement[] evenements) {
         
         this.titre = titre;
@@ -70,15 +70,15 @@ public class Graphe {
     }
 
     /**
-     * @return nouvelle valeur de evenement
+     * @return nouvelle valeur de évènement
      */
     public Evenement[] getEvenement() {
         return evenement;
     }
     
     /**
-     * Calcule la date au plus tot de chaque événement
-     * @return date au plus tot
+     * Calcule la date au plus tôt de chaque événement
+     * @return date au plus tôt
      */
     public double calculerDatePlusTot() {
         return 0.0;
