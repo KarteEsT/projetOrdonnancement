@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import iut.info1.ordonnancement.Evenement;
+
 import iut.info1.ordonnancement.Tache;
 
 /**
@@ -24,6 +25,7 @@ import iut.info1.ordonnancement.Tache;
  * @author Sauvaire Léo
  * @author Massicard Maël
  */
+
 class TestEvenement {
 	
     /**
@@ -40,7 +42,7 @@ class TestEvenement {
         assertNotEquals(Evenement2.hashCode(), Evenement3.hashCode());
     }
 
-	/**
+    /**
      * Test method for {@link iut.info1.ordonnancement.Evenement#Evenement( int, double, double, Evenement[] )}.}
      */
     @Test
@@ -75,19 +77,19 @@ class TestEvenement {
 		assertEquals(new Evenement(0, 0.0, 0.0, new Evenement[] { null }), Evenement1.getEvenementInitial());
     }
 
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#getId()}.
-	 */
-	@Test
-	void testGetId() {
-		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
+    /**
+     * Test method for {@link iut.info1.ordonnancement.Evenement#getId()}.
+     */
+    @Test
+    final void testGetId() {
+	Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
 		
-		assertEquals(1, Evenement1.getId());
-	}
+	assertEquals(1, Evenement1.getId());
+    }
 
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#getTacheAuPlusTot()}.
-	 */
+    /**
+     * Test method for {@link iut.info1.ordonnancement.Evenement#getTacheAuPlusTot()}.
+     */
 	@Test
 	void testGetTacheAuPlusTot() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
