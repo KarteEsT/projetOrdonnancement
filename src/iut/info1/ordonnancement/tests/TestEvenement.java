@@ -26,7 +26,7 @@ import iut.info1.ordonnancement.Tache;
  */
 class TestEvenement {
 	
-	/**
+    /**
      * Test method for {@link iut.info1.ordonnancement.Evenement#hashCode()}.
      */
     @Test

@@ -102,7 +102,7 @@ public class Evenement {
 	 * Un événement est critique si la tâche au plus tôt et la tâche au plus tard
 	 * sont égales.
 	 * @return true si l'événement est critique
-	 * @return false si l'événement n'est pas critique
+	 *         false si l'événement n'est pas critique
 	 */
 	public boolean estCritique() {
 		if (tacheAuPlusTot == tacheAuPlusTard) {

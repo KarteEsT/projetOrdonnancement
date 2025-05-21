@@ -25,7 +25,7 @@ import iut.info1.ordonnancement.Tache;
  * @author Massicard Maël
  */
 
-class testTache {
+class TestTache {
 
     /**
      * Test method for {@link iut.info1.ordonnancement.Tache#hashCode()}.

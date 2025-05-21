@@ -21,7 +21,7 @@ import iut.info1.ordonnancement.Tache;
  * Cette classe teste la classe Graphe.java.
  * @author Esteban Roveri, Gabriel Le Goff
  */
-public class GrapheTest {
+public class TestGraphe {
     
     Tache[] taches = { new Tache("Tache1", "Description1", 1.0),
                        new Tache("Tache2", "Description2", 2.0),
