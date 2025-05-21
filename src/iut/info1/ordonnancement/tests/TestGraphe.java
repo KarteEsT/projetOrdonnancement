@@ -79,7 +79,17 @@ public class TestGraphe {
      */
     @Test
     void testGetUnite() {
-        fail("Not yet implemented");
+        Graphe graphe = new Graphe("Projet Test", "jours", taches, evenements);
+        Graphe graphe2 = new Graphe("Projet Test2", "jours2", taches, evenements);
+        Graphe graphe3 = new Graphe("Projet Test3", "jours3", taches, evenements);
+        Graphe graphe4 = new Graphe("Projet Test4", "jours4", taches, evenements);
+        Graphe graphe5 = new Graphe("Projet Test5", "jours5", taches, evenements);
+
+        assertEquals("jours", graphe.getUnite());
+        assertEquals("jours2", graphe2.getUnite());
+        assertEquals("jours3", graphe3.getUnite());
+        assertEquals("jours4", graphe4.getUnite());
+        assertEquals("jours5", graphe5.getUnite());
     }
 
     /**
@@ -87,7 +97,17 @@ public class TestGraphe {
      */
     @Test
     void testGetTaches() {
-        fail("Not yet implemented");
+        Graphe graphe = new Graphe("Projet Test", "jours", taches, evenements);
+        Graphe graphe2 = new Graphe("Projet Test2", "jours2", taches, evenements);
+        Graphe graphe3 = new Graphe("Projet Test3", "jours3", taches, evenements);
+        Graphe graphe4 = new Graphe("Projet Test4", "jours4", taches, evenements);
+        Graphe graphe5 = new Graphe("Projet Test5", "jours5", taches, evenements);
+
+        assertEquals(taches.length, graphe.getTaches().length);
+        assertEquals(taches.length, graphe2.getTaches().length);
+        assertEquals(taches.length, graphe3.getTaches().length);
+        assertEquals(taches.length, graphe4.getTaches().length);
+        assertEquals(taches.length, graphe5.getTaches().length);
     }
 
     /**
@@ -95,7 +115,17 @@ public class TestGraphe {
      */
     @Test
     void testGetEvenement() {
-        fail("Not yet implemented");
+        Graphe graphe = new Graphe("Projet Test", "jours", taches, evenements);
+        Graphe graphe2 = new Graphe("Projet Test2", "jours2", taches, evenements);
+        Graphe graphe3 = new Graphe("Projet Test3", "jours3", taches, evenements);
+        Graphe graphe4 = new Graphe("Projet Test4", "jours4", taches, evenements);
+        Graphe graphe5 = new Graphe("Projet Test5", "jours5", taches, evenements);
+
+        assertEquals(evenements.length, graphe.getEvenement().length);
+        assertEquals(evenements.length, graphe2.getEvenement().length);
+        assertEquals(evenements.length, graphe3.getEvenement().length);
+        assertEquals(evenements.length, graphe4.getEvenement().length);
+        assertEquals(evenements.length, graphe5.getEvenement().length);
     }
 
     /**
@@ -103,7 +133,30 @@ public class TestGraphe {
      */
     @Test
     void testCalculerDatePlusTot() {
-        fail("Not yet implemented");
+        double datePlusTot;
+        
+        Tache[] taches = { new Tache("Tache1", "Description1", 2.0),
+                           new Tache("Tache2", "Description2", 3.0),
+                           new Tache("Tache3", "Description3", 4.0),
+                         };
+       
+        Evenement[] evenements = { new Evenement(1, 0.0, 0.0,new Evenement[0]),
+                                   new Evenement(2, 2.0, 2.0,new Evenement[0]),
+                                   new Evenement(3, 5.0, 5.0, new Evenement[0])
+                                };
+        Graphe graphe = new Graphe("Projet Test", "jours", taches, evenements);
+        Graphe graphe2 = new Graphe("Projet Test2", "jours2", taches, evenements);
+        Graphe graphe3 = new Graphe("Projet Test3", "jours3", taches, evenements);
+            
+        datePlusTot = graphe.calculerDatePlusTot();
+        assertEquals(2.0, datePlusTot, "La date au plus tôt devrait être 2.0");
+        
+        datePlusTot = graphe2.calculerDatePlusTot();
+        assertEquals(5.0, datePlusTot, "La date au plus tôt devrait être 5.0");
+        
+        
+        datePlusTot = graphe3.calculerDatePlusTot();
+        assertEquals(5.0, datePlusTot, "La date au plus tôt devrait être 5.0");
     }
 
     /**
@@ -121,29 +174,4 @@ public class TestGraphe {
     void testCalculerFinProjet() {
         fail("Not yet implemented");
     }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Graphe#calculerCheminCritique()}.
-     */
-    @Test
-    void testCalculerCheminCritique() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Graphe#calculerMargeLibre()}.
-     */
-    @Test
-    void testCalculerMargeLibre() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Graphe#calculerMargeTotale()}.
-     */
-    @Test
-    void testCalculerMargeTotale() {
-        fail("Not yet implemented");
-    }
-
 }
