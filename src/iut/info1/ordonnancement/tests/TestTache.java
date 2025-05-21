@@ -1,5 +1,5 @@
 /*
- * testTache.java                                   14 mai 2025
+ * TestTache.java                                   14 mai 2025
  * IUT de Rodez, Info1 2024-2025, pas de copyright
  */
 

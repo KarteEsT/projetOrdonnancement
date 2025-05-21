@@ -31,16 +31,36 @@ public class Graphe {
     /** Ensemble des différents événement du graphe */
     private Evenement[] evenement;
     
+    
+	/**
+	 * Constructeur par défaut
+	 * @param titre du graphe
+	 * @throws NullPointerException si le titre est null
+	 */
+    public Graphe(String titre) {
+		if (titre == null) {
+			throw new NullPointerException("Le titre ne peut pas être null.");
+		}
+    	this.titre = titre;
+    }
+    
     /**
      * Crée un graphe PERT
      * @param titre du graphe
      * @param unite du graphe
      * @param taches composant le graphe
      * @param evenements composant le graphe
+     * @throws NullPointerException si le titre ou l'unité est null
      */
     public Graphe(String titre, String unite, Tache[] taches, 
                   Evenement[] evenements) {
-        
+		if (titre == null) {
+			throw new NullPointerException("Le titre ne peut pas être null.");
+		}
+		if (unite == null) {
+			throw new NullPointerException("L'unité ne peut pas être null.");
+		}
+    	
         this.titre = titre;
         this.unite = unite;
         this.taches = taches;
