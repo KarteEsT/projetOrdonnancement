@@ -30,6 +30,7 @@ public class ChargeurCSV {
     /**
      * Enregistre des données dans un fichier CSV avec des valeurs
      * séparées par des points-virgules.
+     * @param cheminFichierEcriture 
      * @param cheminFichier le chemin vers le fichier à écrire
      * @param donnees une liste de lignes, où chaque ligne est un
      * tableau de chaînes.
@@ -90,6 +91,7 @@ public class ChargeurCSV {
     
 	/**
 	 * Tests temporaires de la classe ChargeurCSV
+	 * @param args non utilisé
 	 */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -131,21 +133,22 @@ public class ChargeurCSV {
         scanner.close();
     }
     
-	/*
-	 * Renvoie le chemin du fichier CSV à écrire
-	 * @return le chemin du fichier CSV à écrire
-	 */
+	
+    /**
+     * Renvoie le chemin du fichier CSV à écrire
+     * @return le chemin du fichier CSV à écrire
+     */
     public String getCheminFichier() {
         return cheminFichierEcrit;
     }
     
-	/*
-	 * Renvoie le chemin du fichier CSV à lire
-	 * @return le chemin du fichier CSV à lire
-	 */
-	public String getCheminFichierLecture() {
+    /**
+     * Renvoie le chemin du fichier CSV à lire
+     * @return le chemin du fichier CSV à lire
+     */
+    public String getCheminFichierLecture() {
         return cheminFichierLu;
-	}
+    }
 	
 	/**
 	 * Modifie le chemin du fichier CSV à écrire
