@@ -4,6 +4,8 @@
  */
 package iut.info1.ordonnancement;
 
+import java.util.ArrayList;
+
 /**
  * Représenter et gère un graphe PERT 
  * (Program Evaluation Review Technique).
@@ -31,6 +33,8 @@ public class Graphe {
     /** Ensemble des différents événement du graphe */
     private Evenement[] evenement;
     
+    /** Liste des tâches */
+    private ArrayList<Tache> listeTaches;
     
     /**
      * Constructeur par défaut
@@ -60,7 +64,11 @@ public class Graphe {
 	
 	if (unite == null) {
 		throw new NullPointerException("L'unité ne peut pas être null.");
-	}	
+	}
+	
+	if (!verifierTachesRequisesExistantes()) {
+	    throw new IllegalArgumentException("Les tâches requises ne sont pas toutes présentes.");
+	}
     	
         this.titre = titre;
         this.unite = unite;
@@ -94,6 +102,33 @@ public class Graphe {
      */
     public Evenement[] getEvenement() {
         return evenement;
+    }
+    
+    /**
+     * Permet de vérifier si toutes les tâches requises existent dans le graphe.
+     * @return true si toutes les tâches requises existent
+     *         false sinon.
+     */
+    public boolean verifierTachesRequisesExistantes() {
+        if (getTaches() == null) {
+            return true; 
+        }
+
+        for (Tache tache : getTaches()) {
+            for (Tache requise : tache.getTachesRequises()) {
+                boolean trouvee = false;
+                for (Tache t : getTaches()) {
+                    if (t.equals(requise)) {
+                        trouvee = true;
+                        break;
+                    }
+                }
+                if (!trouvee) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     /**

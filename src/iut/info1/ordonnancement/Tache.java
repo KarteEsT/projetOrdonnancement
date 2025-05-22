@@ -26,6 +26,8 @@ import java.util.Objects;
  */
 
 public class Tache {
+    
+    //TODO : Ajouter des commentaires pour chaque attribut
     private String libelle;
     private String description;
     private double duree;
