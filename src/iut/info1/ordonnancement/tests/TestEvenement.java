@@ -53,17 +53,17 @@ class TestEvenement {
     	
     	assertEquals(1, Evenement1.getId());
     	assertEquals(0.0, Evenement1.getTacheAuPlusTot());
-    	assertEquals(5.0, Evenement1.getTacheAusPlusTard());
+    	assertEquals(5.0, Evenement1.getTacheAuPlusTard());
     	assertArrayEquals(new Evenement[] { null }, Evenement1.getEvenementPredecesseur());
     	
     	assertEquals(2, Evenement2.getId());
     	assertEquals(1.0, Evenement2.getTacheAuPlusTot());
-    	assertEquals(4.0, Evenement2.getTacheAusPlusTard());
+    	assertEquals(4.0, Evenement2.getTacheAuPlusTard());
     	assertArrayEquals(new Evenement[] { Evenement1 }, Evenement2.getEvenementPredecesseur());
     	
     	assertEquals(3, Evenement3.getId());
     	assertEquals(2.0, Evenement3.getTacheAuPlusTot());
-    	assertEquals(3.0, Evenement3.getTacheAusPlusTard());
+    	assertEquals(3.0, Evenement3.getTacheAuPlusTard());
     	assertArrayEquals(new Evenement[] { Evenement1, Evenement2 }, Evenement3.getEvenementPredecesseur());
     }
     
@@ -104,7 +104,7 @@ class TestEvenement {
 	void testGetTacheAusPlusTard() {
 		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
 		
-		assertEquals(5.0, Evenement1.getTacheAusPlusTard());
+		assertEquals(5.0, Evenement1.getTacheAuPlusTard());
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class Evenement {
 	 * Retourne la tâche au plus tard d'un événement 
 	 * @return tacheAuPlusTard Tâche au plus tard d'un événement
 	 */
-	public double getTacheAusPlusTard() {
+	public double getTacheAuPlusTard() {
 		return tacheAuPlusTard;
 	}
 	
