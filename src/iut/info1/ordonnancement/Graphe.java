@@ -45,6 +45,11 @@ public class Graphe {
 	if (titre == null) {
 	    throw new NullPointerException("Le titre ne peut pas être null.");
 	}
+	
+	if (titre.isEmpty()) {
+	    throw new IllegalArgumentException("Le titre ne peut pas être vide.");
+	}
+	
     	this.titre = titre;
     }
     
