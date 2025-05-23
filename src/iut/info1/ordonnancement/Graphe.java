@@ -136,6 +136,34 @@ public class Graphe {
         return true;
     }
     
+
+    /**
+     * Ajoute une tâche au graphe.
+     *
+     * @param tache la tâche à ajouter
+     * @throws NullPointerException si la tâche est null
+     */
+    public void ajouterTache(Tache tache) {
+        if (tache == null) {
+            throw new NullPointerException("La tâche ne peut pas être null.");
+        }
+    
+        if (taches == null) {
+            taches = new Tache[1];
+            taches[0] = tache;
+        } else {
+            Tache[] nouveauTableau = new Tache[taches.length + 1];
+            System.arraycopy(taches, 0, nouveauTableau, 0, taches.length);
+            nouveauTableau[taches.length] = tache;
+            taches = nouveauTableau;
+        }
+    }
+
+    
+    
+     
+       
+    
     /**
      * Calcule la date au plus tôt de chaque événement
      * @return date au plus tôt
@@ -158,6 +186,10 @@ public class Graphe {
      */
     public double calculerFinProjet() {
         return 0.0;
+    }
+    
+    
+        
     }
     
 }

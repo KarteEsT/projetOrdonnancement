@@ -26,9 +26,13 @@ public class Main {
         String[] nomsPredecesseurs = chargeur.demandePredecesseursTache();
 
         Tache nouvelleTache = new Tache(nom, description, duree);
+        
+        graphe.ajouterTache(nouvelleTache);
 
         System.out.println("Tâche ajoutée au graphe : " + nouvelleTache.getLibelle());
         System.out.println("Nombre total de tâches dans le graphe : " + graphe.getTaches());
+        
+        
 
     }
 }
