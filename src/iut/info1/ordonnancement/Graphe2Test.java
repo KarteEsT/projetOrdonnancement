@@ -31,7 +31,7 @@ public class Graphe2Test {
     private ArrayList<Tache> taches;
     
     /** Ensemble des différents événement du graphe */
-    private ArrayList<Evenement> evenement;
+    private static ArrayList<Evenement> evenement;
     
     /**
      * Crée un graphe PERT
@@ -95,7 +95,7 @@ public class Graphe2Test {
     /**
      * @return nouvelle valeur de évènement
      */
-    public ArrayList<Evenement> getEvenement() {
+    public static ArrayList<Evenement> getEvenement() {
         return evenement;
     }
     

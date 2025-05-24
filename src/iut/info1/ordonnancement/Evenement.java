@@ -4,6 +4,10 @@
  */
 package iut.info1.ordonnancement;
 
+import iut.info1.ordonnancement.Tache;
+import iut.info1.ordonnancement.Graphe;
+import iut.info1.ordonnancement.Graphe2Test;
+
 import java.util.ArrayList;
 
 /**
@@ -41,9 +45,6 @@ public class Evenement {
     
     /** Ensemble des événements successeurs d'un événement */
     private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
-    
-    /** Liste des événements dans le projet */
-    private static ArrayList<Evenement> listeEvenements = new ArrayList<>();
 
     /**
      * Constructeur pour un événement initial.
@@ -218,7 +219,7 @@ public class Evenement {
      * @return la date de fin du projet
      */
     public double calculerFinProjet() {
-        for (Evenement evenement : listeEvenements) {
+        for (Evenement evenement : Graphe2Test.getEvenement()) { //modifier par Graphe2Test.getEvenement() --> Graphe.getEvenement()
             if (evenement.getEvenementSuccesseurList().isEmpty()) {
                 return evenement.getDateAuPlusTot();
             }
