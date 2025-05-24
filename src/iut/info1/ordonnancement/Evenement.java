@@ -165,11 +165,15 @@ public class Evenement {
 	        // Si l'événement n'a pas de prédécesseurs, sa date au plus tôt est 0.0
 	        tacheAuPlusTot = 0.0;
 	    } else {
-	        // Sinon, on prend le maximum des dates au plus tôt des prédécesseurs + leur durée.
-	        tacheAuPlusTot = evenementPredecesseurList.stream()
-	            .mapToDouble(predecesseur -> predecesseur.calculerDatePlusTot())
-	            .max()
-	            .orElse(0);
+	        double maxDate = 0.0; // Initialisation à 0
+	        for (Evenement predecesseur : evenementPredecesseurList) {
+	            // Calcul de la date au plus tôt pour chaque prédécesseur
+	            double datePlusTotPredecesseur = predecesseur.calculerDatePlusTot();
+	            if (datePlusTotPredecesseur > maxDate) {
+	                maxDate = datePlusTotPredecesseur;
+	            }
+	        }
+	        tacheAuPlusTot = maxDate;
 	    }
 	    return tacheAuPlusTot;
 	}
@@ -184,13 +188,21 @@ public class Evenement {
 	        // Si l'événement est le dernier, sa date au plus tard est la date de fin du projet.
 	        tacheAuPlusTard = dateFinProjet;
 	    } else {
-	        // Sinon, on prend le minimum des dates au plus tard des successeurs - leur durée.
-	        tacheAuPlusTard = evenementSuccesseurList.stream()
-	            .mapToDouble(successeur -> successeur.calculerDatePlusTard(dateFinProjet) - successeur.getTaches().stream()
-	                .mapToDouble(Tache::getDuree)
-	                .sum())
-	            .min()
-	            .orElse(dateFinProjet);
+	        double minDate = Double.MAX_VALUE; // Initialisation à une valeur très grande
+	        for (Evenement successeur : evenementSuccesseurList) {
+	            // Calcul de la durée totale des tâches du successeur
+	            double dureeTotale = 0;
+	            for (Tache tache : successeur.getTaches()) {
+	                dureeTotale += tache.getDuree();
+	            }
+	            // Calcul de la date au plus tard pour ce successeur
+	            double datePlusTardSuccesseur = successeur.calculerDatePlusTard(dateFinProjet) - dureeTotale;
+	            // Mise à jour du minimum
+	            if (datePlusTardSuccesseur < minDate) {
+	                minDate = datePlusTardSuccesseur;
+	            }
+	        }
+	        tacheAuPlusTard = minDate;
 	    }
 	    return tacheAuPlusTard;
 	}
