@@ -26,8 +26,6 @@ import java.util.ArrayList;
 
 public class Tache {
     
-    //TODO : Vérifier que chaque tâche a un libellé différent
-    
     /** Le libellé de la tache */
     private String libelle;
     

@@ -28,30 +28,10 @@ public class Graphe {
     private String unite;
     
     /** Ensembles des différentes tâches du graphe */
-    private Tache[] taches;
+    private ArrayList<Tache> taches;
     
     /** Ensemble des différents événement du graphe */
-    private Evenement[] evenement;
-    
-    /** Liste des tâches */
-    private ArrayList<Tache> listeTaches;
-    
-    /**
-     * Constructeur par défaut
-     * @param titre du graphe
-     * @throws NullPointerException si le titre est null
-     */
-    public Graphe(String titre) {
-	if (titre == null) {
-	    throw new NullPointerException("Le titre ne peut pas être null.");
-	}
-	
-	if (titre.isEmpty()) {
-	    throw new IllegalArgumentException("Le titre ne peut pas être vide.");
-	}
-	
-    	this.titre = titre;
-    }
+    private ArrayList<Evenement> evenement;
     
     /**
      * Crée un graphe PERT
@@ -61,20 +41,44 @@ public class Graphe {
      * @param evenements composant le graphe
      * @throws NullPointerException si le titre ou l'unité est null
      */
-    public Graphe(String titre, String unite, Tache[] taches, 
-                  Evenement[] evenements) {
-	if (titre == null) {
-		throw new NullPointerException("Le titre ne peut pas être null.");
-	}
-	
-	if (unite == null) {
-		throw new NullPointerException("L'unité ne peut pas être null.");
-	}
-	
-	if (!verifierTachesRequisesExistantes()) {
-	    throw new IllegalArgumentException("Les tâches requises ne sont pas toutes présentes.");
-	}
-    	
+    public Graphe(String titre, String unite, ArrayList<Tache> taches, 
+            ArrayList<Evenement> evenements) {
+        if (titre == null || titre.isEmpty() || titre.isBlank()) {
+                throw new NullPointerException("Le titre ne peut pas être null.");
+        }
+        
+        if (unite == null) {
+                throw new NullPointerException("L'unité ne peut pas être null.");
+        }
+        
+        if (!verifierTachesRequisesExistantes()) {
+            throw new IllegalArgumentException("Les tâches requises ne sont pas toutes présentes.");
+        }
+        
+        for (Tache tache : taches) {
+            if (tache == null) {
+                throw new NullPointerException("Une tâche ne peut pas être null.");
+            }
+            for (Tache t : taches) {
+                if (tache.equals(t)) {
+                    throw new IllegalArgumentException("La tâche " + tache.getLibelle() +
+                                                       " existe déjà dans le graphe.");
+                }
+            }
+        }
+        
+        for (Evenement evenement : evenements) {
+            if (evenement == null) {
+                throw new NullPointerException("Une tâche ne peut pas être null.");
+            }
+            for (Evenement event : evenements) {
+                if (evenement.equals(event)) {
+                    throw new IllegalArgumentException("L'évènement " + event.getId() +
+                                                       " existe déjà dans le graphe.");
+                }
+            }
+        }
+        
         this.titre = titre;
         this.unite = unite;
         this.taches = taches;
@@ -98,14 +102,14 @@ public class Graphe {
     /**
      * @return nouvelle valeur de taches
      */
-    public Tache[] getTaches() {
+    public ArrayList<Tache> getTaches() {
         return taches;
     }
 
     /**
      * @return nouvelle valeur de évènement
      */
-    public Evenement[] getEvenement() {
+    public ArrayList<Evenement> getEvenement() {
         return evenement;
     }
     
@@ -148,14 +152,14 @@ public class Graphe {
             throw new NullPointerException("La tâche ne peut pas être null.");
         }
     
-        if (taches == null) {
-            taches = new Tache[1];
-            taches[0] = tache;
-        } else {
-            Tache[] nouveauTableau = new Tache[taches.length + 1];
-            System.arraycopy(taches, 0, nouveauTableau, 0, taches.length);
-            nouveauTableau[taches.length] = tache;
-            taches = nouveauTableau;
+        // Vérifie si la tâche existe déjà
+        for (Tache t : getTaches()) {
+            if (t.equals(tache)) {
+                throw new IllegalArgumentException("La tâche existe déjà dans le graphe.");
+            }
         }
+        
+        taches.add(tache);
+
     }
 }
