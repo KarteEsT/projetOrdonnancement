@@ -92,7 +92,23 @@ public class Evenement {
 	}
 	
 	/**
-	 * Retourne les tâches associées à cet événement.
+	 * Retourne les événements prédécesseurs d'un événement 
+	 * @return evenementPredecesseur Ensemble des événements prédécesseurs
+	 */
+	public ArrayList<Evenement> getEvenementPredecesseurList() {
+		return evenementPredecesseurList;
+	}
+	
+	/**
+	 * Retourne les événements successeurs d'un événement 
+	 * @return evenementSuccesseur Ensemble des événements successeurs
+	 */
+	public ArrayList<Evenement> getEvenementSuccesseurList() {
+		return evenementSuccesseurList;
+	}
+	
+	/**
+	 * Retourne les tâches associées à un événement.
 	 * @return une liste de tâches.
 	 */
 	public ArrayList<Tache> getTaches() {
@@ -105,14 +121,6 @@ public class Evenement {
 	 */
 	public void ajouterTache(Tache tache) {
 	    taches.add(tache);
-	}
-	
-	/**
-	 * Retourne les événements prédécesseurs d'un événement 
-	 * @return evenementPredecesseur Ensemble des événements prédécesseurs
-	 */
-	public ArrayList<Evenement> getEvenementPredecesseurList() {
-		return evenementPredecesseurList;
 	}
 	
 	/**
@@ -136,24 +144,6 @@ public class Evenement {
 		} else {
 			return false;
 		}
-	}
-	
-	@Override
-    public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Evenement))
-			return false;
-		Evenement evenement = (Evenement) o;
-		return id == evenement.id && Double.compare(evenement.tacheAuPlusTot, tacheAuPlusTot) == 0
-				&& Double.compare(evenement.tacheAuPlusTard, tacheAuPlusTard) == 0;
-	}
-	
-	@Override
-    public int hashCode() {
-		int result = Integer.hashCode(id);
-        result = 31 * result + Double.hashCode(tacheAuPlusTot);
-        result = 31 * result + Double.hashCode(tacheAuPlusTard);
-        return result;
 	}
 	
 	/**
@@ -214,5 +204,23 @@ public class Evenement {
 	public double calculerFinProjet() {
 	    // La date de fin du projet est la date au plus tôt du dernier événement.
 	    return calculerDatePlusTot();
+	}
+	
+	@Override
+    public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Evenement))
+			return false;
+		Evenement evenement = (Evenement) o;
+		return id == evenement.id && Double.compare(evenement.tacheAuPlusTot, tacheAuPlusTot) == 0
+				&& Double.compare(evenement.tacheAuPlusTard, tacheAuPlusTard) == 0;
+	}
+	
+	@Override
+    public int hashCode() {
+		int result = Integer.hashCode(id);
+        result = 31 * result + Double.hashCode(tacheAuPlusTot);
+        result = 31 * result + Double.hashCode(tacheAuPlusTard);
+        return result;
 	}
 }
