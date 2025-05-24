@@ -159,4 +159,28 @@ class TestEvenement {
 		assertNotEquals(Evenement2, Evenement3);
 		assertEquals(Evenement3, Evenement4);
     }
+    
+    /**
+     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerDatePlusTot()}.
+     */
+    @Test
+    void testCalculerDatePlusTot() {
+        fail ("Not yet implemented");
+    }
+
+    /**
+     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerDatePlusTard()}.
+     */
+    @Test
+    void testCalculerDatePlusTard() {
+        fail("Not yet implemented");
+    }
+
+    /**
+     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerFinProjet()}.
+     */
+    @Test
+    void testCalculerFinProjet() {
+        fail("Not yet implemented");
+    }
 }

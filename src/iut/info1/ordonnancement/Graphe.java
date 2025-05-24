@@ -158,34 +158,4 @@ public class Graphe {
             taches = nouveauTableau;
         }
     }
-
-    
-    
-     
-       
-    
-    /**
-     * Calcule la date au plus tôt de chaque événement
-     * @return date au plus tôt
-     */
-    public double calculerDatePlusTot() {
-        return 0.0;
-    }
-    
-    /**
-     * Calcule la date au plus tard de chaque événement
-     * @return date au plus tard
-     */
-    public double calculerDatePlusTard() {
-        return 0.0;
-    }
-    
-    /**
-     * Calcule la date de fin de projet
-     * @return date de fin de projet
-     */
-    public double calculerFinProjet() {
-        return 0.0;
-    }
-    
 }
