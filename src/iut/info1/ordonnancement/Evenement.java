@@ -4,6 +4,10 @@
  */
 package iut.info1.ordonnancement;
 
+import iut.info1.ordonnancement.Tache;
+
+import java.util.ArrayList;
+
 /**
  * Cette classe est utilisée pour créer des événements
  * Les événements sont ensuite utilisées dans la classe Graphe
@@ -12,7 +16,7 @@ package iut.info1.ordonnancement;
  * @author Mael Massicard
  * @author Esteban Roveri
  * @author Léo Sauvaire
- * @version 1.0
+ * @version 2.0
  */
 public class Evenement {
 	
@@ -26,7 +30,13 @@ public class Evenement {
 	private double tacheAuPlusTard;
 	
 	/** Ensemble des événements prédécesseurs de l'événement */
-	private Evenement[] evenementPredecesseur;
+	private ArrayList<Evenement> evenementPredecesseurList = new ArrayList<>();
+	
+	/** Ensemble des événements successeurs de l'événement */
+	private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
+	
+	/** Liste des tâches associées à cet événement */
+	private ArrayList<Tache> taches = new ArrayList<>();
 	
 	/** 
 	 * Déclaration de l'événement initial pour le début
@@ -49,11 +59,11 @@ public class Evenement {
 	 * @param evenementPredecesseur Ensemble des événements prédécesseurs
 	 */
 	public Evenement(int id, double tacheAuPlusTot, double tacheAuPlusTard,
-				Evenement[] evenementPredecesseur) {
+			ArrayList<Evenement> evenementPredecesseurList) {
 		this.id = id;
 		this.tacheAuPlusTot = tacheAuPlusTot;
 		this.tacheAuPlusTard = tacheAuPlusTard;
-		this.evenementPredecesseur = evenementPredecesseur;
+		this.evenementPredecesseurList = evenementPredecesseurList;
 		
 	}
 	
@@ -82,11 +92,27 @@ public class Evenement {
 	}
 	
 	/**
+	 * Retourne les tâches associées à cet événement.
+	 * @return une liste de tâches.
+	 */
+	public ArrayList<Tache> getTaches() {
+	    return taches;
+	}
+
+	/**
+	 * Ajoute une tâche à cet événement.
+	 * @param tache la tâche à ajouter.
+	 */
+	public void ajouterTache(Tache tache) {
+	    taches.add(tache);
+	}
+	
+	/**
 	 * Retourne les événements prédécesseurs d'un événement 
 	 * @return evenementPredecesseur Ensemble des événements prédécesseurs
 	 */
-	public Evenement[] getEvenementPredecesseur() {
-		return evenementPredecesseur;
+	public ArrayList<Evenement> getEvenementPredecesseurList() {
+		return evenementPredecesseurList;
 	}
 	
 	/**
@@ -130,27 +156,51 @@ public class Evenement {
         return result;
 	}
 	
-    /**
-     * Calcule la date au plus tôt de chaque événement
-     * @return date au plus tôt
-     */
-    public double calculerDatePlusTot() {
-        return 0.0;
-    }
+	/**
+	 * Calcule la date au plus tôt de chaque événement.
+	 * @return la date au plus tôt de cet événement.
+	 */
+	public double calculerDatePlusTot() {
+	    if (evenementPredecesseurList.isEmpty()) {
+	        // Si l'événement n'a pas de prédécesseurs, sa date au plus tôt est 0.0
+	        tacheAuPlusTot = 0.0;
+	    } else {
+	        // Sinon, on prend le maximum des dates au plus tôt des prédécesseurs + leur durée.
+	        tacheAuPlusTot = evenementPredecesseurList.stream()
+	            .mapToDouble(predecesseur -> predecesseur.calculerDatePlusTot())
+	            .max()
+	            .orElse(0);
+	    }
+	    return tacheAuPlusTot;
+	}
     
-    /**
-     * Calcule la date au plus tard de chaque événement
-     * @return date au plus tard
-     */
-    public double calculerDatePlusTard() {
-        return 0.0;
-    }
+	/**
+	 * Calcule la date au plus tard de chaque événement.
+	 * @param dateFinProjet la date de fin du projet (nécessaire pour le dernier événement).
+	 * @return la date au plus tard de cet événement.
+	 */
+	public double calculerDatePlusTard(double dateFinProjet) {
+	    if (evenementSuccesseurList.isEmpty()) {
+	        // Si l'événement est le dernier, sa date au plus tard est la date de fin du projet.
+	        tacheAuPlusTard = dateFinProjet;
+	    } else {
+	        // Sinon, on prend le minimum des dates au plus tard des successeurs - leur durée.
+	        tacheAuPlusTard = evenementSuccesseurList.stream()
+	            .mapToDouble(successeur -> successeur.calculerDatePlusTard(dateFinProjet) - successeur.getTaches().stream()
+	                .mapToDouble(Tache::getDuree)
+	                .sum())
+	            .min()
+	            .orElse(dateFinProjet);
+	    }
+	    return tacheAuPlusTard;
+	}
     
-    /**
-     * Calcule la date de fin de projet
-     * @return date de fin de projet
-     */
-    public double calculerFinProjet() {
-        return 0.0;
-    }
+	/**
+	 * Calcule la date de fin du projet.
+	 * @return la date de fin du projet.
+	 */
+	public double calculerFinProjet() {
+	    // La date de fin du projet est la date au plus tôt du dernier événement.
+	    return calculerDatePlusTot();
+	}
 }

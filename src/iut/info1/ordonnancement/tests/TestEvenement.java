@@ -24,6 +24,7 @@ import iut.info1.ordonnancement.Tache;
  * @author Roveri Esteban
  * @author Sauvaire Léo
  * @author Massicard Maël
+ * @Version 2.0
  */
 
 class TestEvenement {
