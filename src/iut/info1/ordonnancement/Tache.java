@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 public class Tache {
     
+    //TODO : Vérifier que chaque tâche a un libellé différent
+    
     /** Le libellé de la tache */
     private String libelle;
     
@@ -104,4 +106,91 @@ public class Tache {
     public ArrayList<Tache> getTachesRequises() {
         return tachesRequises;
     }
+    
+    /**
+     * Méthode permettant de vérifier si il existe un 
+     * circuit dans le graphe des tâches.
+     * @return true si un circuit existe,
+     *         false sinon.
+     */
+    public boolean existeCircuit() {
+        // Modéliser le graphe par une matrice d'adjacence
+        // M* = M
+        /*
+         * Algorithme de détection de circuit :
+         * On recherche si il existe une ligne ou une colonne de 0 dans M*
+         * ^  -si non, alors il existe un circuit
+         * |  -si oui :
+         * |    -on supprime la ligne et la colonne correspondantes
+         * |    -M* devient la matrice résultante de cette opération
+         * |    -on recommence jusqu'à ce que M* ne contienne que des 0 
+         * |     (ou soit vide,). Alors il n'existe pas de circuit
+         * |     |
+         *  ------
+         */
+        
+        /* Modélisation du graphe par une matrice d'adjacence */
+        /* On compte le nombre de taches */
+        int nombreTaches = getNombreTaches();
+        
+        /* On crée la matrice d'adjacence */
+        String[][] matriceAdjacence = new String[nombreTaches][nombreTaches];
+        
+        /* On remplit la matrice d'adjacence */
+        
+        
+        return false; //STUB 
+    }
+    
+    /**
+     * Méthode permettant de compter le nombre de Taches à partir de la liste
+     * des Taches requises.
+     * Surcharge de la méthode getNombreTaches(ArrayList<Tache> tachesVisitees)
+     * @return une ArrayList avec la tache courante dedans ainsi qu'un appel 
+     *         à la méthode getNombreTaches(ArrayList<Tache>).
+     */
+    public int getNombreTaches() {
+        ArrayList<Tache> tachesVisitees = new ArrayList<>();
+        tachesVisitees.add(this);
+        return getNombreTaches(tachesVisitees);
+    }
+    
+    /**
+     * Méthode permettant de compter le nombre de Taches à partir de la liste
+     * des Taches requises.
+     * @param tachesVisitees les tâches déjà visitées dans le graphe
+     *        Si c'est la première fois qu'on appelle cette méthode,
+     *        tachesVisitees doit contenir this.
+     * @return le nombre de Taches du graphe à partir des tachesRequises.
+     */
+    public int getNombreTaches(ArrayList<Tache> tachesVisitees) {
+        /*
+         * On va vérifier dans tacheRequises de chaque Tache combien 
+         * de Taches différentes de celles qu'on a déjà compté elle contient
+         * On va utiliser la méthode contains de ArrayList<Tache>
+         */
+        
+        /* Condition d'arrêt */
+        boolean plusDeCheminPossible = true;
+        
+        for (Tache tache : getTachesRequises()) {
+            plusDeCheminPossible = plusDeCheminPossible && tachesVisitees.contains(tache);
+        }
+        
+        if (plusDeCheminPossible) {
+            return tachesVisitees.size();
+        }
+        
+        
+        /* Remplissage de tachesVisitees*/
+        
+        for (Tache tache : tachesRequises) {
+            if (!tachesVisitees.contains(tache)) {
+                tachesVisitees.add(tache);
+            }
+        }
+        
+        return getNombreTaches(tachesVisitees);
+    }
+    
 }
