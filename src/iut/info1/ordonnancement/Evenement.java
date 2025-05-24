@@ -4,13 +4,14 @@
  */
 package iut.info1.ordonnancement;
 
-import iut.info1.ordonnancement.Tache;
-
 import java.util.ArrayList;
 
 /**
- * Cette classe est utilisée pour créer des événements
- * Les événements sont ensuite utilisées dans la classe Graphe
+ * Cette classe représente un événement dans un système d'ordonnancement.
+ * Un événement est défini par un identifiant, des dates au plus tôt et au plus tard,
+ * des prédécesseurs, des successeurs, et des tâches associées.
+ * Elle permet de calculer les dates au plus tôt et au plus tard, ainsi que de vérifier
+ * si un événement est critique.
  * @author Gabriel Robache
  * @author Gabriel Le Goff
  * @author Mael Massicard
@@ -19,208 +20,230 @@ import java.util.ArrayList;
  * @version 2.0
  */
 public class Evenement {
-	
-	/** Identifiant de l'événement */
-	private int id;
-	
-	/** Tâche au plus tôt d'un événement */
-	private double tacheAuPlusTot;
-	
-	/** Tâche au plus tard d'un événement */
-	private double tacheAuPlusTard;
-	
-	/** Ensemble des événements prédécesseurs de l'événement */
-	private ArrayList<Evenement> evenementPredecesseurList = new ArrayList<>();
-	
-	/** Ensemble des événements successeurs de l'événement */
-	private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
-	
-	/** Liste des tâches associées à cet événement */
-	private ArrayList<Tache> taches = new ArrayList<>();
-	
-	/** 
-	 * Déclaration de l'événement initial pour le début
-	 * du graphique d'ordonnancement
-	 */
-	private Evenement event_initial;
-	
+
+    /** Identifiant de l'événement */
+    private int id;
+
+    /** Tâche au plus tôt d'un événement */
+    private double dateAuPlusTot;
+
+    /** Tâche au plus tard d'un événement */
+    private double dateAuPlusTard;
+
+    /** Ensemble des tâches prédécesseurs d'un événement */
+    private ArrayList<Tache> tachePredecesseurList = new ArrayList<>();
+    
+    /** Ensemble des tâches successeurs d'un événement */
+    private ArrayList<Tache> tacheSuccesseurList = new ArrayList<>();
+    
+    /** Ensemble des événement prédécesseurs d'un événement */
+    private ArrayList<Evenement> evenementPredecesseurList = new ArrayList<>();
+    
+    /** Ensemble des événements successeurs d'un événement */
+    private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
+    
+    /** Liste des événements dans le projet */
+    private static ArrayList<Evenement> listeEvenements = new ArrayList<>();
+
+    /**
+     * Constructeur pour un événement initial.
+     * Les valeurs de tâche au plus tôt et au plus tard sont initialisées à 0.0.
+     * @param id Identifiant de l'événement
+     */
+    public Evenement(int id) {
+        this.id = id;
+        this.dateAuPlusTot = 0.0;
+        this.dateAuPlusTard = 0.0;
+    }
+    
+    /**
+     * Constructeur pour un événement.
+     * @param id Identifiant de l'événement
+     * @param evenementPredecesseurList Liste des événements prédécesseurs
+     * @param tachePredecesseurList Liste des tâches prédécesseurs
+     * @throws IllegalArgumentException si une des listes est vide ou contient des éléments invalides
+     */
+    public Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, ArrayList<Tache> tachePredecesseurList) {
+    	
+        if (evenementPredecesseurList.isEmpty()) {
+            throw new IllegalArgumentException("Un événement doit avoir au moins un événement prédécesseur.");
+        }
+        if (tachePredecesseurList.isEmpty()) {
+            throw new IllegalArgumentException("Un événement doit avoir au moins une tâche prédécesseur.");
+        }
+        if (evenementPredecesseurList.size() != tachePredecesseurList.size()) {
+            throw new IllegalArgumentException("Le nombre de prédécesseurs doit correspondre au nombre de tâches.");
+        }
+
+        this.id = id;
+        this.evenementPredecesseurList = evenementPredecesseurList;
+        this.tachePredecesseurList = tachePredecesseurList;
+        this.dateAuPlusTot = calculerDatePlusTot();
+        this.dateAuPlusTard = calculerDatePlusTard(calculerFinProjet());
+    }
+
+    /**
+     * Retourne l'identifiant de l'événement.
+     * @return l'identifiant de l'événement
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Retourne la tâche au plus tôt de l'événement.
+     * @return la tâche au plus tôt
+     */
+    public double getDateAuPlusTot() {
+        return dateAuPlusTot;
+    }
+
+    /**
+     * Retourne la tâche au plus tard de l'événement.
+     * @return la tâche au plus tard
+     */
+    public double getDateAuPlusTard() {
+        return dateAuPlusTard;
+    }
+
+    /**
+     * Retourne la liste des événements prédécesseurs.
+     * @return une liste des événements prédécesseurs
+     */
+    public ArrayList<Evenement> getEvenementPredecesseurList() {
+        return evenementPredecesseurList;
+    }
+    
 	/**
-	 * Constructeur par défaut
-	 * @param event_initial Evenement initial
+	 * Retourne la liste des événements successeurs. 
+	 * @return une liste des événements successeurs
 	 */
-	public Evenement(Evenement event_initial) {
-		this.event_initial = event_initial;
-	}
-	
-	/** Constructeur d'un événement
-	 * @param id Identifiant de l'événement
-	 * @param tacheAuPlusTot Tâche au plus tôt d'un événement
-	 * @param tacheAuPlusTard Tâche au plus tard d'un événement
-	 * @param evenementPredecesseur Ensemble des événements prédécesseurs
-	 */
-	public Evenement(int id, double tacheAuPlusTot, double tacheAuPlusTard,
-			ArrayList<Evenement> evenementPredecesseurList) {
-		this.id = id;
-		this.tacheAuPlusTot = tacheAuPlusTot;
-		this.tacheAuPlusTard = tacheAuPlusTard;
-		this.evenementPredecesseurList = evenementPredecesseurList;
-		
-	}
-	
-	/** 
-	 * Retourne l'identifiant d'un événement 
-	 * @return id Identifiant de l'événement
-	 */
-	public int getId() {
-		return id;
-	}
-	
-	/** 
-	 * Retourne la tache au plus tôt d'un événement 
-	 * @return tacheAuPlusTot Tâche au plus tôt d'un événement
-	 */
-	public double getTacheAuPlusTot() {
-		return tacheAuPlusTot;
-	}
-	
-	/** 
-	 * Retourne la tâche au plus tard d'un événement 
-	 * @return tacheAuPlusTard Tâche au plus tard d'un événement
-	 */
-	public double getTacheAuPlusTard() {
-		return tacheAuPlusTard;
-	}
-	
+    public ArrayList<Evenement> getEvenementSuccesseurList() {
+        return evenementSuccesseurList;
+    }
+    
 	/**
-	 * Retourne les événements prédécesseurs d'un événement 
-	 * @return evenementPredecesseur Ensemble des événements prédécesseurs
+	 * Retourne la liste des tâches prédécesseurs.
+	 * 
+	 * @return une liste des tâches prédécesseurs
 	 */
-	public ArrayList<Evenement> getEvenementPredecesseurList() {
-		return evenementPredecesseurList;
-	}
-	
-	/**
-	 * Retourne les événements successeurs d'un événement 
-	 * @return evenementSuccesseur Ensemble des événements successeurs
-	 */
-	public ArrayList<Evenement> getEvenementSuccesseurList() {
-		return evenementSuccesseurList;
-	}
-	
-	/**
-	 * Retourne les tâches associées à un événement.
-	 * @return une liste de tâches.
-	 */
-	public ArrayList<Tache> getTaches() {
-	    return taches;
+	public ArrayList<Tache> getTachePredecesseurList() {
+		return tachePredecesseurList;
 	}
 
-	/**
-	 * Ajoute une tâche à cet événement.
-	 * @param tache la tâche à ajouter.
-	 */
-	public void ajouterTache(Tache tache) {
-	    taches.add(tache);
-	}
-	
-	/**
-	 * Retourne l'événement initial du graphe 
-	 * @return event_initial Événement initial
-	 */
-	public Evenement getEvenementInitial() {
-		return event_initial;
-	}
-	
-	/**
-	 * Cette méthode permet de savoir si un événement est critique.
-	 * Un événement est critique si la tâche au plus tôt et la tâche au plus tard
-	 * sont égales.
-	 * @return true si l'événement est critique
-	 *         false si l'événement n'est pas critique
-	 */
-	public boolean estCritique() {
-		if (tacheAuPlusTot == tacheAuPlusTard) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Calcule la date au plus tôt de chaque événement.
-	 * @return la date au plus tôt de cet événement.
-	 */
-	public double calculerDatePlusTot() {
-	    if (evenementPredecesseurList.isEmpty()) {
-	        // Si l'événement n'a pas de prédécesseurs, sa date au plus tôt est 0.0
-	        tacheAuPlusTot = 0.0;
-	    } else {
-	        double maxDate = 0.0; // Initialisation à 0
-	        for (Evenement predecesseur : evenementPredecesseurList) {
-	            // Calcul de la date au plus tôt pour chaque prédécesseur
-	            double datePlusTotPredecesseur = predecesseur.calculerDatePlusTot();
-	            if (datePlusTotPredecesseur > maxDate) {
-	                maxDate = datePlusTotPredecesseur;
-	            }
-	        }
-	        tacheAuPlusTot = maxDate;
-	    }
-	    return tacheAuPlusTot;
-	}
+    /**
+     * Vérifie si cet événement est critique.
+     * Un événement est critique si la tâche au plus tôt et la tâche au plus tard sont égales.
+     * @return true si l'événement est critique, false sinon
+     */
+    public boolean estCritique() {
+        return dateAuPlusTot == dateAuPlusTard;
+    }
+
+    /**
+     * Calcule la date au plus tôt de cet événement.
+     * La date au plus tôt est déterminée en fonction des dates au plus tôt
+     * des événements prédécesseurs et des durées des tâches associées.
+     *
+     * @return la date au plus tôt calculée pour cet événement
+     */
+    public double calculerDatePlusTot() {
+        // Si aucun prédécesseur, la date au plus tôt est 0.0
+        if (evenementPredecesseurList.isEmpty()) {
+            return 0.0;
+        }
+
+        // Initialisation de la date au plus tôt à une valeur par défaut
+        double dateAuPlusTot = Double.MAX_VALUE;
+
+        // Parcours des événements prédécesseurs
+        for (int i = 0; i < evenementPredecesseurList.size(); i++) {
+            Evenement predecesseur = evenementPredecesseurList.get(i);
+            Tache tachePredecesseur = tachePredecesseurList.get(i);
+
+            // Calcul de la date au plus tôt du prédécesseur
+            double datePlusTotPredecesseur = predecesseur.calculerDatePlusTot();
+
+            // Ajout de la durée de la tâche associée
+            double dateAvecDuree = datePlusTotPredecesseur + tachePredecesseur.getDuree();
+
+            // Mise à jour de la date au plus tôt si la nouvelle date est plus petite
+            dateAuPlusTot = Math.min(dateAuPlusTot, dateAvecDuree);
+        }
+
+        return dateAuPlusTot;
+    }
+
+    /**
+     * Calcule la date au plus tard de cet événement.
+     * La date au plus tard est déterminée en fonction des dates au plus tard
+     * des événements successeurs et des durées des tâches associées.
+     *
+     * @param dateFinProjet la date de fin du projet
+     * @return la date au plus tard calculée pour cet événement
+     */
+    public double calculerDatePlusTard(double dateFinProjet) {
+        // Si aucun successeur, la date au plus tard est la date de fin du projet
+        if (evenementSuccesseurList.isEmpty()) {
+            dateAuPlusTard = dateFinProjet;
+            return dateAuPlusTard;
+        }
+
+        // Initialisation de la date au plus tard à une valeur très élevée
+        double dateAuPlusTard = Double.MAX_VALUE;
+
+        // Parcours des événements successeurs
+        for (int i = 0; i < evenementSuccesseurList.size(); i++) {
+            Evenement successeur = evenementSuccesseurList.get(i);
+            Tache tacheSuccesseur = tacheSuccesseurList.get(i);
+
+            // Calcul de la date au plus tard du successeur
+            double datePlusTardSuccesseur = successeur.calculerDatePlusTard(dateFinProjet);
+
+            // Calcul de la date au plus tard pour cet événement
+            double dateAvecDuree = datePlusTardSuccesseur - tacheSuccesseur.getDuree();
+
+            // Mise à jour de la date au plus tard si la nouvelle date est plus petite
+            dateAuPlusTard = Math.min(dateAuPlusTard, dateAvecDuree);
+        }
+
+        return dateAuPlusTard;
+    }
     
-	/**
-	 * Calcule la date au plus tard de chaque événement.
-	 * @param dateFinProjet la date de fin du projet (nécessaire pour le dernier événement).
-	 * @return la date au plus tard de cet événement.
-	 */
-	public double calculerDatePlusTard(double dateFinProjet) {
-	    if (evenementSuccesseurList.isEmpty()) {
-	        // Si l'événement est le dernier, sa date au plus tard est la date de fin du projet.
-	        tacheAuPlusTard = dateFinProjet;
-	    } else {
-	        double minDate = Double.MAX_VALUE; // Initialisation à une valeur très grande
-	        for (Evenement successeur : evenementSuccesseurList) {
-	            // Calcul de la durée totale des tâches du successeur
-	            double dureeTotale = 0;
-	            for (Tache tache : successeur.getTaches()) {
-	                dureeTotale += tache.getDuree();
-	            }
-	            // Calcul de la date au plus tard pour ce successeur
-	            double datePlusTardSuccesseur = successeur.calculerDatePlusTard(dateFinProjet) - dureeTotale;
-	            // Mise à jour du minimum
-	            if (datePlusTardSuccesseur < minDate) {
-	                minDate = datePlusTardSuccesseur;
-	            }
-	        }
-	        tacheAuPlusTard = minDate;
-	    }
-	    return tacheAuPlusTard;
-	}
-    
-	/**
-	 * Calcule la date de fin du projet.
-	 * @return la date de fin du projet.
-	 */
-	public double calculerFinProjet() {
-	    // La date de fin du projet est la date au plus tôt du dernier événement.
-	    return calculerDatePlusTot();
-	}
-	
+    /**
+     * Calcule la date de fin de projet.
+     * La date de fin de projet correspond à la date au plus tôt
+     * de l'unique événement sans successeur.
+     *
+     * @return la date de fin du projet
+     */
+    public double calculerFinProjet() {
+        for (Evenement evenement : listeEvenements) {
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                return evenement.getDateAuPlusTot();
+            }
+        }
+        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
+    }
+
 	@Override
-    public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Evenement))
-			return false;
-		Evenement evenement = (Evenement) o;
-		return id == evenement.id && Double.compare(evenement.tacheAuPlusTot, tacheAuPlusTot) == 0
-				&& Double.compare(evenement.tacheAuPlusTard, tacheAuPlusTard) == 0;
+	public boolean equals(Object o) {
+	    if (this == o) return true; // Vérifie si les deux références pointent vers le même objet
+	    if (o == null || getClass() != o.getClass()) return false; // Vérifie la classe et si l'objet est null
+	    Evenement evenement = (Evenement) o;
+	    return id == evenement.id
+	            && Double.compare(evenement.dateAuPlusTot, dateAuPlusTot) == 0
+	            && Double.compare(evenement.dateAuPlusTard, dateAuPlusTard) == 0
+	            && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
+	            && tachePredecesseurList.equals(evenement.tachePredecesseurList);
 	}
-	
-	@Override
+
+
+    @Override
     public int hashCode() {
-		int result = Integer.hashCode(id);
-        result = 31 * result + Double.hashCode(tacheAuPlusTot);
-        result = 31 * result + Double.hashCode(tacheAuPlusTard);
+        int result = Integer.hashCode(id);
+        result = 31 * result + Double.hashCode(dateAuPlusTot);
+        result = 31 * result + Double.hashCode(dateAuPlusTard);
         return result;
-	}
+    }
 }

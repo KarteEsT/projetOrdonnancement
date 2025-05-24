@@ -4,184 +4,103 @@
  */
 package iut.info1.ordonnancement.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import iut.info1.ordonnancement.Evenement;
+import iut.info1.ordonnancement.Tache;
 
 import org.junit.jupiter.api.Test;
 
-import iut.info1.ordonnancement.Evenement;
+import java.util.ArrayList;
 
-import iut.info1.ordonnancement.Tache;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Cette classe est responsable de tester la classe `Evenement`.
- * Elle vérifie que les méthodes et les constructeurs de la classe `Evenement`
- * se comportent comme attendu.
- * Les tests couvrent la génération de hashCode, les constructeurs,
- * les accesseurs (getters) ainsi que la méthode `equals`.
- * 
- * @author Gabriel Le Goff
- * @author Gabriel Robache
- * @author Roveri Esteban
- * @author Sauvaire Léo
- * @author Massicard Maël
- * @Version 2.0
+ * Classe de test pour la classe Evenement.
+ * Elle vérifie le bon fonctionnement des méthodes et des validations
+ * dans la classe Evenement.
  */
-
-class TestEvenement {
+public class TestEvenement {
 	
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#hashCode()}.
-     */
-    @Test
-    final void testHashCode() {
-    	Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-    	Evenement Evenement2 = new Evenement(2, 1.0, 4.0, new Evenement[] { Evenement1 });
-    	Evenement Evenement3 = new Evenement(3, 2.0, 3.0, new Evenement[] { Evenement1, Evenement2 });       
-        
-        assertNotEquals(Evenement1.hashCode(), Evenement2.hashCode());
-        assertNotEquals(Evenement1.hashCode(), Evenement3.hashCode());
-        assertNotEquals(Evenement2.hashCode(), Evenement3.hashCode());
-    }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#Evenement( int, double, double, Evenement[] )}.}
-     */
-    @Test
-    final void testConstructeur() {
-    	Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-    	Evenement Evenement2 = new Evenement(2, 1.0, 4.0, new Evenement[] { Evenement1 });
-    	Evenement Evenement3 = new Evenement(3, 2.0, 3.0, new Evenement[] { Evenement1, Evenement2 });
-    	
-    	assertEquals(1, Evenement1.getId());
-    	assertEquals(0.0, Evenement1.getTacheAuPlusTot());
-    	assertEquals(5.0, Evenement1.getTacheAuPlusTard());
-    	assertArrayEquals(new Evenement[] { null }, Evenement1.getEvenementPredecesseur());
-    	
-    	assertEquals(2, Evenement2.getId());
-    	assertEquals(1.0, Evenement2.getTacheAuPlusTot());
-    	assertEquals(4.0, Evenement2.getTacheAuPlusTard());
-    	assertArrayEquals(new Evenement[] { Evenement1 }, Evenement2.getEvenementPredecesseur());
-    	
-    	assertEquals(3, Evenement3.getId());
-    	assertEquals(2.0, Evenement3.getTacheAuPlusTot());
-    	assertEquals(3.0, Evenement3.getTacheAuPlusTard());
-    	assertArrayEquals(new Evenement[] { Evenement1, Evenement2 }, Evenement3.getEvenementPredecesseur());
-    }
-    
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#Evenement( Evenement event_initial )}.
-     */
-    @Test
-    final void testConstructeurInitial() {
-		Evenement Evenement1 = new Evenement(new Evenement(0, 0.0, 0.0, new Evenement[] { null }));
-
-		assertEquals(new Evenement(0, 0.0, 0.0, new Evenement[] { null }), Evenement1.getEvenementInitial());
-    }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#getId()}.
-     */
-    @Test
-    final void testGetId() {
-	Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-		
-	assertEquals(1, Evenement1.getId());
-    }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#getTacheAuPlusTot()}.
-     */
+	//------------ Test Constructeurs -------------//
+	
+	@Test
+	void testConstructeurEvenementInitialCorrecte() {
+		Evenement evenement = new Evenement(1);
+		assertEquals(1, evenement.getId(), "L'ID de l'événement doit être 1.");
+		assertEquals(0.0, evenement.getDateAuPlusTot(), "La tâche au plus tôt doit être 0.0.");
+		assertEquals(0.0, evenement.getDateAuPlusTard(), "La tâche au plus tard doit être 0.0.");
+	}
+	
+	@Test
+	void testConstructeurEvenementCorrecte() {
+		fail();
+	}
+	
+	@Test
+	void testConstructeurEvenementIncorrecte() {
+		fail();
+	}
+	
+	@Test
+	void testConstructeurTacheIncorrecte() {
+		fail();
+	}
+	
+	@Test
+	void testConstructeurEvenementTacheIncorrecte() {
+		fail();
+	}
+	
+	//------------ Test des getters -------------//
+	
+	@Test
+	void testGetId() {
+		fail();
+	}
+	
 	@Test
 	void testGetTacheAuPlusTot() {
-		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-		
-		assertEquals(0.0, Evenement1.getTacheAuPlusTot());
+		fail();
 	}
-
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#getTacheAusPlusTard()}.
-	 */
+	
 	@Test
-	void testGetTacheAusPlusTard() {
-		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-		
-		assertEquals(5.0, Evenement1.getTacheAuPlusTard());
+	void testGetTacheAuPlusTard() {
+		fail();
 	}
-
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#getEvenementPredecesseur()}.
-	 */
+	
 	@Test
-	void testGetEvenementPredecesseur() {
-		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-		Evenement Evenement2 = new Evenement(2, 1.0, 4.0, new Evenement[] { Evenement1 });
-		
-		assertArrayEquals(new Evenement[] { null }, Evenement1.getEvenementPredecesseur());
-		assertArrayEquals(new Evenement[] { Evenement1 }, Evenement2.getEvenementPredecesseur());
-	}
-
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#getEvenementInitial()}.
-	 */
-	@Test
-	void testGetEvenementInitial() {
-	    Evenement evenementInitial = new Evenement(0, 0.0, 0.0, new Evenement[] { null });
-	    Evenement evenement = new Evenement(evenementInitial);
-
-	    assertEquals(evenementInitial, evenement.getEvenementInitial());
-	}
-
-	/**
-	 * Test method for {@link iut.info1.ordonnancement.Evenement#estCritique()}.
-	 */
-	@Test
-	void testEstCritique() {
-		Evenement Evenement1 = new Evenement(1, 5.0, 5.0, new Evenement[] { null });
-		Evenement Evenement2 = new Evenement(2, 1.0, 1.0, new Evenement[] { Evenement1 });
-		Evenement Evenement3 = new Evenement(3, 2.0, 3.0, new Evenement[] { Evenement1, Evenement2 });
-
-		assertTrue(Evenement1.estCritique());
-		assertTrue(Evenement2.estCritique());
-		assertFalse(Evenement3.estCritique());
-	}
-
-	/**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#equals(java.lang.Object)}.
-     */
+    void testGetEvenementPredecesseurList() {
+        fail();
+    }
+	
+	//------------ Test des méthodes -------------//
+	
     @Test
-    final void testEqualsObject() {
-		Evenement Evenement1 = new Evenement(1, 0.0, 5.0, new Evenement[] { null });
-		Evenement Evenement2 = new Evenement(2, 1.0, 4.0, new Evenement[] { Evenement1 });
-		Evenement Evenement3 = new Evenement(3, 2.0, 3.0, new Evenement[] { Evenement1, Evenement2 });
-		Evenement Evenement4 = new Evenement(3, 2.0, 3.0, new Evenement[] { Evenement1, Evenement2 });
-
-		assertNotEquals(Evenement1, Evenement2);
-		assertNotEquals(Evenement1, Evenement3);
-		assertNotEquals(Evenement2, Evenement3);
-		assertEquals(Evenement3, Evenement4);
+    void testEstCritique() {
+    	fail();
     }
     
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerDatePlusTot()}.
-     */
     @Test
     void testCalculerDatePlusTot() {
-        fail ("Not yet implemented");
+    	fail();
     }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerDatePlusTard()}.
-     */
+    
     @Test
     void testCalculerDatePlusTard() {
-        fail("Not yet implemented");
+    	fail();
     }
-
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Evenement#calculerFinProjet()}.
-     */
+    
     @Test
-    void testCalculerFinProjet() {
-        fail("Not yet implemented");
+	void testCalculerFinProjet() {
+		fail();
+	}
+    
+    @Test
+    void testEquals() {
+    	fail();
+    }
+    
+    @Test
+    void testhashCode() {
+		fail();	
     }
 }
