@@ -10,7 +10,7 @@ import java.util.Scanner;
  * Permet de charger des taches depuis la console
  */
 public class ChargeurConsole {
-//nom de tâche ; description de la tâche ; durée ; prédécesseur 1 ; prédécesseur 2 ; ... ; -
+    //nom de tâche ; description de la tâche ; durée ; prédécesseur 1 ; prédécesseur 2 ; ... ; -
     
     /**
      * Demande à l'utilisateur de saisir le nom d'une tâche
@@ -105,6 +105,4 @@ public class ChargeurConsole {
         }
         return nomsPredecesseurs;
     }
-
-       
 }

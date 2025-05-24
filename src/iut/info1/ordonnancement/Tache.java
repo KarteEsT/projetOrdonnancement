@@ -4,8 +4,7 @@
  */
 package iut.info1.ordonnancement;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.ArrayList;
 
 
 /**
@@ -27,11 +26,17 @@ import java.util.Objects;
 
 public class Tache {
     
-    //TODO : Ajouter des commentaires pour chaque attribut
+    /** Le libellé de la tache */
     private String libelle;
+    
+    /** La description de la tâche */
     private String description;
+    
+    /** La durée estimée de la tâche */
     private double duree;
-    private Tache[] tachesRequises;
+    
+    /** Les tâches qui doivent être terminées avant celle-ci */
+    private ArrayList<Tache> tachesRequises;
 
     /**
      * Construit une tâche avec un libellé, une description, une durée, et une liste de tâches requises.
@@ -42,7 +47,17 @@ public class Tache {
      * @param duree le temps estimé pour réaliser la tâche
      * @param tachesRequises les tâches devant être terminées avant celle-ci
      */
-    public Tache(String libelle, String description, double duree, Tache[] tachesRequises) {
+    public Tache(String libelle, String description, double duree, ArrayList<Tache> tachesRequises) {
+        if (libelle == null || libelle.isEmpty() || libelle.strip().isEmpty()) {
+            throw new IllegalArgumentException("Le libellé de la tâche ne peut pas être vide.");
+        }
+        if (description == null || description.isEmpty() || description.strip().isEmpty()) {
+            throw new IllegalArgumentException("La description de la tâche ne peut pas être vide.");
+        }
+        if (duree < 0) {
+            throw new IllegalArgumentException("La durée de la tâche doit être positive ou nulle.");
+        }
+        
         this.libelle = libelle;
         this.description = description;
         this.duree = duree;
@@ -52,20 +67,17 @@ public class Tache {
     /**
      * Construit une tâche sans tâches requises.
      * Initialise la tâche avec un libellé, une description et une durée,
-     * et une liste vide pour les tâches requises.
+     * et un ArrayList<Tache> vide pour les tâches requises.
      *
      * @param libelle le nom de la tâche
      * @param description une brève explication de la tâche
      * @param duree le temps estimé pour réaliser la tâche
      */
     public Tache(String libelle, String description, double duree) {
-        this(libelle, description, duree, new Tache[0]);
+        this(libelle, description, duree, new ArrayList<>());
     }
 
     /**
-     * Fournit le libellé (nom) de la tâche.
-     * Respecte le principe SRP en donnant un accès contrôlé à l'attribut `libelle`.
-     *
      * @return le libellé de la tâche
      */
     public String getLibelle() {
@@ -73,9 +85,6 @@ public class Tache {
     }
 
     /**
-     * Fournit la description de la tâche.
-     * Respecte le principe SRP en donnant un accès contrôlé à l'attribut `description`.
-     *
      * @return la description de la tâche
      */
     public String getDescription() {
@@ -83,9 +92,6 @@ public class Tache {
     }
 
     /**
-     * Fournit la durée de la tâche.
-     * Respecte le principe SRP en donnant un accès contrôlé à l'attribut `duree`.
-     *
      * @return la durée estimée de la tâche
      */
     public double getDuree() {
@@ -93,30 +99,9 @@ public class Tache {
     }
 
     /**
-     * Fournit la liste des tâches requises pour exécuter cette tâche.
-     * Respecte le principe SRP en donnant un accès contrôlé à l'attribut `tachesRequises`.
-     *
-     * @return un tableau des tâches à réaliser avant celle-ci
+     * @return un ArrayList<Tache> des tâches à réaliser avant celle-ci
      */
-    public Tache[] getTachesRequises() {
+    public ArrayList<Tache> getTachesRequises() {
         return tachesRequises;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Tache)) return false;
-        Tache tache = (Tache) o;
-        return Double.compare(tache.duree, duree) == 0 &&
-               Objects.equals(libelle, tache.libelle) &&
-               Objects.equals(description, tache.description) &&
-               Arrays.equals(tachesRequises, tache.tachesRequises);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(libelle, description, duree);
-        result = 31 * result + Arrays.hashCode(tachesRequises);
-        return result;
     }
 }
