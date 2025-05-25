@@ -8,7 +8,12 @@ import java.util.ArrayList;
 
 /**
  * Permet de lancer l'application
- * @author Esteban
+ * 
+ * @author Gabriel Le Goff
+ * @author Gabriel Robache
+ * @author Roveri Esteban
+ * @author Sauvaire Léo
+ * @author Massicard Maël
  */
 public class Prototype {
     
@@ -22,13 +27,14 @@ public class Prototype {
         ArrayList<Tache> toutesLesTaches = new ArrayList<>();
         Graphe2Test graphe = new Graphe2Test(null, null, null, null); // TODO créer un constructeur par défaut pour graphe
 
-        int nbTaches = chargeur.demandeNombreTaches();
-
-        // 1. Saisie utilisateur
-        for (int i = 0; i < nbTaches; i++) {
-            System.out.println("=== Tâche " + (i + 1) + " sur " + nbTaches + " ===");
-
+        // 1. Saisie utilisateur sans nombre fixe, arrêt sur "fin" ou vide
+        while (true) {
+            System.out.println("Entrez le nom de la tâche (ou 'fin' pour terminer) :");
             String nom = chargeur.demandeNomTache();
+            if (nom.equalsIgnoreCase("fin") || nom.isEmpty()) {
+                break;
+            }
+
             String description = chargeur.demandeDescriptionTache();
             double duree = chargeur.demandeDureeTache();
             String[] nomsPredecesseurs = chargeur.demandePredecesseursTache();
@@ -76,8 +82,8 @@ public class Prototype {
                 int indexPrec = toutesLesTaches.indexOf(tachePrec);
                 Evenement finPrec = fins.get(indexPrec);
 
-                // On crée un arc direct entre la fin du prédécesseur et le début de la tâche courante,
-                // sans créer de tâche liaison intermédiaire
+                // On crée un arc direct entre la fin du prédécesseur
+                // et le début de la tâche courante, sans créer de tâche liaison intermédiaire
                 finPrec.ajouterSuccesseur(debutTache, null);
             }
         }
