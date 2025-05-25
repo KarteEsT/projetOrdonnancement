@@ -31,18 +31,18 @@ public class Graphe2Test {
     private ArrayList<Tache> taches;
     
     /** Ensemble des différents événement du graphe */
-    private static ArrayList<Evenement> evenement;
+    private static ArrayList<Evenement> evenements;
     
     /**
      * Crée un graphe PERT
      * @param titre du graphe
      * @param unite du graphe
      * @param taches composant le graphe
-     * @param evenements composant le graphe
+     * @param listeEvenements composant le graphe
      * @throws NullPointerException si le titre ou l'unité est null
      */
     public Graphe2Test(String titre, String unite, ArrayList<Tache> taches, 
-            ArrayList<Evenement> evenements) {
+                       ArrayList<Evenement> listeEvenements) {
         if (titre == null || titre.isEmpty() || titre.isBlank()) {
                 throw new NullPointerException("Le titre ne peut pas être null.");
         }
@@ -51,23 +51,25 @@ public class Graphe2Test {
                 throw new NullPointerException("L'unité ne peut pas être null.");
         }
         
-        if (!verifierTachesRequisesExistantes()) {
-            throw new IllegalArgumentException("Les tâches requises ne sont pas toutes présentes.");
+        this.taches = new ArrayList<>(); // Initialisation de la liste des tâches
+        if (taches == null || taches.isEmpty()) {
+            this.taches = new ArrayList<>();
+        } else {
+            for (Tache tache : taches) {
+                ajouterTache(tache);
+            }
         }
-        
-        //Peuvent lever des exceptions si les taches ou évènements sont null
-        for (Tache tache : taches) {
-            ajouterTache(tache);
-        }
-        
-        for (Evenement evenement : evenements) {
+        if (listeEvenements == null || listeEvenements.isEmpty()) {
+            evenements = new ArrayList<>();
+        } else {
+            for (Evenement evenement : listeEvenements) {
             ajouterEvenement(evenement);
-        }
+            }
+        }        
+        
         
         this.titre = titre;
         this.unite = unite;
-        this.taches = taches;
-        this.evenement = evenements;
     }
 
 
@@ -96,36 +98,9 @@ public class Graphe2Test {
      * @return nouvelle valeur de évènement
      */
     public static ArrayList<Evenement> getEvenement() {
-        return evenement;
+        return evenements;
     }
     
-    /**
-     * Permet de vérifier si toutes les tâches requises existent dans le graphe.
-     * @return true si toutes les tâches requises existent
-     *         false sinon.
-     */
-    public boolean verifierTachesRequisesExistantes() {
-        if (getTaches() == null) {
-            return true; 
-        }
-
-        for (Tache tache : getTaches()) {
-            for (Tache requise : tache.getTachesRequises()) {
-                boolean trouvee = false;
-                for (Tache t : getTaches()) {
-                    if (t.equals(requise)) {
-                        trouvee = true;
-                        break;
-                    }
-                }
-                if (!trouvee) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     /**
      * Ajoute une tâche au graphe et vérifie la validité 
      * des tâches requises.
@@ -138,18 +113,18 @@ public class Graphe2Test {
         if (tache == null) {
             throw new NullPointerException("Une tâche ne peut pas être null.");
         }
-        for (Tache t : taches) {
-            if (tache.equals(t)) {
+        
+        if (getTaches().isEmpty() || getTaches() == null) {
+            getTaches().add(tache);
+        } else {
+            if (getTaches().contains(tache)) {
                 throw new IllegalArgumentException("La tâche " + tache.getLibelle() +
-                                                   " existe déjà dans le graphe.");
+                        " existe déjà dans le graphe.");
             }
+
+            getTaches().add(tache);
         }
         
-        getTaches().add(tache);
-        if (!verifierTachesRequisesExistantes()) {
-            throw new IllegalArgumentException("Les tâches requises ne " +
-                                               "sont pas toutes présentes.");
-        }
     }
     
     /**
@@ -235,35 +210,41 @@ public class Graphe2Test {
             }
         }
         
+        /* Algorithme de détection de circuit */
         boolean matriceEnCoursDeManipulation = true;
+        boolean[] supprime = new boolean[nombreTaches];
         do {
             boolean modification = false;
 
             for (int i = 0; i < nombreTaches; i++) {
+                if (supprime[i]) {
+                    continue; // Ignorer les lignes/colonnes déjà supprimées
+                }
+
                 boolean ligneVide = true;
                 boolean colonneVide = true;
 
                 for (int j = 0; j < nombreTaches; j++) {
-                    ligneVide = ligneVide && !matriceAdjacence[i][j];
-                    colonneVide = colonneVide && !matriceAdjacence[j][i];
+                    if (!supprime[j]) {
+                        ligneVide &= !matriceAdjacence[i][j];
+                        colonneVide &= !matriceAdjacence[j][i];
+                    }
                 }
 
                 if (ligneVide || colonneVide) {
-                    // On supprime la ligne et la colonne correspondantes
-                    for (int j = 0; j < nombreTaches; j++) {
-                        matriceAdjacence[i][j] = false;
-                        matriceAdjacence[j][i] = false;
-                    }
+                    supprime[i] = true; // Marquer la ligne/colonne comme supprimée
                     modification = true;
                 }
             }
 
-            // Si aucune modification n'a été faite, il reste un circuit ou la matrice est vide
+            // Si aucune modification n'a été faite, vérifier s'il reste des éléments
             if (!modification) {
                 for (int i = 0; i < nombreTaches; i++) {
-                    for (int j = 0; j < nombreTaches; j++) {
-                        if (matriceAdjacence[i][j]) {
-                            return true; // Il existe un circuit
+                    if (!supprime[i]) {
+                        for (int j = 0; j < nombreTaches; j++) {
+                            if (!supprime[j] && matriceAdjacence[i][j]) {
+                                return true; // Circuit détecté
+                            }
                         }
                     }
                 }

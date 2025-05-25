@@ -105,4 +105,14 @@ public class Tache {
         return tachesRequises;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Tache))
+            return false;
+        Tache other = (Tache) obj;
+        return libelle.equals(other.libelle);
+    }
+    
 }
