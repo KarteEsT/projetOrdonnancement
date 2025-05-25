@@ -4,6 +4,7 @@
  */
 package iut.info1.ordonnancement;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -12,6 +13,63 @@ import java.util.Scanner;
 public class ChargeurConsole {
     //nom de tâche ; description de la tâche ; durée ; prédécesseur 1 ; prédécesseur 2 ; ... ; -
     
+    /**
+     * Demande à l'utilisateur de saisir le nom d'un graphe
+     * envoie un message d'erreur si jamais le nom du graphe est déjà utilisé ou est vide
+     * et ajoute le nom validé à la liste des noms existants.
+     * @param nomsExistants une liste contenant les noms de graphes déjà existants (c'est une liste mutable)
+     * @return nom du graphe
+     */
+    public String demandeNomGraphe(List<String> nomsExistants) {
+        Scanner entree = new Scanner(System.in);
+        String nom;
+        boolean nomInvalide;
+
+        do {
+            System.out.print("Renseignez le nom du graphe : ");
+            nom = entree.nextLine().strip();
+
+            if (nom.isEmpty()) {
+                System.out.println("Le nom du graphe ne peut pas être vide.");
+                nomInvalide = true;
+            } else if (nomsExistants.contains(nom)) {
+                System.out.println("Le nom du graphe est déjà utilisé.");
+                nomInvalide = true;
+            } else {
+                nomInvalide = false;
+            }
+        } while (nomInvalide);
+
+        // Ajout du nom validé à la liste
+        nomsExistants.add(nom);
+
+        return nom;
+    }
+    
+    /** 
+     * Demande à l'utilisateur de saisir le nom d'un graphe 
+     * envoie un message d'erreur si jamais le nom du graphe est déja ou est vide
+     * @return nom du graphe
+     */
+    public String demandeNomGraphe() {
+        Scanner entree = new Scanner(System.in);
+        String nom;
+
+        boolean nomInvalide = false;
+
+        do {
+            System.out.print("Renseignez le nom du graphe : ");
+            nom = entree.nextLine().strip();
+            if (nom.equals("")) {
+                System.out.println("Le nom du graphe ne peut pas être vide.");
+                nomInvalide = true;
+            } else {
+                nomInvalide = false;
+            }
+        } while (nomInvalide);
+
+        return nom;
+    }
     /**
      * Demande à l'utilisateur de saisir le nom d'une tâche
      * @return nom de la tâche
