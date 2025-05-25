@@ -105,4 +105,30 @@ public class ChargeurConsole {
         }
         return nomsPredecesseurs;
     }
+
+    /**
+     * TODO commenter le rôle de cette méthode (SRP)
+     * @return nombre de tâches demandées
+     */
+    public int demandeNombreTaches() {
+        Scanner entree = new Scanner(System.in);
+        int nombreTaches = 0;
+        boolean nombreTachesInvalide = false;
+        do {
+            System.out.print("Combien de tâches voulez-vous saisir ? ");
+            try {
+                nombreTaches = Integer.parseInt(entree.nextLine().strip());
+                if (nombreTaches <= 0) {
+                    System.out.println("Le nombre de tâches doit être un entier positif.");
+                    nombreTachesInvalide = true;
+                } else {
+                    nombreTachesInvalide = false;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Le nombre de tâches doit être un entier positif.");
+                nombreTachesInvalide = true;
+            }
+        } while (nombreTachesInvalide);
+        return 0;
+    }
 }
