@@ -152,6 +152,20 @@ public class Graphe2Test {
         }
     }
     
+    /**
+     * Ajoute plusieurs tâches au graphe. Cette méthode vérifie que les tâches
+     * n'existent pas déjà
+     * 
+     * @param taches les tâches à ajouter
+     * @throws NullPointerException     si une des tâches est null
+     * @throws IllegalArgumentException si une des tâches existe déjà dans le graphe
+     */
+    public void ajouterToutesLesTaches(Tache... taches) {
+        for (Tache tache : taches) {
+            ajouterTache(tache);
+        }
+    }
+    
 
     /**
      * Ajoute un évènement au graphe.
