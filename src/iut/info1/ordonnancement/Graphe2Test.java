@@ -235,26 +235,42 @@ public class Graphe2Test {
             }
         }
         
-        /* On vérifie s'il existe un circuit */
-        for (int i = 0; i < nombreTaches; i++) {
-            boolean ligneVide = true;
-            boolean colonneVide = true;
-            for (int j = 0; j < nombreTaches; j++) {
-                ligneVide = ligneVide && matriceAdjacence[i][j];
-                colonneVide = colonneVide && matriceAdjacence[j][i];
-            }
-            if (ligneVide || colonneVide) {
-                // On supprime la ligne et la colonne correspondantes
+        boolean matriceEnCoursDeManipulation = true;
+        do {
+            boolean modification = false;
+
+            for (int i = 0; i < nombreTaches; i++) {
+                boolean ligneVide = true;
+                boolean colonneVide = true;
+
                 for (int j = 0; j < nombreTaches; j++) {
-                    matriceAdjacence[i][j] = false;
-                    matriceAdjacence[j][i] = false;
+                    ligneVide = ligneVide && !matriceAdjacence[i][j];
+                    colonneVide = colonneVide && !matriceAdjacence[j][i];
                 }
-            } else {
-                return true; // Il existe un circuit
+
+                if (ligneVide || colonneVide) {
+                    // On supprime la ligne et la colonne correspondantes
+                    for (int j = 0; j < nombreTaches; j++) {
+                        matriceAdjacence[i][j] = false;
+                        matriceAdjacence[j][i] = false;
+                    }
+                    modification = true;
+                }
             }
-        }
-        
-        
-        return false; //STUB 
+
+            // Si aucune modification n'a été faite, il reste un circuit ou la matrice est vide
+            if (!modification) {
+                for (int i = 0; i < nombreTaches; i++) {
+                    for (int j = 0; j < nombreTaches; j++) {
+                        if (matriceAdjacence[i][j]) {
+                            return true; // Il existe un circuit
+                        }
+                    }
+                }
+                matriceEnCoursDeManipulation = false; // Pas de circuit
+            }
+        } while (matriceEnCoursDeManipulation);
+
+        return false;
     }
 }
