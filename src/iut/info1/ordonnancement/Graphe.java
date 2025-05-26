@@ -134,10 +134,27 @@ public class Graphe {
      * @throws NullPointerException     si une des tâches est null
      * @throws IllegalArgumentException si une des tâches existe déjà dans le graphe
      */
-    public void ajouterToutesLesTaches(Tache... taches) {
+    public void ajouterPlusieursTaches(Tache... taches) {
         for (Tache tache : taches) {
             ajouterTache(tache);
         }
+    }
+    
+    /**
+     * Supprime une tâche du graphe.
+     * @param tache la tâche à supprimer
+     */
+    public void supprimerTache(Tache tache) {
+        if (tache == null) {
+            throw new NullPointerException("La tâche à supprimer ne peut pas être null.");
+        }
+
+        if (!getTaches().contains(tache)) {
+            throw new IllegalArgumentException("La tâche " + tache.getLibelle() + " n'existe pas dans le graphe.");
+        }
+
+        getTaches().remove(tache);
+        
     }
     
 
