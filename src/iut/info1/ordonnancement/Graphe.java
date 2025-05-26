@@ -72,7 +72,6 @@ public class Graphe {
         this.unite = unite;
     }
 
-
     /**
      * @return nouvelle valeur de titre
      */
