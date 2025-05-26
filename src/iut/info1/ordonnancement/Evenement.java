@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * des prédécesseurs, des successeurs, et des tâches associées.
  * Elle permet de calculer les dates au plus tôt et au plus tard, ainsi que de vérifier
  * si un événement est critique.
+ * 
  * @author Gabriel Robache
  * @author Gabriel Le Goff
  * @author Mael Massicard
