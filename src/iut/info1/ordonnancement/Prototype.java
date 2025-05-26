@@ -44,7 +44,7 @@ public class Prototype {
         taches.add(tache4);
 
         // Création du graphe
-        Graphe2Test graphe = new Graphe2Test("Graphe Test", "jours", taches, new ArrayList<>());
+        Graphe graphe = new Graphe("Graphe Test", "jours", taches, new ArrayList<>());
 
         // Test de la méthode existeCircuit
         boolean circuitExiste = graphe.existeCircuit();

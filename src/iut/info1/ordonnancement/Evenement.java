@@ -6,7 +6,7 @@ package iut.info1.ordonnancement;
 
 import iut.info1.ordonnancement.Tache;
 import iut.info1.ordonnancement.Graphe;
-import iut.info1.ordonnancement.Graphe2Test;
+import iut.info1.ordonnancement.Graphe;
 
 import java.util.ArrayList;
 
@@ -227,7 +227,7 @@ public class Evenement {
      * @return la date de fin du projet
      */
     public double calculerFinProjet() {
-        for (Evenement evenement : Graphe2Test.getEvenement()) { //modifier par Graphe2Test.getEvenement() --> Graphe.getEvenement()
+        for (Evenement evenement : Graphe.getEvenement()) { //modifier par Graphe2Test.getEvenement() --> Graphe.getEvenement()
             if (evenement.getEvenementSuccesseurList().isEmpty()) {
                 return evenement.getDateAuPlusTot();
             }
