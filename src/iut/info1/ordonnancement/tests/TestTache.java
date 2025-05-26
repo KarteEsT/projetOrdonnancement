@@ -7,6 +7,8 @@ package iut.info1.ordonnancement.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import iut.info1.ordonnancement.Tache;
@@ -27,43 +29,21 @@ import iut.info1.ordonnancement.Tache;
 
 class TestTache {
 
-    /**
-     * Test method for {@link iut.info1.ordonnancement.Tache#hashCode()}.
-     */
-    @Test
-    final void testHashCode() {
-        Tache tacheA = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0, new Tache[] { tacheA });
-        Tache tacheC = new Tache("Tache C", "Électricité", 3.0, new Tache []{ tacheA, tacheB });       
-        
-        assertNotEquals(tacheA.hashCode(), tacheB.hashCode());
-        assertNotEquals(tacheA.hashCode(), tacheC.hashCode());
-        assertNotEquals(tacheB.hashCode(), tacheC.hashCode());
-    }
-
+    
     /**
      * Test method for {@link iut.info1.ordonnancement.Tache#Tache(java.lang.String, java.lang.String, double, iut.info1.ordonnancement.Tache[])}.
      */
     @Test
     final void testConstructeur() {
-        Tache tacheA = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0, new Tache[] { tacheA });
-        Tache tacheC = new Tache("Tache C", "Électricité", 3.0, new Tache[] { tacheA, tacheB });
-
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0, new ArrayList<>());
+        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0, new ArrayList<>());
+        tacheB.getTachesRequises().add(tacheA);
+        
         assertEquals("Tache A", tacheA.getLibelle());
         assertEquals("Fondation", tacheA.getDescription());
-        assertEquals(2.0, tacheA.getDuree());
-        assertArrayEquals(new Tache[] { null }, tacheA.getTachesRequises());
-
-        assertEquals("Tache B", tacheB.getLibelle());
-        assertEquals("Plomberie", tacheB.getDescription());
-        assertEquals(1.0, tacheB.getDuree());
-        assertArrayEquals(new Tache[] { tacheA }, tacheB.getTachesRequises());
-
-        assertEquals("Tache C", tacheC.getLibelle());
-        assertEquals("Électricité", tacheC.getDescription());
-        assertEquals(3.0, tacheC.getDuree());
-        assertArrayEquals(new Tache[] { tacheA, tacheB }, tacheC.getTachesRequises());
+        
+        assertTrue(tacheA.getTachesRequises().isEmpty()); // Aucune tâche requise initialement
+        assertEquals("Tache A", tacheB.getTachesRequises().get(0).getLibelle()); 
     }
 
     /**
@@ -71,11 +51,17 @@ class TestTache {
      */
     @Test
     final void testConstructeurInitial() {
-        Tache tache = new Tache("Tache A", "Fondation", 2.0);
-        assertEquals("Tache A", tache.getLibelle());
-        assertEquals("Fondation", tache.getDescription());
-        assertEquals(2.0, tache.getDuree());
-        assertArrayEquals(new Tache[0], tache.getTachesRequises());
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        assertEquals("Tache A", tacheA.getLibelle());
+        assertEquals("Fondation", tacheA.getDescription());
+        assertEquals(2.0, tacheA.getDuree());
+        
+        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0);
+        
+        
+        tacheB.getTachesRequises().add(tacheA);
+        
+        assertEquals("Tache A", tacheB.getTachesRequises().get(0).getLibelle());
     }
 
     /**
@@ -83,8 +69,11 @@ class TestTache {
      */
     @Test
     final void testGetLibelle() {
-        Tache tache = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        assertEquals("Tache A", tache.getLibelle());
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0);
+        
+        assertEquals("Tache A", tacheA.getLibelle());
+        assertEquals("Tache B", tacheB.getLibelle());
     }
 
     /**
@@ -92,8 +81,13 @@ class TestTache {
      */
     @Test
     final void testGetDescription() {
-        Tache tache = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        assertEquals("Fondation", tache.getDescription());
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        
+        assertEquals("Fondation", tacheA.getDescription());
+        
+        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0);
+        
+        assertEquals("Plomberie", tacheB.getDescription());
     }
 
     /**
@@ -101,8 +95,8 @@ class TestTache {
      */
     @Test
     final void testGetDuree() {
-        Tache tache = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        assertEquals(2.0, tache.getDuree());
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        assertEquals(2.0, tacheA.getDuree());
     }
 
     /**
@@ -110,27 +104,31 @@ class TestTache {
      */
     @Test
     final void testGetTachesRequises() {
-        Tache tacheA = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0, new Tache[] { tacheA });
-        Tache tacheC = new Tache("Tache C", "Électricité", 3.0, new Tache[] { tacheA, tacheB });
-
-        assertArrayEquals(new Tache[] { tacheA, tacheB }, tacheC.getTachesRequises());
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        
+        Tache tacheB = new Tache("Tache B" , "Plomberie", 1.0);
+        
+        tacheB.getTachesRequises().add(tacheA);
+        
+        assertEquals("Tache A", tacheB.getTachesRequises().get(0).getLibelle());
+        
+        assertEquals(0, tacheA.getTachesRequises().size());
+        
     }
+        
 
     /**
      * Test method for {@link iut.info1.ordonnancement.Tache#equals(java.lang.Object)}.
      */
     @Test
     final void testEqualsObject() {
-        Tache tacheA = new Tache("Tache A", "Fondation", 2.0, new Tache[] { null });
-        Tache tacheB = new Tache("Tache B", "Plomberie", 1.0, new Tache[] { tacheA });
-        Tache tacheC = new Tache("Tache C", "Électricité", 3.0, new Tache[] { tacheA, tacheB });
-        Tache tacheD = new Tache("Tache C", "Électricité", 3.0, new Tache[] { tacheA, tacheB });
-
-        assertNotEquals(tacheA, tacheB);
-        assertNotEquals(tacheA, tacheC);
-        assertNotEquals(tacheB, tacheC);
-        assertEquals(tacheC, tacheD);
+        Tache tacheA = new Tache("Tache A", "Fondation", 2.0);
+        Tache tacheB = new Tache("Tache A", "Fondation", 2.0);
+        Tache tacheC = new Tache("Tache C", "Électricité", 3.0);
+        
+        assertTrue(tacheA.equals(tacheB), "Les tâches A et B devraient être égales");
+        assertFalse(tacheA.equals(tacheC), "Les tâches A et C ne devraient pas être égales");
+        
     }
 
 }
