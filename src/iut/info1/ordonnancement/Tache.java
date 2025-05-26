@@ -105,6 +105,12 @@ public class Tache {
         return tachesRequises;
     }
     
+    //ajouterTache
+    
+    //modifierTache
+    
+    //supprimerTache
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -115,4 +121,5 @@ public class Tache {
         return libelle.equals(other.libelle);
     }
     
+    //hashCode
 }
