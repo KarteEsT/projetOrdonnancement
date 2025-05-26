@@ -29,12 +29,15 @@ public class Prototype {
         Tache tache3 = new Tache("T3", "Description T3", 1);
         Tache tache4 = new Tache("T4", "Description T4", 4);
 
+        Tache tache5 = new Tache("T5", "Description T5", 1);
+        Tache tache6 = new Tache("T6", "Description T6", 4);
+
         // Définition des dépendances (T2 dépend de T1, T3 dépend de T2)
-        tache2.getTachesRequises().add(tache1);
-        tache3.getTachesRequises().add(tache2);
+        tache2.ajouterTacheRequise(tache1);
+        tache3.ajouterTacheRequise(tache2);
 
         // Ajout d'une dépendance circulaire pour tester (T1 dépend de T3)
-        tache1.getTachesRequises().add(tache2);
+        tache1.ajouterTacheRequise(tache2);
 
         // Création de la liste des tâches
         ArrayList<Tache> taches = new ArrayList<>();
@@ -42,12 +45,16 @@ public class Prototype {
         taches.add(tache2);
         taches.add(tache3);
         taches.add(tache4);
+        taches.add(tache6);
 
         // Création du graphe
         Graphe graphe = new Graphe("Graphe Test", "jours", taches, new ArrayList<>());
+        
+        graphe.ajouterTache(tache5);
 
         // Test de la méthode existeCircuit
         boolean circuitExiste = graphe.existeCircuit();
-        System.out.println("Un circuit existe : " + circuitExiste);
+        System.out.println("Circuit existant : " + circuitExiste);
+        System.out.println(graphe.toString());
     }
 }

@@ -270,4 +270,13 @@ public class Graphe {
 
         return false;
     }
+    
+    
+    @Override
+    public String toString() {
+        String graphe = getTitre();
+        graphe += ", unite = " + getUnite();
+        graphe += "\n" + getTaches();
+        return graphe;
+    }
 }

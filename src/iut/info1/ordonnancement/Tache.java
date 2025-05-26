@@ -146,4 +146,12 @@ public class Tache {
         return libelle.equals(other.libelle);
     }
     
+    @Override
+    public String toString() {
+        String tache = getLibelle();
+        
+        return tache;
+        
+    }
+    
 }

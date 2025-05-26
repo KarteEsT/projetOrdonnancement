@@ -4,10 +4,6 @@
  */
 package iut.info1.ordonnancement;
 
-import iut.info1.ordonnancement.Tache;
-import iut.info1.ordonnancement.Graphe;
-import iut.info1.ordonnancement.Graphe;
-
 import java.util.ArrayList;
 
 /**
@@ -159,12 +155,12 @@ public class Evenement {
      */
     public double calculerDatePlusTot() {
         // Si aucun prédécesseur, la date au plus tôt est 0.0
-        if (evenementPredecesseurList.isEmpty()) {
+        if (getEvenementPredecesseurList().isEmpty()) {
             return 0.0; //le seul événement sans prédécesseur est l'événement initial
         }
 
         // Initialisation de la date au plus tôt à une valeur par défaut
-        double dateAuPlusTot = Double.MAX_VALUE;
+        double dateAuPlusTot = Double.MIN_VALUE;
 
         // Parcours des événements prédécesseurs
         for (int i = 0; i < evenementPredecesseurList.size(); i++) {
@@ -178,7 +174,7 @@ public class Evenement {
             double dateAvecDuree = datePlusTotPredecesseur + tachePredecesseur.getDuree();
 
             // Mise à jour de la date au plus tôt si la nouvelle date est plus petite
-            dateAuPlusTot = Math.min(dateAuPlusTot, dateAvecDuree);
+            dateAuPlusTot = Math.max(dateAuPlusTot, dateAvecDuree);
         }
 
         return dateAuPlusTot;
@@ -220,6 +216,7 @@ public class Evenement {
         return dateAuPlusTard;
     }
     
+    //TODO mettre dans Graphe
     /**
      * Calcule la date de fin de projet.
      * La date de fin de projet correspond à la date au plus tôt
@@ -236,17 +233,17 @@ public class Evenement {
         throw new IllegalStateException("Aucun événement sans successeur trouvé.");
     }
 
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true; // Vérifie si les deux références pointent vers le même objet
-	    if (o == null || getClass() != o.getClass()) return false; // Vérifie la classe et si l'objet est null
-	    Evenement evenement = (Evenement) o;
-	    return id == evenement.id
-	            && Double.compare(evenement.dateAuPlusTot, dateAuPlusTot) == 0
-	            && Double.compare(evenement.dateAuPlusTard, dateAuPlusTard) == 0
-	            && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
-	            && tachePredecesseurList.equals(evenement.tachePredecesseurList);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // Vérifie si les deux références pointent vers le même objet
+        if (o == null || getClass() != o.getClass()) return false; // Vérifie la classe et si l'objet est null
+        Evenement evenement = (Evenement) o;
+        return id == evenement.id
+                && Double.compare(evenement.dateAuPlusTot, dateAuPlusTot) == 0
+                && Double.compare(evenement.dateAuPlusTard, dateAuPlusTard) == 0
+                && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
+                && tachePredecesseurList.equals(evenement.tachePredecesseurList);
+    }
 
 
     @Override
