@@ -160,6 +160,6 @@ public class TestEvenement {
 		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 		Evenement evenement2 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		assertEquals(evenement1, evenement2);
+		assertEquals(evenement1.equals(evenement2), evenement2.equals(evenement1));
     }
 }
