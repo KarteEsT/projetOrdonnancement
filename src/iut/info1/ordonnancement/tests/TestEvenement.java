@@ -148,7 +148,7 @@ public class TestEvenement {
 	}
     
     @Test
-    void testEquals() {
+    void testEquals() { //TODO
     	
 		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
 		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
