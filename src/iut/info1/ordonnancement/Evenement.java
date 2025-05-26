@@ -155,8 +155,26 @@ public class Evenement {
      * @return la date au plus tôt calculée pour cet événement
      */
     public double calculerDatePlusTot() {
-    	return 0.0; //STUB
-    	//TODO
+        double maxDate = 0.0;
+
+        // Parcourt les prédécesseurs et leurs tâches associées
+        for (int i = 0; i < evenementPredecesseurList.size(); i++) {
+            Evenement predecesseur = evenementPredecesseurList.get(i);
+            Tache tachePredecesseur = tachePredecesseurList.get(i);
+
+            // Calcule la date au plus tôt pour ce prédécesseur
+            double datePrecedente = predecesseur.getDateAuPlusTot() + tachePredecesseur.getDuree();
+
+            // Met à jour la date maximale
+            if (datePrecedente > maxDate) {
+                maxDate = datePrecedente;
+            }
+        }
+
+        // Met à jour la date au plus tôt de cet événement
+        this.dateAuPlusTot = maxDate;
+
+        return maxDate;
     }
 
     /**
