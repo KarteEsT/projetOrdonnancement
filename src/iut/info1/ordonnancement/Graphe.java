@@ -63,7 +63,7 @@ public class Graphe {
             evenements = new ArrayList<>();
         } else {
             for (Evenement evenement : listeEvenements) {
-            ajouterEvenement(evenement);
+                ajouterEvenement(evenement);
             }
         }        
         
@@ -111,6 +111,14 @@ public class Graphe {
     public void ajouterTache(Tache tache) {
         if (tache == null) {
             throw new NullPointerException("Une tâche ne peut pas être null.");
+        }
+        if (tache.getTachesRequises() != null ) {
+            for (Tache requise : tache.getTachesRequises()) {
+                if (!getTaches().contains(requise)) {
+                    throw new IllegalArgumentException(
+                            "La tâche requise " + requise.getLibelle() + " n'existe pas dans le graphe.");
+                }
+            }
         }
         
         if (getTaches().isEmpty() || getTaches() == null) {
