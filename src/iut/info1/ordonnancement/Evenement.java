@@ -125,12 +125,20 @@ public class Evenement {
     
 	/**
 	 * Retourne la liste des tâches prédécesseurs.
-	 * 
 	 * @return une liste des tâches prédécesseurs
 	 */
 	public ArrayList<Tache> getTachePredecesseurList() {
 		return tachePredecesseurList;
 	}
+	
+	/**
+	 * Retourne la liste des tâches successeurs.
+	 * @return une liste des tâches successeurs
+	 */
+	public ArrayList<Tache> getTacheSuccesseurList() {
+		return tacheSuccesseurList;
+	}
+	
 
     /**
      * Vérifie si cet événement est critique.
@@ -151,7 +159,7 @@ public class Evenement {
     public double calculerDatePlusTot() {
         // Si aucun prédécesseur, la date au plus tôt est 0.0
         if (evenementPredecesseurList.isEmpty()) {
-            return 0.0;
+            return 0.0; //le seul événement sans prédécesseur est l'événement initial
         }
 
         // Initialisation de la date au plus tôt à une valeur par défaut
