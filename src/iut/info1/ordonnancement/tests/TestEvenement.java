@@ -23,53 +23,106 @@ public class TestEvenement {
 	//------------ Test Constructeurs -------------//
 	
 	@Test
-	void testConstructeurEvenementInitialCorrecte() {
-		Evenement evenement = new Evenement(1);
-		assertEquals(1, evenement.getId(), "L'ID de l'événement doit être 1.");
-		assertEquals(0.0, evenement.getDateAuPlusTot(), "La tâche au plus tôt doit être 0.0.");
-		assertEquals(0.0, evenement.getDateAuPlusTard(), "La tâche au plus tard doit être 0.0.");
+	void testConstructeurEvenementCorrect() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+		
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+		
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+		
+		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		
+		assertEquals(Evenement.EVENEMENT_INITIAL, evenement1.getEvenementPredecesseurList().get(0));
 	}
 	
 	@Test
-	void testConstructeurEvenementCorrecte() {
-		fail();
+	void testConstructeurEvenementIncorrect() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+		tachesPredecesseurs.add(tache1);
+		// Je n'ajoute pas l'événement initial dans la liste des événements prédécesseurs pour créer une erreur
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		});
 	}
 	
 	@Test
-	void testConstructeurEvenementIncorrecte() {
-		fail();
+	void testConstructeurTacheIncorrect() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		// Je n'ajoute pas de tache prédécesseur pour créer une erreur.
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		});
 	}
 	
 	@Test
-	void testConstructeurTacheIncorrecte() {
-		fail();
-	}
-	
-	@Test
-	void testConstructeurEvenementTacheIncorrecte() {
-		fail();
+	void testConstructeurEvenementTacheIncorrect() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+		tachesPredecesseurs.add(tache2);
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		});
 	}
 	
 	//------------ Test des getters -------------//
 	
 	@Test
 	void testGetId() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+
+		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+		assertEquals(0, Evenement.EVENEMENT_INITIAL.getId());
+		assertEquals(1, evenement1.getId());
+	}
+	
+	@Test
+	void testGetDateAuPlusTot() {
 		fail();
 	}
 	
 	@Test
-	void testGetTacheAuPlusTot() {
-		fail();
-	}
-	
-	@Test
-	void testGetTacheAuPlusTard() {
+	void testGetDateAuPlusTard() {
 		fail();
 	}
 	
 	@Test
     void testGetEvenementPredecesseurList() {
-        fail();
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+        
+        tachesPredecesseurs.add(tache1);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        
+        assertEquals(1, evenement1.getEvenementPredecesseurList().size());
+        assertTrue(evenement1.getEvenementPredecesseurList().contains(Evenement.EVENEMENT_INITIAL));
     }
 	
 	//------------ Test des méthodes -------------//
@@ -96,11 +149,17 @@ public class TestEvenement {
     
     @Test
     void testEquals() {
-    	fail();
-    }
-    
-    @Test
-    void testhashCode() {
-		fail();	
+    	
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+
+		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		Evenement evenement2 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+		assertEquals(evenement1, evenement2);
     }
 }

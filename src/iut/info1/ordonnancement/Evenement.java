@@ -43,13 +43,16 @@ public class Evenement {
     /** Ensemble des événements successeurs d'un événement */
     private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
 
+    /** Événement initial, utilisé pour représenter le début du projet */
+    public final static Evenement EVENEMENT_INITIAL = new Evenement();
+    
     /**
      * Constructeur pour un événement initial.
      * Les valeurs de tâche au plus tôt et au plus tard sont initialisées à 0.0.
      * @param id Identifiant de l'événement
      */
-    public Evenement(int id) {
-        this.id = id;
+    private Evenement() {
+        this.id = 0;
         this.dateAuPlusTot = 0.0;
         this.dateAuPlusTard = 0.0;
     }
@@ -76,8 +79,6 @@ public class Evenement {
         this.id = id;
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
-        this.dateAuPlusTot = calculerDatePlusTot();
-        this.dateAuPlusTard = calculerDatePlusTard(calculerFinProjet());
     }
 
     /**
@@ -154,30 +155,8 @@ public class Evenement {
      * @return la date au plus tôt calculée pour cet événement
      */
     public double calculerDatePlusTot() {
-        // Si aucun prédécesseur, la date au plus tôt est 0.0
-        if (getEvenementPredecesseurList().isEmpty()) {
-            return 0.0; //le seul événement sans prédécesseur est l'événement initial
-        }
-
-        // Initialisation de la date au plus tôt à une valeur par défaut
-        double dateAuPlusTot = Double.MIN_VALUE;
-
-        // Parcours des événements prédécesseurs
-        for (int i = 0; i < evenementPredecesseurList.size(); i++) {
-            Evenement predecesseur = evenementPredecesseurList.get(i);
-            Tache tachePredecesseur = tachePredecesseurList.get(i);
-
-            // Calcul de la date au plus tôt du prédécesseur
-            double datePlusTotPredecesseur = predecesseur.calculerDatePlusTot();
-
-            // Ajout de la durée de la tâche associée
-            double dateAvecDuree = datePlusTotPredecesseur + tachePredecesseur.getDuree();
-
-            // Mise à jour de la date au plus tôt si la nouvelle date est plus petite
-            dateAuPlusTot = Math.max(dateAuPlusTot, dateAvecDuree);
-        }
-
-        return dateAuPlusTot;
+    	return 0.0; //STUB
+    	//TODO
     }
 
     /**
@@ -189,34 +168,10 @@ public class Evenement {
      * @return la date au plus tard calculée pour cet événement
      */
     public double calculerDatePlusTard(double dateFinProjet) {
-        // Si aucun successeur, la date au plus tard est la date de fin du projet
-        if (evenementSuccesseurList.isEmpty()) {
-            dateAuPlusTard = dateFinProjet;
-            return dateAuPlusTard;
-        }
-
-        // Initialisation de la date au plus tard à une valeur très élevée
-        double dateAuPlusTard = Double.MAX_VALUE;
-
-        // Parcours des événements successeurs
-        for (int i = 0; i < evenementSuccesseurList.size(); i++) {
-            Evenement successeur = evenementSuccesseurList.get(i);
-            Tache tacheSuccesseur = tacheSuccesseurList.get(i);
-
-            // Calcul de la date au plus tard du successeur
-            double datePlusTardSuccesseur = successeur.calculerDatePlusTard(dateFinProjet);
-
-            // Calcul de la date au plus tard pour cet événement
-            double dateAvecDuree = datePlusTardSuccesseur - tacheSuccesseur.getDuree();
-
-            // Mise à jour de la date au plus tard si la nouvelle date est plus petite
-            dateAuPlusTard = Math.min(dateAuPlusTard, dateAvecDuree);
-        }
-
-        return dateAuPlusTard;
+    	return 0.0; //STUB
+    	//TODO
     }
     
-    //TODO mettre dans Graphe
     /**
      * Calcule la date de fin de projet.
      * La date de fin de projet correspond à la date au plus tôt
@@ -225,12 +180,8 @@ public class Evenement {
      * @return la date de fin du projet
      */
     public double calculerFinProjet() {
-        for (Evenement evenement : Graphe.getEvenement()) { //modifier par Graphe2Test.getEvenement() --> Graphe.getEvenement()
-            if (evenement.getEvenementSuccesseurList().isEmpty()) {
-                return evenement.getDateAuPlusTot();
-            }
-        }
-        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
+    	return 0.0; //STUB
+    	//TODO
     }
 
     @Override
@@ -245,12 +196,4 @@ public class Evenement {
                 && tachePredecesseurList.equals(evenement.tachePredecesseurList);
     }
 
-
-    @Override
-    public int hashCode() {
-        int result = Integer.hashCode(id);
-        result = 31 * result + Double.hashCode(dateAuPlusTot);
-        result = 31 * result + Double.hashCode(dateAuPlusTard);
-        return result;
-    }
 }
