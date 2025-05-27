@@ -222,7 +222,9 @@ public class Graphe {
      * @throws  IllegalStateException si le graphe contient un circuit
      */
     public void ordonnerTaches() {
-        
+        if (getTaches() == null || getTaches().isEmpty()) {
+            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+        }
         trierTaches();
             
         /* Création des événements */
@@ -262,17 +264,19 @@ public class Graphe {
                                             + " l'ordonnancement est impossible.");
         }
         /* Tri ArrayList */
-        ArrayList<Tache> tachesTriees = new ArrayList<>();
-        ArrayList<Tache> tachesNonTriees = new ArrayList<>(getTaches());
+        ArrayList<Tache> tachesTriees = new ArrayList<>(); // Liste des tâches triées
+        ArrayList<Tache> tachesNonTriees = new ArrayList<>(getTaches()); // Liste des tâches non triées
+        ArrayList<Tache> tachesAEnlever = new ArrayList<>(); 
         
         while (!tachesNonTriees.isEmpty()) {
             for (Tache aTrier : tachesNonTriees) {
-                System.out.println("Tache : " + aTrier.toString());
                 if (aTrier.getTachesRequises().isEmpty() || tachesTriees.containsAll(aTrier.getTachesRequises())) {
                     tachesTriees.add(aTrier);
-                    tachesNonTriees.remove(aTrier);
+                    tachesAEnlever.add(aTrier);
                 }
             }
+            tachesNonTriees.removeAll(tachesAEnlever);
+            tachesAEnlever.clear(); 
         }
         setTaches(tachesTriees);
     }

@@ -33,16 +33,14 @@ public class Prototype {
         Tache tache6 = new Tache("T6", "Description T6", 4);
 
         // Définition des dépendances (T2 dépend de T1, T3 dépend de T2)
-        tache2.ajouterTacheRequise(tache1);
-        tache3.ajouterTacheRequise(tache2);
 
         // Ajout d'une dépendance circulaire pour tester (T1 dépend de T3)
         //tache1.ajouterTacheRequise(tache2);
 
         // Création de la liste des tâches
         ArrayList<Tache> taches = new ArrayList<>();
-        taches.add(tache1);
         taches.add(tache2);
+        taches.add(tache1);
         taches.add(tache3);
         taches.add(tache4);
         taches.add(tache6);
@@ -50,6 +48,8 @@ public class Prototype {
         // Création du graphe
         Graphe graphe = new Graphe("Graphe Test", "jours", taches, new ArrayList<>());
         
+        tache2.ajouterTacheRequise(tache1);
+        tache3.ajouterTacheRequise(tache2);
         graphe.ajouterTache(tache5);
         
 
