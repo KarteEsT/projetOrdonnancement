@@ -75,8 +75,10 @@ public class Evenement {
         if (evenementPredecesseurList.size() != tachePredecesseurList.size()) {
             throw new IllegalArgumentException("Le nombre de prédécesseurs doit correspondre au nombre de tâches.");
         }
-
+        
         this.id = id;
+        this.dateAuPlusTot = 0.0; // Initialisation de la date au plus tôt qui sera calculée lors de l'ordonnancement
+        this.dateAuPlusTard = 0.0; // Initialisation de la date au plus tard qui sera calculée lors de l'ordonnancement
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
     }
@@ -174,7 +176,7 @@ public class Evenement {
         // Met à jour la date au plus tôt de cet événement
         this.dateAuPlusTot = maxDate;
 
-        return maxDate;
+        return dateAuPlusTot;
     }
 
     /**
@@ -186,8 +188,31 @@ public class Evenement {
      * @return la date au plus tard calculée pour cet événement
      */
     public double calculerDatePlusTard(double dateFinProjet) {
-    	return 0.0; //STUB
-    	//TODO
+        if (evenementSuccesseurList.isEmpty()) {
+            // Si aucun successeur, la date au plus tard est la date de fin du projet
+            this.dateAuPlusTard = dateFinProjet;
+        } else {
+            double minDate = Double.MAX_VALUE;
+
+            // Parcourt les successeurs et leurs tâches associées
+            for (int i = 0; i < evenementSuccesseurList.size(); i++) {
+                Evenement successeur = evenementSuccesseurList.get(i);
+                Tache tacheSuccesseur = tacheSuccesseurList.get(i);
+
+                // Calcule la date au plus tard pour ce successeur
+                double dateSuivante = successeur.getDateAuPlusTard() - tacheSuccesseur.getDuree();
+
+                // Met à jour la date minimale
+                if (dateSuivante < minDate) {
+                    minDate = dateSuivante;
+                }
+            }
+
+            // Met à jour la date au plus tard de cet événement
+            this.dateAuPlusTard = minDate;
+        }
+
+        return dateAuPlusTard;
     }
     
     /**
@@ -198,8 +223,12 @@ public class Evenement {
      * @return la date de fin du projet
      */
     public double calculerFinProjet() {
-    	return 0.0; //STUB
-    	//TODO
+        for (Evenement evenement : Graphe.getEvenement()) {
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                return evenement.getDateAuPlusTot();
+            }
+        }
+        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
     }
 
     @Override
