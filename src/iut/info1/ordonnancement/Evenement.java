@@ -141,6 +141,30 @@ public class Evenement {
 		}
 		this.evenementSuccesseurList = evenementSuccesseurList;
 	}
+	
+	/**
+	 * Setter de la liste des taches successeurs.
+	 */
+	public void setTacheSuccesseurList(ArrayList<Tache> tacheSuccesseurList) {
+		if (tacheSuccesseurList == null || tacheSuccesseurList.isEmpty()) {
+			throw new IllegalArgumentException("La liste des tâches successeurs ne peut pas être vide.");
+		}
+		this.tacheSuccesseurList = tacheSuccesseurList;
+	}
+	
+	/**
+	 * Setter de la date au plus tôt.
+	 */
+	public void setDatePlusTot(double dateAuPlusTot) {
+		this.dateAuPlusTot = dateAuPlusTot;
+	}
+	
+	/**
+	 * Setter de la date au plus tard.
+	 */
+	public void setDatePlusTard(double dateAuPlusTard) {
+		this.dateAuPlusTard = dateAuPlusTard;
+	}
 
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.

@@ -41,33 +41,30 @@ public class Graphe {
      * @param listeEvenements composant le graphe
      * @throws NullPointerException si le titre ou l'unité est null
      */
-    public Graphe(String titre, String unite, ArrayList<Tache> taches, 
-                       ArrayList<Evenement> listeEvenements) {
+    public Graphe(String titre, String unite, ArrayList<Tache> taches, ArrayList<Evenement> listeEvenements) {
         if (titre == null || titre.isEmpty() || titre.isBlank()) {
-                throw new NullPointerException("Le titre ne peut pas être null.");
+            throw new NullPointerException("Le titre ne peut pas être null.");
         }
-        
+
         if (unite == null) {
-                throw new NullPointerException("L'unité ne peut pas être null.");
+            throw new NullPointerException("L'unité ne peut pas être null.");
         }
-        
-        this.taches = new ArrayList<>(); // Initialisation de la liste des tâches
-        if (taches == null || taches.isEmpty()) {
-            this.taches = new ArrayList<>();
-        } else {
+
+        this.taches = new ArrayList<>();
+        if (taches != null && !taches.isEmpty()) {
             for (Tache tache : taches) {
                 ajouterTache(tache);
             }
         }
-        if (listeEvenements == null || listeEvenements.isEmpty()) {
-            evenements = new ArrayList<>();
-        } else {
+
+        // Initialisation de la liste `evenements`
+        this.evenements = new ArrayList<>();
+        if (listeEvenements != null && !listeEvenements.isEmpty()) {
             for (Evenement evenement : listeEvenements) {
                 ajouterEvenement(evenement);
             }
-        }        
-        
-        
+        }
+
         this.titre = titre;
         this.unite = unite;
     }
