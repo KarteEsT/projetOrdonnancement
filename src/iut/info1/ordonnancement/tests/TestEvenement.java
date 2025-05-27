@@ -6,6 +6,7 @@ package iut.info1.ordonnancement.tests;
 
 import iut.info1.ordonnancement.Evenement;
 import iut.info1.ordonnancement.Tache;
+import iut.info1.ordonnancement.Graphe;
 
 import org.junit.jupiter.api.Test;
 
@@ -127,7 +128,7 @@ public class TestEvenement {
 		tachesPredecesseurs.add(tache1);
 
 		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-
+		
 		assertEquals(0.0, evenement1.getDateAuPlusTard()); //ici 0.0 car l'ordonnancement n'est pas encore fait
 		assertEquals(0.0, Evenement.EVENEMENT_INITIAL.getDateAuPlusTard());
 	}
@@ -151,11 +152,7 @@ public class TestEvenement {
 	
 	@Test
 	void testAddEvenementPredecesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		
-		Evenement.addEvenementPredecesseur(Evenement.EVENEMENT_INITIAL); //TODO
-		assertEquals(1, evenementsPredecesseurs.size(),
-				"La liste des événements prédécesseurs doit contenir 1 élément.");
+        fail();
 	}
 	
 	@Test
@@ -216,19 +213,32 @@ public class TestEvenement {
     
     @Test
     void testCalculerDatePlusTard() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
-		tachesPredecesseurs.add(tache1);
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+        tachesPredecesseurs.add(tache1);
 
-		Evenement evenementFinal = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		evenementFinal.calculerDatePlusTot();
-		
-		
-		assertEquals(5.0, evenementFinal.getDateAuPlusTard(),
-				"La date au plus tard doit être 5.0 après le calcul initial. 0.0 + 5.0 = 5.0");
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        // Création du graphe
+        ArrayList<Evenement> listeEvenements = new ArrayList<>();
+        ArrayList<Tache> listeTaches = new ArrayList<>();
+        
+        listeEvenements.add(Evenement.EVENEMENT_INITIAL);
+        listeEvenements.add(evenement1);
+        listeTaches.add(tache1);
+
+        Graphe graphe = new Graphe("Test Graphe", "jours", listeTaches, listeEvenements);
+
+        // Calcul des dates
+        double dateFinProjet = graphe.calculerFinProjet();
+        evenement1.calculerDatePlusTard(dateFinProjet);
+
+        // Vérification
+        assertEquals(5.0, evenement1.getDateAuPlusTard(),
+            "La date au plus tard doit être 5.0 après le calcul initial.");
     }
     
     @Test
