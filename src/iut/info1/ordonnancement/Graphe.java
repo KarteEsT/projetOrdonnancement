@@ -31,7 +31,7 @@ public class Graphe {
     private ArrayList<Tache> taches;
     
     /** Ensemble des différents événement du graphe */
-    private static ArrayList<Evenement> evenements;
+    private ArrayList<Evenement> evenements;
     
     /**
      * Crée un graphe PERT
@@ -96,7 +96,7 @@ public class Graphe {
     /**
      * @return nouvelle valeur de évènement
      */
-    public static ArrayList<Evenement> getEvenement() {
+    public ArrayList<Evenement> getEvenement() {
         return evenements;
     }
     
@@ -146,6 +146,22 @@ public class Graphe {
         for (Tache tache : taches) {
             ajouterTache(tache);
         }
+    }
+    
+    /**
+     * Calcule la date de fin de projet.
+     * La date de fin de projet correspond à la date au plus tôt
+     * de l'unique événement sans successeur.
+     *
+     * @return la date de fin du projet
+     */
+    public double calculerFinProjet() {
+        for (Evenement evenement : getEvenement()) {
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                return evenement.getDateAuPlusTot();
+            }
+        }
+        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
     }
     
     /**

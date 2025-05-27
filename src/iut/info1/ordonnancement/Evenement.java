@@ -84,31 +84,27 @@ public class Evenement {
     }
 
     /**
-     * Retourne l'identifiant de l'événement.
-     * @return l'identifiant de l'événement
+	 * @return l'identifiant de l'événement
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Retourne la tâche au plus tôt de l'événement.
-     * @return la tâche au plus tôt
+     * @return la tâche au plus tôt de l'événement
      */
     public double getDateAuPlusTot() {
         return dateAuPlusTot;
     }
 
     /**
-     * Retourne la tâche au plus tard de l'événement.
-     * @return la tâche au plus tard
+     * @return la tâche au plus tard de l'événement
      */
     public double getDateAuPlusTard() {
         return dateAuPlusTard;
     }
 
     /**
-     * Retourne la liste des événements prédécesseurs.
      * @return une liste des événements prédécesseurs
      */
     public ArrayList<Evenement> getEvenementPredecesseurList() {
@@ -116,7 +112,6 @@ public class Evenement {
     }
     
 	/**
-	 * Retourne la liste des événements successeurs. 
 	 * @return une liste des événements successeurs
 	 */
     public ArrayList<Evenement> getEvenementSuccesseurList() {
@@ -124,7 +119,6 @@ public class Evenement {
     }
     
 	/**
-	 * Retourne la liste des tâches prédécesseurs.
 	 * @return une liste des tâches prédécesseurs
 	 */
 	public ArrayList<Tache> getTachePredecesseurList() {
@@ -132,7 +126,6 @@ public class Evenement {
 	}
 	
 	/**
-	 * Retourne la liste des tâches successeurs.
 	 * @return une liste des tâches successeurs
 	 */
 	public ArrayList<Tache> getTacheSuccesseurList() {
@@ -214,22 +207,6 @@ public class Evenement {
 
         return dateAuPlusTard;
     }
-    
-    /**
-     * Calcule la date de fin de projet.
-     * La date de fin de projet correspond à la date au plus tôt
-     * de l'unique événement sans successeur.
-     *
-     * @return la date de fin du projet
-     */
-    public double calculerFinProjet() {
-        for (Evenement evenement : Graphe.getEvenement()) {
-            if (evenement.getEvenementSuccesseurList().isEmpty()) {
-                return evenement.getDateAuPlusTot();
-            }
-        }
-        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -237,10 +214,9 @@ public class Evenement {
         if (o == null || getClass() != o.getClass()) return false; // Vérifie la classe et si l'objet est null
         Evenement evenement = (Evenement) o;
         return id == evenement.id
-                && Double.compare(evenement.dateAuPlusTot, dateAuPlusTot) == 0
-                && Double.compare(evenement.dateAuPlusTard, dateAuPlusTard) == 0
+                && evenement.getDateAuPlusTot() == getDateAuPlusTot()
+                && evenement.getDateAuPlusTard() == getDateAuPlusTard()
                 && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
                 && tachePredecesseurList.equals(evenement.tachePredecesseurList);
     }
-
 }

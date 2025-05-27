@@ -127,4 +127,9 @@ public class TestGraphe {
         assertEquals(evenements.length, graphe4.getEvenement().length);
         assertEquals(evenements.length, graphe5.getEvenement().length);
     }
+    
+    @Test
+    void testDateFinProjet() {
+    	fail();
+    }
 }

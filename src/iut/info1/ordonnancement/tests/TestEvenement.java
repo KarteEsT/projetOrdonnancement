@@ -143,11 +143,6 @@ public class TestEvenement {
     }
     
     @Test
-	void testCalculerFinProjet() {
-		fail();
-	}
-    
-    @Test
     void testEquals() { //TODO
     	
 		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
