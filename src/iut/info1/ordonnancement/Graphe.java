@@ -234,7 +234,7 @@ public class Graphe {
         
         /* Association des tâches initiales à l'événement initial */
         
-        Evenement evenementInitial = Evenement.EVENEMENT_INITIAL;
+        Evenement evenementInitial = new Evenement();
         for (Tache tache : getTaches()) {
             if (tache.getTachesRequises().isEmpty()) {
                 evenementInitial.addTachePredecesseur(tache);

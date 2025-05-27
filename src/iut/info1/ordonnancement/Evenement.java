@@ -42,19 +42,18 @@ public class Evenement {
     
     /** Ensemble des événements successeurs d'un événement */
     private ArrayList<Evenement> evenementSuccesseurList = new ArrayList<>();
-
-    /** Événement initial, utilisé pour représenter le début du projet */
-    public final static Evenement EVENEMENT_INITIAL = new Evenement();
     
     /**
      * Constructeur pour un événement initial.
      * Les valeurs de tâche au plus tôt et au plus tard sont initialisées à 0.0.
      * @param id Identifiant de l'événement
      */
-    private Evenement() {
+    public Evenement() {
         this.id = 0;
         this.dateAuPlusTot = 0.0;
         this.dateAuPlusTard = 0.0;
+        this.evenementSuccesseurList = evenementSuccesseurList; // Initialisation de la liste des événements successeurs
+        this.tacheSuccesseurList = tacheSuccesseurList; // Initialisation de la liste des tâches successeurs
     }
     
     /**
@@ -81,6 +80,8 @@ public class Evenement {
         this.dateAuPlusTard = 0.0; // Initialisation de la date au plus tard qui sera calculée lors de l'ordonnancement
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
+        this.evenementSuccesseurList = evenementSuccesseurList; // Initialisation de la liste des événements successeurs
+        this.tacheSuccesseurList = tacheSuccesseurList; // Initialisation de la liste des tâches successeurs
     }
 
     /**
@@ -279,7 +280,11 @@ public class Evenement {
             // Parcourt les successeurs et leurs tâches associées
             for (int i = 0; i < evenementSuccesseurList.size(); i++) {
                 Evenement successeur = evenementSuccesseurList.get(i);
-                Tache tacheSuccesseur = tacheSuccesseurList.get(i);
+                Tache tacheSuccesseur = (i < tacheSuccesseurList.size()) ? tacheSuccesseurList.get(i) : null;
+
+                if (tacheSuccesseur == null) {
+                    throw new IllegalStateException("La tâche successeur est manquante pour un événement successeur.");
+                }
 
                 // Calcule la date au plus tard pour ce successeur
                 double dateSuivante = successeur.getDateAuPlusTard() - tacheSuccesseur.getDuree();
