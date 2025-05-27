@@ -162,12 +162,17 @@ public class Graphe {
      * @return la date de fin du projet
      */
     public double calculerFinProjet() {
+        double dateFinProjet = 0.0;
+
+        // Parcourt tous les événements pour trouver ceux sans successeur
         for (Evenement evenement : getEvenement()) {
-            if (evenement.getEvenementSuccesseurList().isEmpty()) {
-                return evenement.getDateAuPlusTot();
+            if (evenement.getEvenementSuccesseurList() == null || evenement.getEvenementSuccesseurList().isEmpty()) {
+                // La date de fin du projet est la plus grande date au plus tôt parmi les événements sans successeur
+                dateFinProjet = evenement.getDateAuPlusTot();
             }
         }
-        throw new IllegalStateException("Aucun événement sans successeur trouvé.");
+
+        return dateFinProjet;
     }
     
     /**

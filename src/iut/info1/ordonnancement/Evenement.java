@@ -263,7 +263,7 @@ public class Evenement {
     }
 
     /**
-     * Calcule la date au plus tard de cet événement.
+     * Calcule la date au plus tard d'un événement.
      * La date au plus tard est déterminée en fonction des dates au plus tard
      * des événements successeurs et des durées des tâches associées.
      *
@@ -271,7 +271,7 @@ public class Evenement {
      * @return la date au plus tard calculée pour cet événement
      */
     public double calculerDatePlusTard(double dateFinProjet) {
-        if (evenementSuccesseurList.isEmpty()) {
+        if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
             // Si aucun successeur, la date au plus tard est la date de fin du projet
             this.dateAuPlusTard = dateFinProjet;
         } else {
@@ -280,11 +280,7 @@ public class Evenement {
             // Parcourt les successeurs et leurs tâches associées
             for (int i = 0; i < evenementSuccesseurList.size(); i++) {
                 Evenement successeur = evenementSuccesseurList.get(i);
-                Tache tacheSuccesseur = (i < tacheSuccesseurList.size()) ? tacheSuccesseurList.get(i) : null;
-
-                if (tacheSuccesseur == null) {
-                    throw new IllegalStateException("La tâche successeur est manquante pour un événement successeur.");
-                }
+                Tache tacheSuccesseur = tacheSuccesseurList.get(i);
 
                 // Calcule la date au plus tard pour ce successeur
                 double dateSuivante = successeur.getDateAuPlusTard() - tacheSuccesseur.getDuree();

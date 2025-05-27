@@ -462,6 +462,9 @@ public class TestEvenement {
 
         Graphe graphe = new Graphe("Test Graphe", "jours", listeTaches, listeEvenements);
 
+        evenementInitial.calculerDatePlusTot();
+        evenement1.calculerDatePlusTot();
+        
         // Calcul des dates
         double dateFinProjet = graphe.calculerFinProjet();
         evenement1.calculerDatePlusTard(dateFinProjet);
