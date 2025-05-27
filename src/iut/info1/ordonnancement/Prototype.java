@@ -52,12 +52,13 @@ public class Prototype {
         
         graphe.ajouterTache(tache5);
         
-        tache1.ajouterTacheRequise(tache2);
 
         // Test de la méthode existeCircuit
         boolean circuitExiste = graphe.existeCircuit();
         System.out.println("Circuit existant : " + circuitExiste);
         System.out.println(graphe.toString());
+        graphe.trierTaches();
+        System.out.println("Tâches triées dans le graphe : " + graphe.toString());
         
         
         
@@ -69,6 +70,5 @@ public class Prototype {
         t1.ajouterTacheRequise(t2); // t2 n'est pas dans le graphe)
         
         graphe2.ajouterPlusieursTaches(t2,t1);
-        System.out.println(t1.getTachesRequises());
     }
 }

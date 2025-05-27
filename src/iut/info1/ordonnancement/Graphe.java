@@ -92,6 +92,15 @@ public class Graphe {
     public ArrayList<Tache> getTaches() {
         return taches;
     }
+    
+    /**
+     * Définit les tâches du graphe.
+     * 
+     * @param taches les tâches à définir
+     */
+    private void setTaches(ArrayList<Tache> taches) {
+        this.taches = taches;
+    }
 
     /**
      * @return nouvelle valeur de évènement
@@ -208,6 +217,67 @@ public class Graphe {
      */
     public int getNombreTaches() {
         return getTaches().size();
+    }
+    
+    /**
+     * Ordonne les tâches du graphe en fonction de leurs dépendances.
+     * Va créer des événements et les associer au graphe.
+     * @throws  IllegalStateException si le graphe contient un circuit
+     */
+    public void ordonnerTaches() {
+        
+        trierTaches();
+            
+        /* Création des événements */
+        int compteur;
+        compteur = 1;
+        ArrayList<Evenement> listeEvenements = new ArrayList<>();
+        
+        /* Association des tâches initiales à l'événement initial */
+        
+        Evenement evenementInitial = Evenement.EVENEMENT_INITIAL;
+        for (Tache tache : getTaches()) {
+            if (tache.getTachesRequises().isEmpty()) {
+                evenementInitial.addTachePredecesseur(tache);
+            }
+        }
+        
+        //Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, ArrayList<Tache> tachePredecesseurList) 
+        /*
+         * Créer un événement pour chaque tâche de la première couche
+         * 
+         * On créé un event à chaque fois, si l'évent existe déjà dans le graphe, 
+         * on le "fusionne" on ajoute ses tâches prédécesseurs et evénements prédécesseurs
+         * au nouvel événement créé et on supprime un des deux événements.
+         */
+        
+        
+    }
+    
+    /**
+     * Trie la liste des tâches du graphe en fonction de leurs
+     * taches requises (dépendances).
+     * @throws IllegalStateException si le graphe contient un circuit
+     */
+    public void trierTaches() {
+        if (existeCircuit()) {
+            throw new IllegalStateException("Le graphe contient un circuit," 
+                                            + " l'ordonnancement est impossible.");
+        }
+        /* Tri ArrayList */
+        ArrayList<Tache> tachesTriees = new ArrayList<>();
+        ArrayList<Tache> tachesNonTriees = new ArrayList<>(getTaches());
+        
+        while (!tachesNonTriees.isEmpty()) {
+            for (Tache aTrier : tachesNonTriees) {
+                System.out.println("Tache : " + aTrier.toString());
+                if (aTrier.getTachesRequises().isEmpty() || tachesTriees.containsAll(aTrier.getTachesRequises())) {
+                    tachesTriees.add(aTrier);
+                    tachesNonTriees.remove(aTrier);
+                }
+            }
+        }
+        setTaches(tachesTriees);
     }
     
     /**
