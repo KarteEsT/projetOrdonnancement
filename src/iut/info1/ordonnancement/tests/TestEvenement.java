@@ -102,12 +102,34 @@ public class TestEvenement {
 	
 	@Test
 	void testGetDateAuPlusTot() {
-		fail();
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+
+		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+		assertEquals(0.0, evenement1.getDateAuPlusTot()); // ici 0.0 car l'ordonnancement n'est pas encore fait
+		assertEquals(0.0, Evenement.EVENEMENT_INITIAL.getDateAuPlusTot());
 	}
 	
 	@Test
 	void testGetDateAuPlusTard() {
-		fail();
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+
+		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+		assertEquals(0.0, evenement1.getDateAuPlusTard()); //ici 0.0 car l'ordonnancement n'est pas encore fait
+		assertEquals(0.0, Evenement.EVENEMENT_INITIAL.getDateAuPlusTard());
 	}
 	
 	@Test
@@ -127,6 +149,50 @@ public class TestEvenement {
 	
 	//------------ Test des méthodes -------------//
 	
+	@Test
+	void testAddEvenementPredecesseur() {
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		
+		Evenement.addEvenementPredecesseur(Evenement.EVENEMENT_INITIAL); //TODO
+		assertEquals(1, evenementsPredecesseurs.size(),
+				"La liste des événements prédécesseurs doit contenir 1 élément.");
+	}
+	
+	@Test
+	void testAddEvenementSuccesseur() {
+		fail();
+	}
+	
+	@Test
+	void testAddTachePredecesseur() {
+		fail();
+	}
+	
+	@Test
+	void testAddTacheSuccesseur() {
+		fail();
+	}
+	
+	@Test
+	void testDelEvenementPredecesseur() {
+		fail();
+	}
+	
+	@Test
+	void testDelEvenementSuccesseur() {
+		fail();
+	}
+	
+	@Test
+	void testDelTachePredecesseur() {
+		fail();
+	}
+	
+	@Test
+	void testDelTacheSuccesseur() {
+		fail();
+	}
+	
     @Test
     void testEstCritique() {
     	fail();
@@ -134,16 +200,39 @@ public class TestEvenement {
     
     @Test
     void testCalculerDatePlusTot() {
-    	fail();
+    	ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+    	ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+    	
+    	Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+    	evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+    	tachesPredecesseurs.add(tache1);
+    	
+    	Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+    	evenement1.calculerDatePlusTot();
+    	assertEquals(5.0, evenement1.getDateAuPlusTot(), 
+    			"La date au plus tôt doit être 5.0 (0.0 + 5.0 = 5.0)");
+    	
     }
     
     @Test
     void testCalculerDatePlusTard() {
-    	fail();
+		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+		evenementsPredecesseurs.add(Evenement.EVENEMENT_INITIAL);
+		tachesPredecesseurs.add(tache1);
+
+		Evenement evenementFinal = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+		evenementFinal.calculerDatePlusTot();
+		
+		
+		assertEquals(5.0, evenementFinal.getDateAuPlusTard(),
+				"La date au plus tard doit être 5.0 après le calcul initial. 0.0 + 5.0 = 5.0");
     }
     
     @Test
-    void testEquals() { //TODO
+    void testEquals() {
     	
 		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
 		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();

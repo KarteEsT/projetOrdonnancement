@@ -132,6 +132,71 @@ public class Evenement {
 		return tacheSuccesseurList;
 	}
 	
+	/**
+	 * Setter de la liste des événements successeurs.
+	 */
+	public void setEvenementSuccesseurList(ArrayList<Evenement> evenementSuccesseurList) {
+		if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
+			throw new IllegalArgumentException("La liste des événements successeurs ne peut pas être vide.");
+		}
+		this.evenementSuccesseurList = evenementSuccesseurList;
+	}
+
+	/**
+	 * Ajout d'une tache dans la liste des tache successeur.
+	 */
+	public void addTacheSuccesseur(Tache tache) {
+		tacheSuccesseurList.add(tache);
+	}
+	
+	/**
+	 * Ajout d'une tache dans la liste des tache successeur.
+	 */
+	public void addTachePredecesseur(Tache tache) {
+		tachePredecesseurList.add(tache);
+	}
+	
+	/**
+	 * Ajout d'une tache dans la liste des tache successeur.
+	 */
+	public void addEvenementSuccesseur(Evenement evenement) {
+		evenementSuccesseurList.add(evenement);
+	}
+	
+	/**
+	 * Ajout d'une tache dans la liste des tache successeur.
+	 */
+	public void addEvenementPredecesseur(Evenement evenement) {
+		evenementPredecesseurList.add(evenement);
+	}
+	
+	/**
+	 * Suppression d'une tache dans la liste des tache successeur.
+	 */
+	public void delTacheSuccesseur(Tache tache) {
+		tacheSuccesseurList.remove(tache);
+	}
+	
+	/**
+	 * Suppression d'une tache dans la liste des tache successeur.
+	 */
+	public void delTachePredecesseur(Tache tache) {
+		tachePredecesseurList.remove(tache);
+	}
+	
+	/**
+	 * Suppression d'une tache dans la liste des tache successeur.
+	 */
+	public void delEvenementSuccesseur(Evenement evenement) {
+		evenementSuccesseurList.remove(evenement);
+	}
+	
+	/**
+	 * Suppression d'une tache dans la liste des tache successeur.
+	 */
+	public void delEvenementPredecesseur(Evenement evenement) {
+		evenementPredecesseurList.remove(evenement);
+	}
 
     /**
      * Vérifie si cet événement est critique.
