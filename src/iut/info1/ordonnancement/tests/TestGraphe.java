@@ -4,6 +4,8 @@
  */
 package iut.info1.ordonnancement.tests;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -61,7 +63,7 @@ public class TestGraphe {
     }
     
     @Test
-    void testDateFinProjet() {
+    void testCalculerDateFinProjet() {
     	fail();
     }
 }
