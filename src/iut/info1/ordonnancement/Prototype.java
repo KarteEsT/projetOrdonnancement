@@ -5,6 +5,7 @@
 package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Permet de lancer l'application
@@ -22,99 +23,74 @@ public class Prototype {
      * Méthode principale pour exécuter le prototype.
      * @param args
      */
-    public static void main(String[] args) {
-        // Création des tâches
-        Tache tacheA = new Tache("tacheA", "Description tacheA", 3);
-        Tache tacheB = new Tache("tacheB", "Description tacheB", 2);
-        Tache tacheC = new Tache("tacheC", "Description tacheC", 4);
-        Tache tacheD = new Tache("tacheD", "Description tacheD", 8);
+	public static void main(String[] args) {
+	    // Création des tâches
+	    Tache tacheA = new Tache("tacheA", "Description tacheA", 3.0);
+	    Tache tacheB = new Tache("tacheB", "Description tacheB", 2.0);
+	    Tache tacheC = new Tache("tacheC", "Description tacheC", 4.0);
+	    Tache tacheD = new Tache("tacheD", "Description tacheD", 8.0);
 
-        
+	    // Création des événements
+	    Evenement evenementInitial = new Evenement();
+	    Evenement evenement1 = new Evenement(1, new ArrayList<>(List.of(evenementInitial)), new ArrayList<>(List.of(tacheA)));
+	    Evenement evenement2 = new Evenement(2, new ArrayList<>(List.of(evenementInitial)), new ArrayList<>(List.of(tacheB)));
+	    Evenement evenement3 = new Evenement(3, new ArrayList<>(List.of(evenement1, evenement2)), new ArrayList<>(List.of(tacheC, tacheD)));
 
-        // Définition des dépendances (T2 dépend de T1, T3 dépend de T2)
+	    // Définition des successeurs
+	    evenementInitial.addEvenementSuccesseur(evenement1);
+	    evenementInitial.addEvenementSuccesseur(evenement2);
+	    evenement1.addEvenementSuccesseur(evenement3);
+	    evenement2.addEvenementSuccesseur(evenement3);
 
-        // Ajout d'une dépendance circulaire pour tester (T1 dépend de T3)
-        //tache1.ajouterTacheRequise(tache2);
+	    evenementInitial.addTacheSuccesseur(tacheA);
+	    evenementInitial.addTacheSuccesseur(tacheB);
+	    evenement1.addTacheSuccesseur(tacheC);
+	    evenement2.addTacheSuccesseur(tacheD);
 
-        // Création de la liste des tâches
-        ArrayList<Tache> taches = new ArrayList<>();
-        taches.add(tacheA);
-        taches.add(tacheB);
-        taches.add(tacheC);
-        taches.add(tacheD);
-        
-        // On mets les différentes taches dans des listes
-        
-        tacheC.ajouterTacheRequise(tacheA); // tacheC dépend de tacheA
-        tacheD.ajouterTacheRequise(tacheB); // tacheD dépend de tacheB
-        
-        ArrayList<Tache> tachesEvenement1 = new ArrayList<>();
-        
-        tachesEvenement1.add(tacheA); // tacheA est dans l'événement 1
-        
-        ArrayList<Tache> tachesEvenement2 = new ArrayList<>();
-        
-        tachesEvenement2.add(tacheB); // tacheB est dans l'événement 2
-        
-        ArrayList<Tache> tachesEvenement3 = new ArrayList<>();
-        
-        tachesEvenement3.add(tacheC); // tacheC est dans l'événement 3
-        tachesEvenement3.add(tacheD); // tacheD est dans l'événement 3
-        
-        // Création des événements
-        
-        Evenement evenementInitial = new Evenement();
-        
-        ArrayList<Evenement> evenement1Predecesseur = new ArrayList<>();
-        
-        evenement1Predecesseur.add(evenementInitial); // evenement1 dépend de l'événement initial
-        
-        Evenement evenement1 = new Evenement(1, evenement1Predecesseur, tachesEvenement1);
-        
-        ArrayList<Evenement> evenement2Predecesseur = new ArrayList<>();
-        
-        evenement2Predecesseur.add(evenementInitial); // evenement2 dépend de l'événement initial
-        Evenement evenement2 = new Evenement(2, evenement2Predecesseur , tachesEvenement2);
-        
-        ArrayList<Evenement> evenement3Predecesseur = new ArrayList<>();
-        
-        evenement3Predecesseur.add(evenement1);
-        evenement3Predecesseur.add(evenement2); // evenement3 dépend de evenement2 et evenement1
-        
-        Evenement evenement3 = new Evenement(3, evenement3Predecesseur , tachesEvenement3);
-        
+	    // Création du graphe
+	    ArrayList<Tache> taches = new ArrayList<>(List.of(tacheA, tacheB, tacheC, tacheD));
+	    ArrayList<Evenement> evenements = new ArrayList<>(List.of(evenementInitial, evenement1, evenement2, evenement3));
+	    Graphe graphe = new Graphe("Graphe Test", "jours", taches, evenements);
 
-        // Création du graphe
-        Graphe graphe = new Graphe("Graphe Test", "jours", taches, new ArrayList<>());
+	    // Calcul des dates au plus tôt
+	    for (Evenement evenement : evenements) {
+	        evenement.calculerDatePlusTot();
+	    }
+
+	    // Calcul de la date de fin du projet
+	    double dateFinProjet = graphe.calculerFinProjet();
+	    System.out.println("Date de fin du projet : " + dateFinProjet);
+
+	    // Calcul des dates au plus tard
+	    for (Evenement evenement : evenements) {
+	        evenement.calculerDatePlusTard(dateFinProjet);
+	    }
+
+	    // Affichage des dates au plus tôt et au plus tard
+	    System.out.println("Dates au plus tôt et au plus tard :");
+	    for (Evenement evenement : evenements) {
+	        System.out.println("Événement " + evenement.getId() + " :");
+	        System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
+	        System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
+	    }
+
+	    // Recherche du chemin critique
+	    System.out.println("Chemin critique :");
+	    for (Evenement evenement : evenements) {
+	        if (evenement.estCritique()) {
+	            System.out.println("Événement " + evenement.getId() + " est critique.");
+	        }
+	    }
         
-    
         // Test de la méthode existeCircuit
         boolean circuitExiste = graphe.existeCircuit();
-        System.out.println("Circuit existant : " + circuitExiste);
+        System.out.println("\nCircuit existant : " + circuitExiste);
         System.out.println(graphe.toString());
+        
         graphe.trierTaches();
         System.out.println("Tâches triées dans le graphe : " + graphe.toString());
                 
-        // Test des méthodes de calcul de date au plus tôt et au plus tard
-        
-        evenement1.calculerDatePlusTot();
-        evenement2.calculerDatePlusTot();
-        evenement3.calculerDatePlusTot();
-        System.out.println("Dates au plus tôt :");
-        System.out.println("Événement 1 : " + evenement1.getDateAuPlusTot());
-        System.out.println("Événement 2 : " + evenement2.getDateAuPlusTot());
-        System.out.println("Événement 3 : " + evenement3.getDateAuPlusTot());
-        
-        
-        
-        /*evenement1.calculerDateAuPlusTard();
-        evenement2.calculerDateAuPlusTard();
-        evenement3.calculerDateAuPlusTard();
-        System.out.println("Dates au plus tard :");
-        System.out.println("Événement 1 : " + evenement1.getDateAuPlusTard());
-        System.out.println("Événement 2 : " + evenement2.getDateAuPlusTard());
-        System.out.println("Événement 3 : " + evenement3.getDateAuPlusTard()); */
-        
+    //------------------------------------------------------------------------//
         
         //Essai tache requise pas dans graphe
         Graphe graphe2 = new Graphe("Graphe Test 2", "jours", new ArrayList<>(), new ArrayList<>());
@@ -124,7 +100,6 @@ public class Prototype {
         t1.ajouterTacheRequise(t2); // t2 n'est pas dans le graphe)
         
         graphe2.ajouterPlusieursTaches(t2,t1);
-        
         
     }
 }
