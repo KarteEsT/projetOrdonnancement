@@ -30,6 +30,12 @@ public class Evenement {
 
     /** Tâche au plus tard d'un événement */
     private double dateAuPlusTard;
+    
+    /** Marge totale d'un événement */
+    private double margeTotal;
+    
+    /** Marge libre d'un événement */
+    private double margeLibre;
 
     /** Ensemble des tâches prédécesseurs d'un événement */
     private ArrayList<Tache> tachePredecesseurList = new ArrayList<>();
@@ -104,6 +110,20 @@ public class Evenement {
     public double getDateAuPlusTard() {
         return dateAuPlusTard;
     }
+    
+	/**
+	 * @return la marge totale de l'événement
+	 */
+	public double getMargeTotale() {
+		return margeTotal;
+	}
+	
+	/**
+	 * @return la marge libre de l'événement
+	 */
+	public double getMargeLibre() {
+		return margeLibre;
+	}
 
     /**
      * @return une liste des événements prédécesseurs
@@ -135,7 +155,6 @@ public class Evenement {
 	
 	/**
 	 * Setter de la liste des événements successeurs.
-	 * @param evenementSuccesseurList la liste des événements successeurs
 	 */
 	public void setEvenementSuccesseurList(ArrayList<Evenement> evenementSuccesseurList) {
 		if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
@@ -146,7 +165,6 @@ public class Evenement {
 	
 	/**
 	 * Setter de la liste des taches successeurs.
-	 * @param tacheSuccesseurList la liste des tâches successeurs
 	 */
 	public void setTacheSuccesseurList(ArrayList<Tache> tacheSuccesseurList) {
 		if (tacheSuccesseurList == null || tacheSuccesseurList.isEmpty()) {
@@ -157,7 +175,6 @@ public class Evenement {
 	
 	/**
 	 * Setter de la date au plus tôt.
-	 * @param dateAuPlusTot la date au plus tôt de l'événement
 	 */
 	public void setDatePlusTot(double dateAuPlusTot) {
 		this.dateAuPlusTot = dateAuPlusTot;
@@ -165,7 +182,6 @@ public class Evenement {
 	
 	/**
 	 * Setter de la date au plus tard.
-	 * @param dateAuPlusTard la date au plus tard de l'événement
 	 */
 	public void setDatePlusTard(double dateAuPlusTard) {
 		this.dateAuPlusTard = dateAuPlusTard;
@@ -173,7 +189,6 @@ public class Evenement {
 
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param tache la tâche à ajouter en successeur
 	 */
 	public void addTacheSuccesseur(Tache tache) {
 		tacheSuccesseurList.add(tache);
@@ -181,7 +196,6 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param tache la tâche à ajouter en prédécesseur
 	 */
 	public void addTachePredecesseur(Tache tache) {
 		tachePredecesseurList.add(tache);
@@ -189,7 +203,6 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param evenement l'événement à ajouter en successeur
 	 */
 	public void addEvenementSuccesseur(Evenement evenement) {
 		evenementSuccesseurList.add(evenement);
@@ -197,7 +210,6 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param evenement l'événement à ajouter en prédécesseur
 	 */
 	public void addEvenementPredecesseur(Evenement evenement) {
 		evenementPredecesseurList.add(evenement);
@@ -205,7 +217,6 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param tache la tâche à supprimer des successeurs
 	 */
 	public void delTacheSuccesseur(Tache tache) {
 		tacheSuccesseurList.remove(tache);
@@ -213,7 +224,6 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param tache la tâche à supprimer des prédécesseurs
 	 */
 	public void delTachePredecesseur(Tache tache) {
 		tachePredecesseurList.remove(tache);
@@ -221,7 +231,6 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param evenement l'événement à supprimer des successeurs
 	 */
 	public void delEvenementSuccesseur(Evenement evenement) {
 		evenementSuccesseurList.remove(evenement);
@@ -229,7 +238,6 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param evenement à supprimer des prédécesseurs
 	 */
 	public void delEvenementPredecesseur(Evenement evenement) {
 		evenementPredecesseurList.remove(evenement);
@@ -308,6 +316,34 @@ public class Evenement {
         }
 
         return dateAuPlusTard;
+    }
+    
+    /**
+     * Calculer Marge Libre
+     * @return la marge libre de l'événement
+     */
+    public double calculerMargeLibre() {
+		if (evenementSuccesseurList.isEmpty()) {
+			margeLibre = 0.0; // Si pas de successeurs, la marge libre est 0
+		} else {
+			double dateMinSuccesseur = Double.MAX_VALUE;
+			for (Evenement successeur : evenementSuccesseurList) {
+				if (successeur.getDateAuPlusTot() < dateMinSuccesseur) {
+					dateMinSuccesseur = successeur.getDateAuPlusTot();
+				}
+			}
+			margeLibre = dateMinSuccesseur - dateAuPlusTot;
+		}
+		return margeLibre;
+    }
+    
+    /**
+     * Calculer Marge Totale
+     * @return la marge totale de l'événement
+     */
+    public double calculerMargeTotale() {
+    	margeTotal = dateAuPlusTard - dateAuPlusTot;
+    	return margeTotal;
     }
 
     @Override
