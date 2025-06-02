@@ -1,5 +1,5 @@
 /*
- * Prototype.java                                   23 mai 2025
+ * Prototype.java                                   			23 mai 2025
  * IUT de Rodez, Info1 2024-2025, pas de copyright
  */
 package iut.info1.ordonnancement;
@@ -58,35 +58,53 @@ public class Prototype {
 
 		// Calcul de la date de fin du projet
 		double dateFinProjet = graphe.calculerFinProjet();
-		System.out.println("Date de fin du projet : " + dateFinProjet);
 
 		// Calcul des dates au plus tard
 		for (int i = evenements.size() - 1; i >= 0; i--) {
 			evenements.get(i).calculerDatePlusTard(dateFinProjet);
 		}
 		
-		for (Evenement evenement : evenements) {
-			evenement.calculerMargeTotale();
-			evenement.calculerMargeLibre();
-		}
+			tacheA.calculerMargeLibre(evenementInitial, evenement1);
+			tacheA.calculerMargeTotale(evenementInitial, evenement1);
+			
+			tacheB.calculerMargeLibre(evenementInitial, evenement2);
+			tacheB.calculerMargeTotale(evenementInitial, evenement2);
+			
+			tacheC.calculerMargeLibre(evenement1, evenement3);
+			tacheC.calculerMargeTotale(evenement1, evenement3);
+			
+			tacheD.calculerMargeLibre(evenement2, evenement3);
+			tacheD.calculerMargeTotale(evenement2, evenement3);
 
 		// Affichage des dates au plus tôt et au plus tard
-		System.out.println("Dates au plus tôt et au plus tard / Marge Libre et Totale:");
+		System.out.println("Dates au plus tôt et au plus tard :");
 		for (Evenement evenement : evenements) {
 			System.out.println("Événement " + evenement.getId() + " :");
 			System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
 			System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
-			System.out.println("  Marge libre : " + evenement.getMargeLibre());
-			System.out.println("  Marge totale : " + evenement.getMargeTotale());
+		}
+		
+		System.out.println("\nDate de fin du projet : " + dateFinProjet);
+
+		System.out.println("\nMarge Totale et Libre :");
+		for (Evenement evenement : evenements) {
+		    for (Tache tache : evenement.getTacheSuccesseurList()) {
+		        System.out.println("Tâche " + tache.getLibelle() + " :");
+		        System.out.println("  Marge libre : " + tache.getMargeLibre());
+		        System.out.println("  Marge totale : " + tache.getMargeTotale());
+		    }
 		}
 
-		// Recherche du chemin critique
-		System.out.println("Chemin critique :");
+		// Événements critiques
+		System.out.println("\nÉvénements Critiques :");
 		for (Evenement evenement : evenements) {
 			if (evenement.estCritique()) {
-				System.out.println("Événement " + evenement.getId() + " est critique.");
+				System.out.println("  Événement " + evenement.getId() + " est critique");
 			}
 		}
+		
+		// Chemin Critique
+		System.out.println("\nChemin Critique : TODO");
 
 		// Test de la méthode existeCircuit
 		boolean circuitExiste = graphe.existeCircuit();

@@ -35,6 +35,12 @@ public class Tache {
     /** La durée estimée de la tâche */
     private double duree;
     
+    /** La marge libre de la tâche */
+    private double margeLibre;
+    
+    /** La marge totale de la tâche */
+    private double margeTotale;
+    
     /** Les tâches qui doivent être terminées avant celle-ci */
     private ArrayList<Tache> tachesRequises;
 
@@ -97,6 +103,20 @@ public class Tache {
     public double getDuree() {
         return duree;
     }
+    
+    /**
+     * @return la marge libre de la tâche
+     */
+    public double getMargeLibre() {
+        return margeLibre;
+    }
+    
+	/**
+	 * @return la marge totale de la tâche
+	 */
+	public double getMargeTotale() {
+		return margeTotale;
+	}
 
     /**
      * @return un ArrayList<Tache> des tâches à réaliser avant celle-ci
@@ -135,6 +155,28 @@ public class Tache {
         }
         getTachesRequises().remove(tache);
     } // Peut-être renvoyer un boolean pour indiquer si la tâche a été supprimée ou non 
+    
+	/**
+	 * Calcule la marge libre d'une tâche. La marge libre est la
+	 * différence entre la date au plus tôt de l'événement successeur et la date au
+	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
+	 * @return la marge totale
+	 */
+    public double calculerMargeLibre(Evenement evenementPredecesseur, Evenement evenementSuccesseur) {
+        this.margeLibre = evenementSuccesseur.getDateAuPlusTot() - evenementPredecesseur.getDateAuPlusTot() - this.duree;
+        return margeLibre;
+    }
+    
+	/**
+	 * Calcule la marge totale d'une tâche. La marge totale est la
+	 * différence entre la date au plus tard de l'événement successeur et la date au
+	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
+	 * @return la marge totale
+	 */
+    public double calculerMargeTotale(Evenement evenementPredecesseur,Evenement evenementSuccesseur) {
+        this.margeTotale = evenementSuccesseur.getDateAuPlusTard() - evenementPredecesseur.getDateAuPlusTot() - this.duree;
+        return margeTotale;
+    }
     
     @Override
     public boolean equals(Object obj) {

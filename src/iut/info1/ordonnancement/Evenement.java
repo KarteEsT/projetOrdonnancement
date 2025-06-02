@@ -30,12 +30,6 @@ public class Evenement {
 
     /** Tâche au plus tard d'un événement */
     private double dateAuPlusTard;
-    
-    /** Marge totale d'un événement */
-    private double margeTotal;
-    
-    /** Marge libre d'un événement */
-    private double margeLibre;
 
     /** Ensemble des tâches prédécesseurs d'un événement */
     private ArrayList<Tache> tachePredecesseurList = new ArrayList<>();
@@ -58,8 +52,6 @@ public class Evenement {
         this.id = 0;
         this.dateAuPlusTot = 0.0;
         this.dateAuPlusTard = 0.0;
-        this.evenementSuccesseurList = evenementSuccesseurList; // Initialisation de la liste des événements successeurs
-        this.tacheSuccesseurList = tacheSuccesseurList; // Initialisation de la liste des tâches successeurs
     }
     
     /**
@@ -86,8 +78,6 @@ public class Evenement {
         this.dateAuPlusTard = 0.0; // Initialisation de la date au plus tard qui sera calculée lors de l'ordonnancement
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
-        this.evenementSuccesseurList = evenementSuccesseurList; // Initialisation de la liste des événements successeurs
-        this.tacheSuccesseurList = tacheSuccesseurList; // Initialisation de la liste des tâches successeurs
     }
 
     /**
@@ -111,20 +101,6 @@ public class Evenement {
         return dateAuPlusTard;
     }
     
-	/**
-	 * @return la marge totale de l'événement
-	 */
-	public double getMargeTotale() {
-		return margeTotal;
-	}
-	
-	/**
-	 * @return la marge libre de l'événement
-	 */
-	public double getMargeLibre() {
-		return margeLibre;
-	}
-
     /**
      * @return une liste des événements prédécesseurs
      */
@@ -316,34 +292,6 @@ public class Evenement {
         }
 
         return dateAuPlusTard;
-    }
-    
-    /**
-     * Calculer Marge Libre
-     * @return la marge libre de l'événement
-     */
-    public double calculerMargeLibre() {
-		if (evenementSuccesseurList.isEmpty()) {
-			margeLibre = 0.0; // Si pas de successeurs, la marge libre est 0
-		} else {
-			double dateMinSuccesseur = Double.MAX_VALUE;
-			for (Evenement successeur : evenementSuccesseurList) {
-				if (successeur.getDateAuPlusTot() < dateMinSuccesseur) {
-					dateMinSuccesseur = successeur.getDateAuPlusTot();
-				}
-			}
-			margeLibre = dateMinSuccesseur - dateAuPlusTot;
-		}
-		return margeLibre;
-    }
-    
-    /**
-     * Calculer Marge Totale
-     * @return la marge totale de l'événement
-     */
-    public double calculerMargeTotale() {
-    	margeTotal = dateAuPlusTard - dateAuPlusTot;
-    	return margeTotal;
     }
 
     @Override
