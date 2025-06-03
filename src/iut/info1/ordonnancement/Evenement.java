@@ -81,6 +81,11 @@ public class Evenement {
         this.tachePredecesseurList = tachePredecesseurList;
     }
     
+    /**
+     * Cette méthode trouve tous les chemins critiques à partir d'un événement initial. 
+     * @param evenementInitial
+     * @return une liste de chemins critiques
+     */
     public List<List<Evenement>> trouverCheminsCritiques(Evenement evenementInitial) {
         List<List<Evenement>> cheminsCritiques = new ArrayList<>();
         List<Evenement> cheminActuel = new ArrayList<>();
@@ -351,5 +356,29 @@ public class Evenement {
                 && evenement.getDateAuPlusTard() == getDateAuPlusTard()
                 && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
                 && tachePredecesseurList.equals(evenement.tachePredecesseurList);
+    }
+    
+    @Override
+    public String toString() {
+        String evenement = "Événement " + id + " :\n";
+        evenement += "  Date au plus tôt : " + dateAuPlusTot + "\n";
+        evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
+        evenement += "  Prédécesseurs : ";
+        for (Evenement predecesseur : evenementPredecesseurList) {
+            evenement += predecesseur.getId() + " ";
+        }
+        evenement += "\n  Successeurs : ";
+        for (Evenement successeur : evenementSuccesseurList) {
+            evenement += successeur.getId() + " ";
+        }
+        evenement += "\n  Tâches prédécesseurs : ";
+        for (Tache tache : tachePredecesseurList) {
+            evenement += tache.getLibelle() + " ";
+        }
+        evenement += "\n  Tâches successeurs : ";
+        for (Tache tache : tacheSuccesseurList) {
+            evenement += tache.getLibelle() + " ";
+        }
+        return evenement;
     }
 }

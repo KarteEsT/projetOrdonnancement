@@ -438,6 +438,8 @@ public class Graphe {
         String graphe = getTitre();
         graphe += ", unite = " + getUnite();
         graphe += "\n" + getTaches();
+        
+        graphe += "\n" + getEvenement();
         return graphe;
     }
 }
