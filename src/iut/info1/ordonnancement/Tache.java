@@ -160,6 +160,8 @@ public class Tache {
 	 * Calcule la marge libre d'une tâche. La marge libre est la
 	 * différence entre la date au plus tôt de l'événement successeur et la date au
 	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
+	 * @param evenementPredecesseur 
+	 * @param evenementSuccesseur 
 	 * @return la marge totale
 	 */
     public double calculerMargeLibre(Evenement evenementPredecesseur, Evenement evenementSuccesseur) {
@@ -171,6 +173,8 @@ public class Tache {
 	 * Calcule la marge totale d'une tâche. La marge totale est la
 	 * différence entre la date au plus tard de l'événement successeur et la date au
 	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
+	 * @param evenementPredecesseur 
+	 * @param evenementSuccesseur 
 	 * @return la marge totale
 	 */
     public double calculerMargeTotale(Evenement evenementPredecesseur,Evenement evenementSuccesseur) {
