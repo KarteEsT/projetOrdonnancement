@@ -1,5 +1,5 @@
 /*
- * ChargeurCSV.java                               29 avril 2025
+ * ChargeurCSV.java                                 29 avril 2025
  * IUT de Rodez, info1, 2024-2025, pas de copyright
  */
 
@@ -7,7 +7,6 @@ package iut.info1.ordonnancement;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Programme permettant la lecture et l'écriture de fichiers
@@ -20,150 +19,147 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class ChargeurCSV {
-	
-	/* Chemin du fichier CSV à écrire */
-	private static String cheminFichierEcrit;
-	
-	/* Chemin du fichier CSV à lire */
-	private static String cheminFichierLu;
-	
-    /**
-     * Enregistre des données dans un fichier CSV avec des valeurs
-     * séparées par des points-virgules.
-     * @param cheminFichierEcriture 
-     * @param cheminFichier le chemin vers le fichier à écrire
-     * @param donnees une liste de lignes, où chaque ligne est un
-     * tableau de chaînes.
-     */
-    public static void ecrireCSV(String cheminFichierEcriture, ArrayList<String[]> donnees) {
-    	
-    	cheminFichierEcrit = cheminFichierEcriture;    	
-        try {
-            BufferedWriter ecriture = new BufferedWriter(new FileWriter(cheminFichierEcriture));
 
-            for (String[] ligne : donnees) {
-                for (int i = 0; i < ligne.length; i++) {
-                    ecriture.write(ligne[i]);
-                    if (i < ligne.length - 1) {
-                        ecriture.write(";");
+    /**
+     * Exporte un graphe PERT dans un fichier CSV avec ';' comme séparateur.
+     * @param graphe le graphe à exporter
+     * @param nomFichier le chemin du fichier CSV
+     * @throws IOException en cas d'erreur d'écriture
+     */
+    public static void exporterGrapheCSV(Graphe graphe, String nomFichier)
+                                         throws IOException {
+        try (FileWriter writer = new FileWriter(nomFichier)) {
+            writer.write("Titre;" + graphe.getTitre() + "\n");
+            writer.write("Unité;" + graphe.getUnite() + "\n\n");
+
+            writer.write("Libelle;Description;Durée;TachesRequises\n");
+
+            for (Tache tache : graphe.getTaches()) {
+                String dependances = "";
+                for (Tache requise : tache.getTachesRequises()) {
+                    dependances += requise.getLibelle() + " ";
+                }
+
+                // Supprimer l'espace final
+                if (!dependances.isEmpty()) {
+                    dependances = dependances.substring(0, dependances.length() - 1);
+                }
+
+                writer.write(tache.getLibelle() + ";" + tache.getDescription() + ";" + 
+                        tache.getDuree() + ";" + dependances + "\n");
+            }
+        }
+    }
+    
+    /**
+     * Charge un graphe PERT depuis un fichier CSV. Le fichier doit respecter le
+     * format suivant : - La première ligne contient le titre du graphe. - La
+     * deuxième ligne contient l'unité de temps. - Les lignes suivantes contiennent
+     * les tâches avec leur libellé, durée et dépendances.
+     *
+     * @param nomFichier le chemin du fichier CSV
+     * @return un objet Graphe contenant les informations du fichier
+     * @throws IOException si une erreur de lecture survient
+     */
+    public static Graphe chargerGrapheDepuisCSV(String nomFichier) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
+            String ligne;
+            String titre = null;
+            String unite = null;
+            ArrayList<Tache> taches = new ArrayList<>();
+
+            // Pour traiter les dépendances après avoir créé toutes les tâches
+            ArrayList<String[]> dependancesEnAttente = new ArrayList<>();
+
+            while ((ligne = reader.readLine()) != null) {
+                ligne = ligne.strip();
+                if (ligne.startsWith("Titre;")) {
+                    titre = ligne.split(";", 2)[1];
+                } else if (ligne.startsWith("Unité;")) {
+                    unite = ligne.split(";", 2)[1];
+                } else if (!ligne.isEmpty() && !ligne.startsWith("Libelle;")) {
+                    String[] elements = ligne.split(";", -1);
+                    if (elements.length < 3) {
+                        throw new IllegalArgumentException("Ligne de tâche mal formatée : " + ligne);
+                    }
+
+                    String libelle = elements[0];
+                    String description = elements[1];
+                    double duree = Double.parseDouble(elements[2]);
+                    String[] dependances = elements.length > 3 ? elements[3].split(" ") : new String[0];
+
+                    Tache nouvelleTache = new Tache(libelle, description, duree);
+                    taches.add(nouvelleTache);
+
+                    dependancesEnAttente.add(new String[] { libelle, elements.length > 3 ? elements[3] : "" });
+                }
+            }
+
+            // Associer les dépendances après la création de toutes les tâches
+            for (String[] infos : dependancesEnAttente) {
+                String libelleTache = infos[0];
+                String dependancesStr = infos[1];
+                Tache tache = taches.stream()
+                        .filter(t -> t.getLibelle().equals(libelleTache))
+                        .findFirst()
+                        .orElseThrow();
+
+                if (!dependancesStr.isEmpty()) {
+                    String[] nomsDependances = dependancesStr.split(" ");
+                    for (String nomDep : nomsDependances) {
+                        for (Tache possible : taches) {
+                            if (possible.getLibelle().equals(nomDep)) {
+                                tache.ajouterTacheRequise(possible);
+                            }
+                        }
                     }
                 }
-                ecriture.newLine();
             }
 
-            ecriture.close();
-            System.out.println("Écriture réussie !");
-        } catch (IOException erreurEcriture) {
-            System.out.println("Erreur d'écriture : "
-                              + erreurEcriture.getMessage());
-        }
-    }
-
-    /**
-     * Enregistre des données dans un fichier CSV avec des
-     * valeurs séparées par des points-virgules.
-     * @param cheminFichier le chemin vers le fichier à lire
-     * @param donnees une liste de lignes, où chaque ligne
-     * est un tableau de chaînes de caractères
-     */
-    public static void lireCSV(String cheminFichier,
-                               ArrayList<String[]> donnees) {
-    	
-    	cheminFichierLu = cheminFichier;
-    	
-        try {
-            BufferedReader lecture =
-                        new BufferedReader(new FileReader(cheminFichier));
-            String ligne;
-
-            /* Lecture du fichier ligne par ligne */
-            while ((ligne = lecture.readLine()) != null) {
-                String[] valeurs = ligne.split(";");
-                donnees.add(valeurs);
+            if (titre == null || unite == null) {
+                throw new IllegalArgumentException("Le fichier CSV est incomplet.");
             }
 
-            lecture.close();
-        } catch (IOException erreurLecture) {
-            System.out.println("Erreur de lecture : "
-                              + erreurLecture.getMessage());
+            return new Graphe(titre, unite, taches, new ArrayList<>());
         }
     }
     
-	/**
-	 * Tests temporaires de la classe ChargeurCSV
-	 * @param args non utilisé
-	 */
+    /**
+     * Point d'entrée du programme pour tester le chargement d'un graphe depuis un fichier CSV.
+     * @param args non utilisé
+     */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        ChargeurConsole chargeurConsole = new ChargeurConsole();
+        Graphe grapheSaisi = chargeurConsole.chargerDepuisConsole();
 
-        // Exemple de données qui vont être écrites dans le fichier CSV
-        ArrayList<String[]> nouvellesDonnees = new ArrayList<>();
-        nouvellesDonnees.add(new String[] {"EtapePrecedente", "Tache", "EtapeSuivante"});
-        nouvellesDonnees.add(new String[] {"0", "a", "2"});
-        nouvellesDonnees.add(new String[] {"1", "c", "3"});
-        nouvellesDonnees.add(new String[] {"2", "j", "3"});
+        String cheminFichier = "C:\\Users\\esteb\\Desktop\\graphe.csv";
 
-        /* Saisie du chemin d’écriture du fichier CSV */
-        System.out.print("Entrez le chemin du fichier CSV dans lequel écrire les données "
-        		           + "(les données présentes dans ce fichier seront écrasées) : ");
-        String cheminEcriture = scanner.nextLine();
-        ecrireCSV(cheminEcriture, nouvellesDonnees);
-        
-        // Saisie du chemin de lecture du fichier CSV
-        System.out.print("\nEntrez le chemin du fichier CSV à lire : ");
-        String cheminLecture = scanner.nextLine();
-        
-        // Lecture du fichier CSV
-        ArrayList<String[]> donneesLues = new ArrayList<>();
-        lireCSV(cheminLecture, donneesLues);
-        System.out.println("Données lues :\n");
-		
-        // Affichage des données lues
-        for (int nbValeurs = 0; nbValeurs < donneesLues.size(); nbValeurs++) {
-			String[] ligne = donneesLues.get(nbValeurs);
-			for (int i = 0; i < ligne.length; i++) {
-				System.out.print(ligne[i]);
-				if (i < ligne.length - 1) {
-					System.out.print(";");
-				}
-			}
-			System.out.println();
-		}
+        try {
+            ChargeurCSV.exporterGrapheCSV(grapheSaisi, cheminFichier);
+            System.out.println("Export terminé !");
 
-        scanner.close();
+            Graphe grapheCharge = ChargeurCSV.chargerGrapheDepuisCSV(cheminFichier);
+            System.out.println("Chargement réussi !");
+            System.out.println("Titre : " + grapheCharge.getTitre());
+            System.out.println("Unité : " + grapheCharge.getUnite());
+            System.out.println("Tâches :");
+
+            for (Tache tache : grapheCharge.getTaches()) {
+                System.out.print("- " + tache.getLibelle() + " (" + tache.getDuree() + " " + grapheCharge.getUnite() + ")");
+                System.out.print(" | Dépendances : ");
+                for (Tache dep : tache.getTachesRequises()) {
+                    System.out.print(dep.getLibelle() + " ");
+                }
+                System.out.println();
+            }
+
+            // Appeler des calculs sur grapheCharge
+            
+            
+            System.out.println("Fin du projet : " + grapheCharge.calculerFinProjet() + " " + grapheCharge.getUnite());
+
+        } catch (IOException erreurImport) {
+            System.err.println("Erreur lors de l'export ou du chargement : " + erreurImport.getMessage());
+        }
     }
-    
-	
-    /**
-     * Renvoie le chemin du fichier CSV à écrire
-     * @return le chemin du fichier CSV à écrire
-     */
-    public String getCheminFichier() {
-        return cheminFichierEcrit;
-    }
-    
-    /**
-     * Renvoie le chemin du fichier CSV à lire
-     * @return le chemin du fichier CSV à lire
-     */
-    public String getCheminFichierLecture() {
-        return cheminFichierLu;
-    }
-	
-	/**
-	 * Modifie le chemin du fichier CSV à écrire
-	 * @param nouveauCheminFichierEcrit le nouveau chemin du fichier CSV à écrire
-	 */
-	public void setCheminFichierEcrit(String nouveauCheminFichierEcrit) {
-		cheminFichierEcrit = nouveauCheminFichierEcrit;
-	}
-	
-	/**
-	 * Modifie le chemin du fichier CSV à lire
-	 * @param nouveauCheminFichierLu le nouveau chemin du fichier CSV à lire
-	 */
-	public void setCheminFichierLu(String nouveauCheminFichierLu) {
-		cheminFichierLu = nouveauCheminFichierLu;
-	}
 }
-

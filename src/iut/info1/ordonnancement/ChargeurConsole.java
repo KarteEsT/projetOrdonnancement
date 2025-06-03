@@ -4,163 +4,115 @@
  */
 package iut.info1.ordonnancement;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Permet de charger des taches depuis la console
  */
 public class ChargeurConsole {
-    //nom de tâche ; description de la tâche ; durée ; prédécesseur 1 ; prédécesseur 2 ; ... ; -
     
     /**
-     * Demande à l'utilisateur de saisir le nom d'un graphe
-     * envoie un message d'erreur si jamais le nom du graphe est déjà utilisé ou est vide
-     * et ajoute le nom validé à la liste des noms existants.
-     * @param nomsExistants une liste contenant les noms de graphes déjà existants (c'est une liste mutable)
-     * @return nom du graphe
+     * TODO commenter le rôle de cette méthode (SRP)
+     * @return graphe
      */
-    public String demandeNomGraphe(List<String> nomsExistants) {
-        Scanner entree = new Scanner(System.in);
-        String nom;
-        boolean nomInvalide;
+    public Graphe chargerDepuisConsole() {
+        Scanner scanner = new Scanner(System.in);
 
+        // Pour entrez le titre
+        String titre;
         do {
-            System.out.print("Renseignez le nom du graphe : ");
-            nom = entree.nextLine().strip();
-
-            if (nom.isEmpty()) {
-                System.out.println("Le nom du graphe ne peut pas être vide.");
-                nomInvalide = true;
-            } else if (nomsExistants.contains(nom)) {
-                System.out.println("Le nom du graphe est déjà utilisé.");
-                nomInvalide = true;
-            } else {
-                nomInvalide = false;
+            System.out.print("Entrez le titre du graphe : ");
+            titre = scanner.nextLine().strip();
+            if (titre.isEmpty()) {
+                System.out.println("Le titre du graphe ne peut pas être vide.");
             }
-        } while (nomInvalide);
+        } while (titre.isEmpty());
 
-        // Ajout du nom validé à la liste
-        nomsExistants.add(nom);
-
-        return nom;
-    }
-    
-    /** 
-     * Demande à l'utilisateur de saisir le nom d'un graphe 
-     * envoie un message d'erreur si jamais le nom du graphe est déja ou est vide
-     * @return nom du graphe
-     */
-    public String demandeNomGraphe() {
-        Scanner entree = new Scanner(System.in);
-        String nom;
-
-        boolean nomInvalide = false;
-
+     // Pour entrez l'unité
+        String unite;
         do {
-            System.out.print("Renseignez le nom du graphe : ");
-            nom = entree.nextLine().strip();
-            if (nom.equals("")) {
-                System.out.println("Le nom du graphe ne peut pas être vide.");
-                nomInvalide = true;
-            } else {
-                nomInvalide = false;
+            System.out.print("Entrez l'unité de temps du graphe : ");
+            unite = scanner.nextLine().strip();
+            if (unite.isEmpty()) {
+                System.out.println("L'unité de temps du graphe ne peut pas être vide.");
             }
-        } while (nomInvalide);
+        } while (unite.isEmpty());
 
-        return nom;
-    }
-    /**
-     * Demande à l'utilisateur de saisir le nom d'une tâche
-     * @return nom de la tâche
-     */
-    public String demandeNomTache() {
-        Scanner entree = new Scanner(System.in);
-        String nom;
-        
-        boolean nomInvalide = false;
-        
-        do {
-            System.out.print("Renseignez le nom de la tâche : ");
-            nom = entree.nextLine().strip();
-            if (nom.equals("")) {
-                System.out.println("Le nom de la tâche ne peut pas être vide.");
-            } else {
-                nomInvalide = false;
-            }
-        } while (nomInvalide);
-        
-        return nom;
-    }
-    
-    /**
-     * Demande à l'utilisateur de saisir la description d'une tâche
-     * @return description de la tâche
-     */
-    public String demandeDescriptionTache() {
-        Scanner entree = new Scanner(System.in);
-        String description;
-        
-        boolean descriptionInvalide = false;
-        
-        do {
-            System.out.print("Renseignez la description de la tâche : ");
-            description = entree.nextLine().strip();
-            if (description.equals("")) {
-                System.out.println("La description de la tâche ne peut pas être vide.");
-            } else {
-                descriptionInvalide = false;
-            }
-        } while (descriptionInvalide);
-        
-        return description;
-    }
-    
-    /**
-     * Demande à l'utilisateur de saisir la durée d'une tâche
-     * @return durée de la tâche
-     */
-    public double demandeDureeTache() {
-        Scanner entree = new Scanner(System.in);
-        double duree = 0.0;
-        
-        boolean dureeInvalide = false;
-        
-        do {
-            System.out.print("Renseignez la durée de la tâche : ");
-            try {
-                duree = Double.parseDouble(entree.nextLine().strip());
-                if (duree <= 0) {
-                    System.out.println("La durée de la tâche doit être un flottant positif.");
-                    dureeInvalide = true;
-                } else {
-                    dureeInvalide = false;
+        // Pour entrez les taches
+        ArrayList<Tache> taches = new ArrayList<>();
+        boolean ajouterTache = true;
+
+        while (ajouterTache) {
+            System.out.print("Voulez-vous ajouter une tâche ? (oui/non) : ");
+            String reponse = scanner.nextLine().strip().toLowerCase();
+
+            if (reponse.equals("oui")) {
+                String nomTache;
+                do {
+                    System.out.print("Entrez le nom de la tâche : ");
+                    nomTache = scanner.nextLine().strip();
+                    if (nomTache.isEmpty()) {
+                        System.out.println("Le nom de la tâche ne peut pas être vide.");
+                    }
+                } while (nomTache.isEmpty());
+
+                // Pour entrez la description de la tache
+                String descriptionTache;
+                do {
+                    System.out.print("Entrez la description de la tâche : ");
+                    descriptionTache = scanner.nextLine().strip();
+                    if (descriptionTache.isEmpty()) {
+                        System.out.println("La description de la tâche ne peut pas être vide.");
+                    }
+                } while (descriptionTache.isEmpty());
+
+                // Pour entrez la durée de la tache
+                double dureeTache = 0;
+                boolean dureeInvalide;
+                do {
+                    System.out.print("Entrez la durée de la tâche : ");
+                    try {
+                        dureeTache = Double.parseDouble(scanner.nextLine().strip());
+                        if (dureeTache <= 0) {
+                            System.out.println("La durée de la tâche doit être un nombre positif.");
+                            dureeInvalide = true;
+                        } else {
+                            dureeInvalide = false;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Veuillez entrer un nombre valide pour la durée.");
+                        dureeInvalide = true;
+                    }
+                } while (dureeInvalide);
+
+                System.out.print("Entrez les noms des tâches prédécesseurs (séparés par des virgules, laissez vide si aucun) : ");
+                String input = scanner.nextLine().strip();
+                String[] nomsPredecesseurs = input.isEmpty() ? new String[0] : input.split(",");
+                for (int i = 0; i < nomsPredecesseurs.length; i++) {
+                    nomsPredecesseurs[i] = nomsPredecesseurs[i].strip();
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("La durée de la tâche doit être un entier positif.");
-                dureeInvalide = true;
-            }
-        } while (dureeInvalide);
-        
-        return duree;
-    }
-    
-    /**
-     * Demande à l'utilisateur de saisir les prédécesseurs d'une tâche
-     * @return nomsPredecesseurs de la tâche
-     */
-    public String[] demandePredecesseursTache() {
-        Scanner entree = new Scanner(System.in);
-        String input;
-        String[] nomsPredecesseurs;
 
-        System.out.print("Renseignez les prédécesseurs de la tâche (séparés par des virgules, laissez vide si aucun) : ");
-        input = entree.nextLine().strip();
-        if (input.equals("")) {
-            nomsPredecesseurs = new String[0];
-        } else {
-            nomsPredecesseurs = input.split(",");
+                ArrayList<Tache> tachesRequises = new ArrayList<>();
+                for (String nomPredecesseur : nomsPredecesseurs) {
+                    for (Tache tacheExistante : taches) {
+                        if (tacheExistante.getLibelle().equals(nomPredecesseur)) {
+                            tachesRequises.add(tacheExistante);
+                        }
+                    }
+                }
+
+                // Ajoute les taches au graphes
+                Tache nouvelleTache = new Tache(nomTache, descriptionTache, dureeTache, tachesRequises);
+                taches.add(nouvelleTache);
+            } else {
+                ajouterTache = false;
+            }
         }
-        return nomsPredecesseurs;
+
+        ArrayList<Evenement> evenements = new ArrayList<>();
+
+        // Return the created graph
+        return new Graphe(titre, unite, taches, evenements);
     }
 }
