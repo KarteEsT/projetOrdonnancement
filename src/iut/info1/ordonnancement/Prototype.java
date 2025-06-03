@@ -104,7 +104,7 @@ public class Prototype {
 			}
 		}
 		
-		// Chemin Critique
+		// Chemins Critiques
 		System.out.println("\nChemins Critiques :");
 		List<List<Evenement>> cheminsCritiques = evenementInitial.trouverCheminsCritiques(evenementInitial);
 		for (List<Evenement> chemin : cheminsCritiques) {

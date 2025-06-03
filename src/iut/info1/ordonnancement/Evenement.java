@@ -105,7 +105,7 @@ public class Evenement {
 				}
 			}
 			
-			// Si aucun successeur critique, ajouter le chemin actuel aux chemins critiques
+			// Si aucun successeur critique, ajouter le chemin actuel aux chemins critiques.
 			if (aucunSuccesseurCritique) {
 				cheminsCritiques.add(new ArrayList<>(cheminActuel));
 			}
