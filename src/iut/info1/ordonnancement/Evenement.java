@@ -5,6 +5,7 @@
 package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cette classe représente un événement dans un système d'ordonnancement.
@@ -78,6 +79,40 @@ public class Evenement {
         this.dateAuPlusTard = 0.0; // Initialisation de la date au plus tard qui sera calculée lors de l'ordonnancement
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
+    }
+    
+    public List<List<Evenement>> trouverCheminsCritiques(Evenement evenementInitial) {
+        List<List<Evenement>> cheminsCritiques = new ArrayList<>();
+        List<Evenement> cheminActuel = new ArrayList<>();
+        List<Evenement> visites = new ArrayList<>();
+
+        parcourirCheminCritique(evenementInitial, cheminActuel, cheminsCritiques, visites);
+        return cheminsCritiques;
+    }
+    
+    private void parcourirCheminCritique(Evenement evenement, List<Evenement> cheminActuel,
+        List<List<Evenement>> cheminsCritiques, List<Evenement> visites) {
+			// Ajouter l'événement actuel au chemin
+			cheminActuel.add(evenement);
+			visites.add(evenement);
+			
+			// Vérifier si l'événement n'a pas de successeurs critiques
+			boolean aucunSuccesseurCritique = true;
+			for (Evenement successeur : evenement.getEvenementSuccesseurList()) {
+				if (successeur.estCritique() && !visites.contains(successeur)) {
+					aucunSuccesseurCritique = false;
+					parcourirCheminCritique(successeur, cheminActuel, cheminsCritiques, visites);
+				}
+			}
+			
+			// Si aucun successeur critique, ajouter le chemin actuel aux chemins critiques
+			if (aucunSuccesseurCritique) {
+				cheminsCritiques.add(new ArrayList<>(cheminActuel));
+			}
+
+		// Retirer l'événement actuel pour revenir en arrière
+		cheminActuel.remove(cheminActuel.size() - 1);
+		visites.remove(visites.size() - 1);
     }
 
     /**

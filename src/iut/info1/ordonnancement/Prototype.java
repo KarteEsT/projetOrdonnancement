@@ -6,6 +6,7 @@ package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Permet de lancer l'application
@@ -104,7 +105,13 @@ public class Prototype {
 		}
 		
 		// Chemin Critique
-		System.out.println("\nChemin Critique : TODO");
+		System.out.println("\nChemins Critiques :");
+		List<List<Evenement>> cheminsCritiques = evenementInitial.trouverCheminsCritiques(evenementInitial);
+		for (List<Evenement> chemin : cheminsCritiques) {
+		    System.out.println(chemin.stream()
+		        .map(e -> "Événement " + e.getId())
+		        .collect(Collectors.joining(" -> ")));
+		}
 
 		// Test de la méthode existeCircuit
 		boolean circuitExiste = graphe.existeCircuit();
@@ -112,17 +119,5 @@ public class Prototype {
 
 		graphe.trierTaches();
 		System.out.println("Tâches triées dans le graphe : " + graphe.toString());
-
-		//------------------------------------------------------------------------//
-
-		//Essai tache requise pas dans graphe
-		//Graphe graphe2 = new Graphe("Graphe Test 2", "jours", new ArrayList<>(), new ArrayList<>());
-		//Tache t1 = new Tache("T1", "Description T1", 3);
-		//Tache t2 = new Tache("T2", "Description T2", 2);
-
-		//t1.ajouterTacheRequise(t2); // t2 n'est pas dans le graphe)
-
-		//graphe2.ajouterPlusieursTaches(t2,t1);
-
 	}
 }
