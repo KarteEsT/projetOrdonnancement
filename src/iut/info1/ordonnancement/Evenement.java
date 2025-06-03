@@ -131,6 +131,7 @@ public class Evenement {
 	
 	/**
 	 * Setter de la liste des événements successeurs.
+	 * @param evenementSuccesseurList Liste des événements successeurs
 	 */
 	public void setEvenementSuccesseurList(ArrayList<Evenement> evenementSuccesseurList) {
 		if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
@@ -141,6 +142,7 @@ public class Evenement {
 	
 	/**
 	 * Setter de la liste des taches successeurs.
+	 * @param tacheSuccesseurList Liste des tâches successeurs
 	 */
 	public void setTacheSuccesseurList(ArrayList<Tache> tacheSuccesseurList) {
 		if (tacheSuccesseurList == null || tacheSuccesseurList.isEmpty()) {
@@ -151,6 +153,7 @@ public class Evenement {
 	
 	/**
 	 * Setter de la date au plus tôt.
+	 * @param dateAuPlusTot Date au plus tôt de l'événement
 	 */
 	public void setDatePlusTot(double dateAuPlusTot) {
 		this.dateAuPlusTot = dateAuPlusTot;
@@ -158,6 +161,7 @@ public class Evenement {
 	
 	/**
 	 * Setter de la date au plus tard.
+	 * @param dateAuPlusTard Date au plus tard de l'événement 
 	 */
 	public void setDatePlusTard(double dateAuPlusTard) {
 		this.dateAuPlusTard = dateAuPlusTard;
@@ -165,6 +169,7 @@ public class Evenement {
 
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
+	 * @param tache Tâche à ajouter en tant que successeur
 	 */
 	public void addTacheSuccesseur(Tache tache) {
 		tacheSuccesseurList.add(tache);
@@ -172,6 +177,7 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
+	 * @param tache Tâche à ajouter en tant que prédécesseur
 	 */
 	public void addTachePredecesseur(Tache tache) {
 		tachePredecesseurList.add(tache);
@@ -179,6 +185,7 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
+	 * @param evenement Événement à ajouter en tant que successeur
 	 */
 	public void addEvenementSuccesseur(Evenement evenement) {
 		evenementSuccesseurList.add(evenement);
@@ -186,6 +193,7 @@ public class Evenement {
 	
 	/**
 	 * Ajout d'une tache dans la liste des tache successeur.
+	 * @param evenement Événement à ajouter en tant que prédécesseur
 	 */
 	public void addEvenementPredecesseur(Evenement evenement) {
 		evenementPredecesseurList.add(evenement);
@@ -193,6 +201,7 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
+	 * @param tache Tâche à supprimer de la liste des successeurs
 	 */
 	public void delTacheSuccesseur(Tache tache) {
 		tacheSuccesseurList.remove(tache);
@@ -200,6 +209,7 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
+	 * @param tache Tâche à supprimer de la liste des prédécesseurs
 	 */
 	public void delTachePredecesseur(Tache tache) {
 		tachePredecesseurList.remove(tache);
@@ -207,6 +217,7 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
+	 * @param evenement à supprimer des evenements successeurs
 	 */
 	public void delEvenementSuccesseur(Evenement evenement) {
 		evenementSuccesseurList.remove(evenement);
@@ -214,6 +225,7 @@ public class Evenement {
 	
 	/**
 	 * Suppression d'une tache dans la liste des tache successeur.
+	 * @param evenement à supprimer des evenements prédécesseurs
 	 */
 	public void delEvenementPredecesseur(Evenement evenement) {
 		evenementPredecesseurList.remove(evenement);

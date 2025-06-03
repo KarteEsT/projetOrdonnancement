@@ -5,6 +5,7 @@
 package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Représenter et gère un graphe PERT 
@@ -371,6 +372,26 @@ public class Graphe {
         return false;
     }
     
+    /**
+     * Crée les événements du graphe en fonction des tâches.
+     */
+    public void creerEvenements() {
+        if (getTaches() == null || getTaches().isEmpty()) {
+            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+        }
+
+        Evenement evenementInitial = new Evenement();
+        for (Tache tache : getTaches()) {
+            if (tache.getTachesRequises().isEmpty()) {
+                evenementInitial.addTachePredecesseur(tache);
+            }
+        }
+
+        // Ajouter l'événement initial au graphe
+        ajouterEvenement(evenementInitial);
+        // Créer des événements pour chaque tâche
+        //TODO COntinuer la création des événements
+    }
     
     @Override
     public String toString() {
