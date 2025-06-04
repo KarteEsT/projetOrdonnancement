@@ -1,1 +1,152 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><umlet_diagram></umlet_diagram>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>200</y>
+      <w>380</w>
+      <h>430</h>
+    </coordinates>
+    <panel_attributes>Graphe
+--
+
+- titre : String
+- unite : String
+- taches : ArrayList&lt;Tache&gt;
+- evenements : ArrayList&lt;Evenement&gt;
+
+--
+
++ Graphe(String titre, String unite, ArrayList&lt;Tache&gt; taches, 
+                ArrayList&lt;Evenement&gt; listeEvenements)
+
++ getTitre : String
++ getUnite : String
++ getTaches : ArrayList&lt;Tache&gt;
++ getEvenement : ArrayList&lt;Evenement&gt;
+
++ ajouterTache(Tache tache)
++ ajouterPlusieursTaches(Tache... taches)
++ calculerFinProjet() : double
++ supprimerTache(Tache tache)
++ ajouterEvenement(Evenement evenement)
+
++ getNombreTaches : int
+
++ existeCircuit() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>510</x>
+      <y>400</y>
+      <w>380</w>
+      <h>430</h>
+    </coordinates>
+    <panel_attributes>Tache
+--
+
+- libelle : String
+- description : String
+- duree : double
+- tachesRequises : ArrayList&lt;Tache&gt;
+
+--
+
++ Tache(String libelle, String description, double duree, 
+              ArrayList&lt;Tache&gt; tachesRequises) 
++ Tache(String libelle, String description, double duree)
+
++ getLibelle : String
++ getDescription : String
++ getDuree : double
++ getTachesRequises : ArrayList&lt;Tache&gt;
+
++ ajouterTacheRequise(Tache tache)
++ supprimerTacheRequise(Tache tache)
+
++ equals() : boolean
++ toString : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1010</x>
+      <y>200</y>
+      <w>380</w>
+      <h>430</h>
+    </coordinates>
+    <panel_attributes>Evenement
+--
+
+- id : int
+- dateAuPlusTot : double
+- dateAuPlusTard : double
+- tachePredecesseurList : ArrayList&lt;Tache&gt;
+- tacheSuccesseurList : ArrayList&lt;Tache&gt;
+- evenementPredecesseurList : ArrayList&lt;Evenement&gt;
+- evenementSuccesseurList : ArrayList&lt;Evenement&gt;
+- EVENEMENT_INITIAL : Evenement
+
+--
+
++ Evenement()
++ Evenement(int id, ArrayList&lt;Evenement&gt; evenementPredecesseurList,
+                        ArrayList&lt;Tache&gt; tachePredecesseurList)
+
++ getId : int
++ getDateAuPlusTot : double
++ getDateAuPlusTard : double
++ getEvenementPredecesseurList : ArrayList&lt;Evenement&gt;
++ getEvenementSuccesseurList : ArrayList&lt;Evenement&gt;
++ getTachePredecesseurList : ArrayList&lt;Tache&gt;
++ getTacheSuccesseurList : ArrayList&lt;Tache&gt;
+
++ estCritique() : boolean
++ calculerDatePlusTot(double)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>70</y>
+      <w>1050</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=0..1</panel_attributes>
+    <additional_attributes>1010.0;130.0;1010.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>270</y>
+      <w>340</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1..*</panel_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>340</y>
+      <w>150</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0;70.0;200.0;130.0;200.0</additional_attributes>
+  </element>
+</diagram>
