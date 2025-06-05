@@ -78,10 +78,6 @@ public class Evenement {
             throw new IllegalArgumentException("Un événement doit avoir au " + 
                                                "moins une tâche prédécesseur.");
         }
-        if (evenementPredecesseurList.size() != tachePredecesseurList.size()) {
-            throw new IllegalArgumentException("Le nombre de prédécesseurs " + 
-                                      "doit correspondre au nombre de tâches.");
-        }
         
         this.id = id;
         this.dateAuPlusTot = 0.0; 

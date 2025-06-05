@@ -19,49 +19,39 @@ public class PrototypeEvenementCreationAuto {
      */
     public static void main(String[] args) {
         // Création des tâches
-        Tache tacheA = new Tache("tacheA", "Description tacheA", 3.0);
-        Tache tacheB = new Tache("tacheB", "Description tacheB", 2.0);
-        Tache tacheC = new Tache("tacheC", "Description tacheC", 4.0);
-        Tache tacheD = new Tache("tacheD", "Description tacheD", 8.0);
-
+        Tache tacheA = new Tache("tacheA", "Description tacheA", 19.0);
+        Tache tacheB = new Tache("tacheB", "Description tacheB", 14.0);
+        Tache tacheC = new Tache("tacheC", "Description tacheC", 2.0);
+        Tache tacheD = new Tache("tacheD", "Description tacheD", 6.0);
+        Tache tacheE = new Tache("tacheE", "Description tacheE", 1.0);
+        Tache tacheF = new Tache("tacheF", "Description tacheF", 7.0);
+        Tache tacheG = new Tache("tacheG", "Description tacheG", 6.0);
+        Tache tacheH = new Tache("tacheH", "Description tacheH", 6.0);
+        Tache tacheI = new Tache("tacheI", "Description tacheI", 5.0);
+        Tache tacheJ = new Tache("tacheJ", "Description tacheJ", 26.0);
+        
         // Ajout des dépendances
-        tacheC.ajouterTacheRequise(tacheA);
-        tacheD.ajouterTacheRequise(tacheB);
+        tacheE.ajouterTacheRequise(tacheA);
+        tacheF.ajouterTacheRequise(tacheB);
+        tacheC.ajouterTacheRequise(tacheB);
+        tacheD.ajouterTacheRequise(tacheC);
+        tacheG.ajouterTacheRequise(tacheE);
+        //tacheG.ajouterTacheRequise(tacheF);
+        tacheH.ajouterTacheRequise(tacheE);
+        //tacheH.ajouterTacheRequise(tacheF);
+        tacheI.ajouterTacheRequise(tacheH);
+        //tacheJ.ajouterTacheRequise(tacheG);
+        //tacheJ.ajouterTacheRequise(tacheI);
+        tacheJ.ajouterTacheRequise(tacheD);
 
-        ArrayList<Tache> taches = new ArrayList<>(List.of(tacheA, tacheB, tacheC, tacheD));
+        ArrayList<Tache> taches = new ArrayList<>(List.of(tacheA, tacheB, tacheC, tacheD, tacheE, tacheF, tacheG, tacheH, tacheI, tacheJ));
 
         // Création du graphe
         Graphe graphe = new Graphe("Graphe Test", "jours", taches);
 
         // Initialisation automatique du graphe
         graphe.initialiserGraphe();
-
-        // Affichage du graphe
-        System.out.println(graphe);
         
-        for (Evenement evenement : graphe.getEvenements()) {
-            System.out.println("Événement " + evenement.getId() + ": "
-                    + evenement.getTachePredecesseurList());
-        }
-        //Essai d'un nouveau graphe
-        
-        Tache tacheE = new Tache("A", "Description tacheE", 3.0);
-        Tache tacheF = new Tache("B", "Description tacheF", 6.0);
-        Tache tacheG = new Tache("C", "Description tacheG", 4.0);
-        Tache tacheH = new Tache("D", "Description tacheH", 5.0);
-        Tache tacheI = new Tache("E", "Description tacheI", 2.0);
-        
-        tacheG.ajouterTacheRequise(tacheE);
-        tacheH.ajouterTacheRequise(tacheF);
-        tacheI.ajouterTacheRequise(tacheG);
-        tacheI.ajouterTacheRequise(tacheH);
-        
-        Graphe graphe2 = new Graphe("Graphe Test 2", "jours",
-                new ArrayList<>(List.of(tacheE, tacheF, tacheG, tacheH, tacheI)));
-        
-        // Initialisation automatique du graphe
-        graphe2.initialiserGraphe();
-        // Affichage du graphe
-        System.out.println("\n\n\n\n\n\n\n\n" + graphe2);
+        System.out.println("Graphe créé avec succès !\n\n" + graphe);
     }
 }

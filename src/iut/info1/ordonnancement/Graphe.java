@@ -366,6 +366,7 @@ public class Graphe {
         if (getTaches() == null || getTaches().isEmpty()) {
             throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
         }
+        
 
         // Nettoyage des anciens événements
         getEvenements().clear();
@@ -404,6 +405,9 @@ public class Graphe {
                     evenementsPred.add(evenementFinRequise);
                     evenementFinRequise.addTacheSuccesseur(tache);
                 }
+            }
+            if (evenementsPred.size() != tachesPred.size()) {
+                throw new IllegalStateException("Les listes des prédécesseurs ne sont pas synchronisées.");
             }
 
             // Créer l'événement de fin pour la tâche courante

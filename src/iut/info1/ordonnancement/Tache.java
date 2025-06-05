@@ -148,22 +148,6 @@ public class Tache {
         getTachesRequises().add(tache);
     }
     
-    /**
-     * Supprime une tâche requise de la liste des tâches requises.
-     *
-     * @param tache la tâche à supprimer
-     * @throws IllegalArgumentException si la tâche n'est 
-     *         pas dans la liste des tâches requises
-     */
-    public void supprimerTacheRequise(Tache tache) {
-        if ( getTachesRequises() == null || 
-             !getTachesRequises().contains(tache)) {
-            throw new IllegalArgumentException(
-                    "La tâche " + tache.getLibelle() + 
-                    " n'est pas dans la liste des tâches requises.");
-        }
-        getTachesRequises().remove(tache);
-    } 
     //TODO réfléchir ci-dessous
     // Peut-être renvoyer un boolean pour indiquer si la tâche a été supprimée ou non 
     
