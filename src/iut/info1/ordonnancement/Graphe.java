@@ -42,8 +42,7 @@ public class Graphe {
      * @param listeEvenements composant le graphe
      * @throws NullPointerException si le titre ou l'unité est null
      */
-    public Graphe(String titre, String unite, ArrayList<Tache> taches, 
-                  ArrayList<Evenement> listeEvenements) {
+    public Graphe(String titre, String unite, ArrayList<Tache> taches) {
         if (titre == null || titre.isEmpty() || titre.isBlank()) {
             throw new NullPointerException("Le titre ne peut pas être null.");
         }
@@ -58,15 +57,8 @@ public class Graphe {
                 ajouterTache(tache);
             }
         }
-
-        // Initialisation de la liste `evenements`
+        
         this.evenements = new ArrayList<>();
-        if (listeEvenements != null && !listeEvenements.isEmpty()) {
-            for (Evenement evenement : listeEvenements) {
-                ajouterEvenement(evenement);
-            }
-        }
-
         this.titre = titre;
         this.unite = unite;
     }
@@ -104,7 +96,7 @@ public class Graphe {
     /**
      * @return nouvelle valeur de évènement
      */
-    public ArrayList<Evenement> getEvenement() {
+    public ArrayList<Evenement> getEvenements() {
         return evenements;
     }
     
@@ -170,7 +162,7 @@ public class Graphe {
         double dateFinProjet = 0.0;
 
         // Parcourt tous les événements pour trouver ceux sans successeur
-        for (Evenement evenement : getEvenement()) {
+        for (Evenement evenement : getEvenements()) {
             if ( evenement.getEvenementSuccesseurList() == null || 
                  evenement.getEvenementSuccesseurList().isEmpty()) {
                 
@@ -214,7 +206,7 @@ public class Graphe {
             throw new NullPointerException("Un évènement ne " +
                                            "peut pas être null.");
         }
-        for (Evenement event : getEvenement()) {
+        for (Evenement event : getEvenements()) {
             if (evenement.equals(event)) {
                 throw new IllegalArgumentException("L'évènement " + 
                                                 event.getId() +
@@ -222,7 +214,7 @@ public class Graphe {
             }
         }
         
-        getEvenement().add(evenement);
+        getEvenements().add(evenement);
     }
     
     /**
@@ -376,7 +368,7 @@ public class Graphe {
         }
 
         // Nettoyage des anciens événements
-        getEvenement().clear();
+        getEvenements().clear();
 
         // Étape 1 : Créer l'événement initial
         Evenement evenementInitial = new Evenement(); // id = 0 par défaut
@@ -434,10 +426,10 @@ public class Graphe {
     public String toString() {
         String graphe = getTitre();
         graphe += ", unite = " + getUnite();
-        graphe += "\nDate de fin de prokjet : " + calculerFinProjet();
+        graphe += "\nDate de fin de projet : " + calculerFinProjet();
         graphe += "\n" + getTaches();
         
-        graphe += "\n" + getEvenement();
+        graphe += "\n" + getEvenements();
         return graphe;
     }
 }

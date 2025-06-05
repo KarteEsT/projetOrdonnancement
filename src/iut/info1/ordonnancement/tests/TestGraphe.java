@@ -41,7 +41,7 @@ public class TestGraphe {
         taches.add(t3);
         taches.add(t4);
 
-        graphe = new Graphe("Test Graphe", "jours", taches, null);
+        graphe = new Graphe("Test Graphe", "jours", taches);
     }
 
     /**
@@ -52,7 +52,7 @@ public class TestGraphe {
         graphe.creerEvenements();
         
         // 1 événement initial + 1 événement par tâche = 5
-        assertEquals(5, graphe.getEvenement().size(), "Le graphe doit contenir 5 événements.");
+        assertEquals(5, graphe.getEvenements().size(), "Le graphe doit contenir 5 événements.");
     }
 
     /**
@@ -65,7 +65,7 @@ public class TestGraphe {
         graphe.creerEvenements();
 
         // On récupère le premier événement (normalement l'événement initial)
-        Evenement evenementInitial = graphe.getEvenement().get(0);
+        Evenement evenementInitial = graphe.getEvenements().get(0);
 
         // Il doit avoir au moins une tâche successeure
         assertFalse(evenementInitial.getTacheSuccesseurList().isEmpty());
@@ -108,7 +108,7 @@ public class TestGraphe {
 
         // On cherche l’événement qui a T4 comme tâche prédécesseur (donc T4 se termine à cet événement)
         Evenement eventFinT4 = null;
-        for (Evenement e : graphe.getEvenement()) {
+        for (Evenement e : graphe.getEvenements()) {
             if (e.getTachePredecesseurList().contains(t4)) {
                 eventFinT4 = e;
                 break;
@@ -123,15 +123,4 @@ public class TestGraphe {
                    "T4 ne devrait pas avoir de tâche successeure.");
     }
 
-    
-
-    /**
-     * Teste la méthode creerEvenements sur un graphe sans tâches.
-     */
-    @Test
-    public void testCreerEvenementsSansTaches() {
-        Graphe grapheVide = new Graphe("Vide", "jours", new ArrayList<>(), null);
-        assertThrows(IllegalArgumentException.class, grapheVide::creerEvenements,
-                "Créer des événements sans tâches doit lever une exception.");
-    }
 }

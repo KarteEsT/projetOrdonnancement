@@ -13,10 +13,10 @@ import java.util.Scanner;
 public class ChargeurConsole {
     
     /**
-     * TODO commenter le rôle de cette méthode (SRP)
-     * @return graphe
+     * Renvoie un graphe chargé depuis la console.
+     * @return graphe chargé
      */
-    public Graphe chargerDepuisConsole() {
+    public static Graphe chargerDepuisConsole() {
         Scanner scanner = new Scanner(System.in);
 
         // Pour entrez le titre
@@ -121,11 +121,8 @@ public class ChargeurConsole {
                 ajouterTache = false;
             }
         }
-
-        ArrayList<Evenement> evenements = new ArrayList<>();
-
-        // Return the created graph
+        
         scanner.close();
-        return new Graphe(titre, unite, taches, evenements);
+        return new Graphe(titre, unite, taches);
     }
 }

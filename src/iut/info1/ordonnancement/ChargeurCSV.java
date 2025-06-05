@@ -130,7 +130,7 @@ public class ChargeurCSV {
                                                    "incomplet.");
             }
 
-            return new Graphe(titre, unite, taches, new ArrayList<>());
+            return new Graphe(titre, unite, taches);
         }
     }
     

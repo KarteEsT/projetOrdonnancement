@@ -20,422 +20,422 @@ import static org.junit.jupiter.api.Assertions.*;
  * dans la classe Evenement.
  */
 public class TestEvenement {
-	
-	//------------ Test Constructeurs -------------//
-	
-	@Test
-	void testConstructeurEvenementCorrect() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-		
-		Evenement evenementInitial = new Evenement();
-		
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		
-		assertEquals(evenementInitial, evenement1.getEvenementPredecesseurList().get(0));
-	}
-	
-	@Test
-	void testConstructeurEvenementIncorrect() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+    //------------ Test Constructeurs -------------//
 
-		tachesPredecesseurs.add(tache1);
-		// Je n'ajoute pas l'événement initial dans la liste des événements prédécesseurs pour créer une erreur
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		});
-	}
-	
-	@Test
-	void testConstructeurTacheIncorrect() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+    @Test
+    void testConstructeurEvenementCorrect() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenementInitial = new Evenement();
-		evenementsPredecesseurs.add(evenementInitial);
-		// Je n'ajoute pas de tache prédécesseur pour créer une erreur.
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		});
-	}
-	
-	@Test
-	void testConstructeurEvenementTacheIncorrect() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        Evenement evenementInitial = new Evenement();
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
 
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		tachesPredecesseurs.add(tache2);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		});
-	}
-	
-	//------------ Test des getters -------------//
-	
-	@Test
-	void testGetId() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        assertEquals(evenementInitial, evenement1.getEvenementPredecesseurList().get(0));
+    }
 
-		Evenement evenementInitial = new Evenement();
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+    @Test
+    void testConstructeurEvenementIncorrect() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
 
-		assertEquals(0, evenementInitial.getId());
-		assertEquals(1, evenement1.getId());
-	}
-	
-	@Test
-	void testGetDateAuPlusTot() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        tachesPredecesseurs.add(tache1);
+        // Je n'ajoute pas l'événement initial dans la liste des événements prédécesseurs pour créer une erreur
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        });
+    }
 
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+    @Test
+    void testConstructeurTacheIncorrect() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenementInitial = new Evenement();
+        evenementsPredecesseurs.add(evenementInitial);
+        // Je n'ajoute pas de tache prédécesseur pour créer une erreur.
 
-		assertEquals(0.0, evenement1.getDateAuPlusTot()); // ici 0.0 car l'ordonnancement n'est pas encore fait
-		assertEquals(0.0, evenementInitial.getDateAuPlusTot());
-	}
-	
-	@Test
-	void testGetDateAuPlusTard() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        });
+    }
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+    @Test
+    void testConstructeurEvenementTacheIncorrect() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		
-		assertEquals(0.0, evenement1.getDateAuPlusTard()); //ici 0.0 car l'ordonnancement n'est pas encore fait
-		assertEquals(0.0, evenementInitial.getDateAuPlusTard());
-	}
-	
-	@Test
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+        tachesPredecesseurs.add(tache2);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        });
+    }
+
+    //------------ Test des getters -------------//
+
+    @Test
+    void testGetId() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+        Evenement evenementInitial = new Evenement();
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        assertEquals(0, evenementInitial.getId());
+        assertEquals(1, evenement1.getId());
+    }
+
+    @Test
+    void testGetDateAuPlusTot() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        assertEquals(0.0, evenement1.getDateAuPlusTot()); // ici 0.0 car l'ordonnancement n'est pas encore fait
+        assertEquals(0.0, evenementInitial.getDateAuPlusTot());
+    }
+
+    @Test
+    void testGetDateAuPlusTard() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        assertEquals(0.0, evenement1.getDateAuPlusTard()); //ici 0.0 car l'ordonnancement n'est pas encore fait
+        assertEquals(0.0, evenementInitial.getDateAuPlusTard());
+    }
+
+    @Test
     void testGetEvenementPredecesseurList() {
         ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
         ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-        
+
         Evenement evenementInitial = new Evenement();
         Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
         evenementsPredecesseurs.add(evenementInitial);
-        
+
         tachesPredecesseurs.add(tache1);
         Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-        
+
         assertEquals(1, evenement1.getEvenementPredecesseurList().size());
         assertTrue(evenement1.getEvenementPredecesseurList().contains(evenementInitial));
     }
-	
-	//------------ Test des méthodes -------------//
-	
-	@Test
-	void testAddEvenementPredecesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+    //------------ Test des méthodes -------------//
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+    @Test
+    void testAddEvenementPredecesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		evenement1.addEvenementPredecesseur(evenement2);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		assertTrue(evenement1.getEvenementPredecesseurList().contains(evenement2),
-				"L'événement prédécesseur doit être ajouté à la liste.");
-	}
-	
-	@Test
-	void testAddEvenementSuccesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        evenement1.addEvenementPredecesseur(evenement2);
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        assertTrue(evenement1.getEvenementPredecesseurList().contains(evenement2),
+                "L'événement prédécesseur doit être ajouté à la liste.");
+    }
 
-		Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
+    @Test
+    void testAddEvenementSuccesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		evenement1.addEvenementSuccesseur(evenement2);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		assertTrue(evenement1.getEvenementSuccesseurList().contains(evenement2),
-				"L'événement successeur doit être ajouté à la liste.");
-	}
-	
-	@Test
-	void testAddTachePredecesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.addEvenementSuccesseur(evenement2);
 
-		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
-		evenement1.addTachePredecesseur(tache2);
+        assertTrue(evenement1.getEvenementSuccesseurList().contains(evenement2),
+                "L'événement successeur doit être ajouté à la liste.");
+    }
 
-		assertTrue(evenement1.getTachePredecesseurList().contains(tache2),
-				"La tâche prédécesseur doit être ajoutée à la liste.");
-	}
-	
-	@Test
-	void testAddTacheSuccesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+    @Test
+    void testAddTachePredecesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
-		evenement1.addTacheSuccesseur(tache2);
+        Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+        evenement1.addTachePredecesseur(tache2);
 
-		assertTrue(evenement1.getTacheSuccesseurList().contains(tache2),
-				"La tâche successeur doit être ajoutée à la liste.");
-	}
-	
-	@Test
-	void testDelEvenementPredecesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        assertTrue(evenement1.getTachePredecesseurList().contains(tache2),
+                "La tâche prédécesseur doit être ajoutée à la liste.");
+    }
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+    @Test
+    void testAddTacheSuccesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
-		evenement1.addEvenementPredecesseur(evenement2);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		evenement1.delEvenementPredecesseur(evenement2);
+        Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+        evenement1.addTacheSuccesseur(tache2);
 
-		assertFalse(evenement1.getEvenementPredecesseurList().contains(evenement2),
-				"L'événement prédécesseur doit être supprimé de la liste.");
-	}
-	
-	@Test
-	void testDelEvenementSuccesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        assertTrue(evenement1.getTacheSuccesseurList().contains(tache2),
+                "La tâche successeur doit être ajoutée à la liste.");
+    }
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+    @Test
+    void testDelEvenementPredecesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
-		evenement1.addEvenementSuccesseur(evenement2);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		evenement1.delEvenementSuccesseur(evenement2);
+        Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.addEvenementPredecesseur(evenement2);
 
-		assertFalse(evenement1.getEvenementSuccesseurList().contains(evenement2),
-				"L'événement successeur doit être supprimé de la liste.");
-	}
-	
-	@Test
-	void testDelTachePredecesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        evenement1.delEvenementPredecesseur(evenement2);
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        assertFalse(evenement1.getEvenementPredecesseurList().contains(evenement2),
+                "L'événement prédécesseur doit être supprimé de la liste.");
+    }
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+    @Test
+    void testDelEvenementSuccesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
-		evenement1.addTachePredecesseur(tache2);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		evenement1.delTachePredecesseur(tache2);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		assertFalse(evenement1.getTachePredecesseurList().contains(tache2),
-				"La tâche prédécesseur doit être supprimée de la liste.");
-	}
-	
-	@Test
-	void testDelTacheSuccesseur() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+        Evenement evenement2 = new Evenement(2, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.addEvenementSuccesseur(evenement2);
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        evenement1.delEvenementSuccesseur(evenement2);
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        assertFalse(evenement1.getEvenementSuccesseurList().contains(evenement2),
+                "L'événement successeur doit être supprimé de la liste.");
+    }
 
-		Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
-		evenement1.addTacheSuccesseur(tache2);
+    @Test
+    void testDelTachePredecesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		evenement1.delTacheSuccesseur(tache2);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		assertFalse(evenement1.getTacheSuccesseurList().contains(tache2),
-				"La tâche successeur doit être supprimée de la liste.");
-	}
-	
-	@Test
-	void testSetDatePlusTot() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-		
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		evenement1.setDatePlusTot(10.0);
-		assertEquals(10.0, evenement1.getDateAuPlusTot(), "La date au plus tôt doit être 10.0 après le set.");
-	}
-	
-	@Test
-	void testSetDatePlusTard() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-		
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		evenement1.setDatePlusTard(10.0);
-		assertEquals(10.0, evenement1.getDateAuPlusTard(), "La date au plus tôt doit être 10.0 après le set.");
-	}
-	
-	@Test
-	void testSetEvenementSuccesseurList() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-		
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
 
-		ArrayList<Evenement> evenementsSuccesseurs = new ArrayList<>();
-		evenementsSuccesseurs.add(evenement1);
+        Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+        evenement1.addTachePredecesseur(tache2);
 
-		evenement1.setEvenementSuccesseurList(evenementsSuccesseurs);
+        evenement1.delTachePredecesseur(tache2);
 
-		assertEquals(1, evenement1.getEvenementSuccesseurList().size(),
-				"La liste des événements successeurs doit contenir un élément.");
-		assertTrue(evenement1.getEvenementSuccesseurList().contains(evenement1),
-				"L'événement successeur doit être présent dans la liste.");
-	}
-	
-	@Test
-	void testSetTacheSuccesseurList() {
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-		
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        assertFalse(evenement1.getTachePredecesseurList().contains(tache2),
+                "La tâche prédécesseur doit être supprimée de la liste.");
+    }
 
-		ArrayList<Tache> tachesSuccesseurs = new ArrayList<>();
-		tachesSuccesseurs.add(tache1);
+    @Test
+    void testDelTacheSuccesseur() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		evenement1.setTacheSuccesseurList(tachesSuccesseurs);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		assertEquals(1, evenement1.getTacheSuccesseurList().size(),
-				"La liste des tâches successeurs doit contenir un élément.");
-		assertTrue(evenement1.getTacheSuccesseurList().contains(tache1),
-				"La tâche successeur doit être présente dans la liste.");
-	}
-	
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        Tache tache2 = new Tache("Tâche 2", "Description de la tâche 2", 3.0);
+        evenement1.addTacheSuccesseur(tache2);
+
+        evenement1.delTacheSuccesseur(tache2);
+
+        assertFalse(evenement1.getTacheSuccesseurList().contains(tache2),
+                "La tâche successeur doit être supprimée de la liste.");
+    }
+
+    @Test
+    void testSetDatePlusTot() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.setDatePlusTot(10.0);
+        assertEquals(10.0, evenement1.getDateAuPlusTot(), "La date au plus tôt doit être 10.0 après le set.");
+    }
+
+    @Test
+    void testSetDatePlusTard() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.setDatePlusTard(10.0);
+        assertEquals(10.0, evenement1.getDateAuPlusTard(), "La date au plus tôt doit être 10.0 après le set.");
+    }
+
+    @Test
+    void testSetEvenementSuccesseurList() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        ArrayList<Evenement> evenementsSuccesseurs = new ArrayList<>();
+        evenementsSuccesseurs.add(evenement1);
+
+        evenement1.setEvenementSuccesseurList(evenementsSuccesseurs);
+
+        assertEquals(1, evenement1.getEvenementSuccesseurList().size(),
+                "La liste des événements successeurs doit contenir un élément.");
+        assertTrue(evenement1.getEvenementSuccesseurList().contains(evenement1),
+                "L'événement successeur doit être présent dans la liste.");
+    }
+
+    @Test
+    void testSetTacheSuccesseurList() {
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        ArrayList<Tache> tachesSuccesseurs = new ArrayList<>();
+        tachesSuccesseurs.add(tache1);
+
+        evenement1.setTacheSuccesseurList(tachesSuccesseurs);
+
+        assertEquals(1, evenement1.getTacheSuccesseurList().size(),
+                "La liste des tâches successeurs doit contenir un élément.");
+        assertTrue(evenement1.getTacheSuccesseurList().contains(tache1),
+                "La tâche successeur doit être présente dans la liste.");
+    }
+
     @Test
     void testEstCritique() {
-    	ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-    	ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-    	
-    	Evenement evenementInitial = new Evenement();
-    	Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-    	
-    	evenementsPredecesseurs.add(evenementInitial);
-    	tachesPredecesseurs.add(tache1);
-    	
-    	Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-    	evenement1.setDatePlusTot(5.0);
-    	evenement1.setDatePlusTard(5.0);
-    	
-    	assertTrue(evenement1.estCritique(), "L'événement doit être critique car les dates au plus tôt et au plus tard sont égales.");
-    	
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.setDatePlusTot(5.0);
+        evenement1.setDatePlusTard(5.0);
+
+        assertTrue(evenement1.estCritique(), "L'événement doit être critique car les dates au plus tôt et au plus tard sont égales.");
+
     }
-    
+
     @Test
     void testCalculerDatePlusTot() {
-    	ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-    	ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-    	
-    	Evenement evenementInitial = new Evenement();
-    	Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-    	evenementsPredecesseurs.add(evenementInitial);
-    	tachesPredecesseurs.add(tache1);
-    	
-    	Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-    	evenement1.calculerDatePlusTot();
-    	assertEquals(5.0, evenement1.getDateAuPlusTot(), 
-    			"La date au plus tôt doit être 5.0 (0.0 + 5.0 = 5.0)");
-    	
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
+
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
+
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        evenement1.calculerDatePlusTot();
+        assertEquals(5.0, evenement1.getDateAuPlusTot(), 
+                "La date au plus tôt doit être 5.0 (0.0 + 5.0 = 5.0)");
+
     }
-    
+
     @Test
     void testCalculerDatePlusTard() {
         // Création des prédécesseurs
         ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
         ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
-        
+
         Evenement evenementInitial = new Evenement();
         Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
         evenementsPredecesseurs.add(evenementInitial);
@@ -460,34 +460,38 @@ public class TestEvenement {
         listeEvenements.add(evenement1);
         listeTaches.add(tache1);
 
-        Graphe graphe = new Graphe("Test Graphe", "jours", listeTaches, listeEvenements);
+        Graphe graphe = new Graphe("Test Graphe", "jours", listeTaches);
+
+        for (Evenement evenement : listeEvenements) {
+            graphe.ajouterEvenement(evenement);
+        }
 
         evenementInitial.calculerDatePlusTot();
         evenement1.calculerDatePlusTot();
-        
+
         // Calcul des dates
         double dateFinProjet = graphe.calculerFinProjet();
         evenement1.calculerDatePlusTard(dateFinProjet);
 
         // Vérification
         assertEquals(5.0, evenement1.getDateAuPlusTard(),
-            "La date au plus tard doit être 5.0 après le calcul initial.");
+                "La date au plus tard doit être 5.0 après le calcul initial.");
     }
-    
+
     @Test
     void testEquals() {
-    	
-		ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
-		ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenementInitial = new Evenement();
-		Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
-		evenementsPredecesseurs.add(evenementInitial);
-		tachesPredecesseurs.add(tache1);
+        ArrayList<Evenement> evenementsPredecesseurs = new ArrayList<>();
+        ArrayList<Tache> tachesPredecesseurs = new ArrayList<>();
 
-		Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
-		Evenement evenement2 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenementInitial = new Evenement();
+        Tache tache1 = new Tache("Tâche 1", "Description de la tâche 1", 5.0);
+        evenementsPredecesseurs.add(evenementInitial);
+        tachesPredecesseurs.add(tache1);
 
-		assertEquals(evenement1.equals(evenement2), evenement2.equals(evenement1));
+        Evenement evenement1 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+        Evenement evenement2 = new Evenement(1, evenementsPredecesseurs, tachesPredecesseurs);
+
+        assertEquals(evenement1.equals(evenement2), evenement2.equals(evenement1));
     }
 }

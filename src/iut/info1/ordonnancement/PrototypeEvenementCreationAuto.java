@@ -31,7 +31,7 @@ public class PrototypeEvenementCreationAuto {
         ArrayList<Tache> taches = new ArrayList<>(List.of(tacheA, tacheB, tacheC, tacheD));
 
         // Création du graphe
-        Graphe graphe = new Graphe("Graphe Test", "jours", taches, new ArrayList<>());
+        Graphe graphe = new Graphe("Graphe Test", "jours", taches);
 
         // Initialisation automatique du graphe
         graphe.initialiserGraphe();
@@ -39,7 +39,7 @@ public class PrototypeEvenementCreationAuto {
         // Affichage du graphe
         System.out.println(graphe);
         
-        for (Evenement evenement : graphe.getEvenement()) {
+        for (Evenement evenement : graphe.getEvenements()) {
             System.out.println("Événement " + evenement.getId() + ": "
                     + evenement.getTachePredecesseurList());
         }
@@ -57,7 +57,7 @@ public class PrototypeEvenementCreationAuto {
         tacheI.ajouterTacheRequise(tacheH);
         
         Graphe graphe2 = new Graphe("Graphe Test 2", "jours",
-                new ArrayList<>(List.of(tacheE, tacheF, tacheG, tacheH, tacheI)), new ArrayList<>());
+                new ArrayList<>(List.of(tacheE, tacheF, tacheG, tacheH, tacheI)));
         
         // Initialisation automatique du graphe
         graphe2.initialiserGraphe();
