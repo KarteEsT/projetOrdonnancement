@@ -125,6 +125,7 @@ public class ChargeurConsole {
         ArrayList<Evenement> evenements = new ArrayList<>();
 
         // Return the created graph
+        scanner.close();
         return new Graphe(titre, unite, taches, evenements);
     }
 }
