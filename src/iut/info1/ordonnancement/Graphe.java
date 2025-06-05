@@ -5,6 +5,7 @@
 package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Représenter et gère un graphe PERT 
@@ -244,9 +245,8 @@ public class Graphe {
         trierTaches();
             
         /* Création des événements */
-        int compteur;
-        compteur = 1;
-        ArrayList<Evenement> listeEvenements = new ArrayList<>();
+        
+        creerEvenements();
         
         /* Association des tâches initiales à l'événement initial */
         
@@ -256,6 +256,7 @@ public class Graphe {
                 evenementInitial.addTachePredecesseur(tache);
             }
         }
+        
         
         //Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, ArrayList<Tache> tachePredecesseurList) 
         /*
@@ -384,12 +385,32 @@ public class Graphe {
     }
     
     /**
+     * Initialise le graphe en créant les événements,
+     */
+    public void initialiserGraphe() {
+        // Étape 1 : Créer les événements
+        creerEvenements();
+
+        // Étape 2 : Calcul des dates au plus tôt
+        for (Evenement evenement : evenements) {
+            evenement.calculerDatePlusTot();
+        }
+
+        // Étape 3 : Calcul de la date de fin du projet
+        double dateFinProjet = calculerFinProjet();
+
+        // Étape 4 : Calcul des dates au plus tard
+        for (int i = evenements.size() - 1; i >= 0; i--) {
+            evenements.get(i).calculerDatePlusTard(dateFinProjet);
+        }
+    }
+    
+    /**
      * Crée les événements du graphe en fonction des tâches.
      */
     public void creerEvenements() {
         if (getTaches() == null || getTaches().isEmpty()) {
-            throw new IllegalArgumentException("Le graphe ne " +
-                                               "contient pas de tâches.");
+            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
         }
 
         // Nettoyage des anciens événements
@@ -401,7 +422,7 @@ public class Graphe {
 
         int compteurId = 1;
 
-        // Stocke les événements de fin pour chaque tâche (par leur position)
+        // Stocke les événements de fin pour chaque tâche
         ArrayList<Tache> tachesCreees = new ArrayList<>();
         ArrayList<Evenement> evenementsFin = new ArrayList<>();
 
@@ -413,27 +434,28 @@ public class Graphe {
             if (tache.getTachesRequises().isEmpty()) {
                 // Dépend de l'événement initial
                 evenementsPred.add(evenementInitial);
-                tachesPred.add(tache);
+                if (!tachesPred.contains(tache)) {
+                    tachesPred.add(tache);
+                }
                 evenementInitial.addTacheSuccesseur(tache);
             } else {
                 // Dépend des événements de fin des tâches requises
                 for (Tache tacheRequise : tache.getTachesRequises()) {
                     int index = tachesCreees.indexOf(tacheRequise);
                     if (index == -1) {
-                        throw new IllegalStateException("Tâche requise non" +
-                                                     " encore traitée : " + 
-                                                     tacheRequise.getLibelle());
+                        throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
                     }
                     Evenement evenementFinRequise = evenementsFin.get(index);
                     evenementsPred.add(evenementFinRequise);
-                    tachesPred.add(tacheRequise);
+                    if (!tachesPred.contains(tacheRequise)) {
+                        tachesPred.add(tacheRequise);
+                    }
                     evenementFinRequise.addTacheSuccesseur(tache);
                 }
             }
 
             // Créer l'événement de fin pour la tâche courante
-            Evenement evenementFin = new Evenement(compteurId++, evenementsPred,
-                                                   tachesPred);
+            Evenement evenementFin = new Evenement(compteurId++, evenementsPred, new ArrayList<>(List.of(tache)));
             evenementFin.addTachePredecesseur(tache);
 
             // Lier les prédécesseurs à ce nouvel événement
@@ -447,6 +469,8 @@ public class Graphe {
             ajouterEvenement(evenementFin);
         }
     }
+
+
     
     @Override
     public String toString() {

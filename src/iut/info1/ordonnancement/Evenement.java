@@ -382,7 +382,7 @@ public class Evenement {
     
     @Override
     public String toString() {
-        String evenement = "Événement " + id + " :\n";
+        String evenement = "\n\nÉvénement " + id + " :\n";
         evenement += "  Date au plus tôt : " + dateAuPlusTot + "\n";
         evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
         evenement += "  Prédécesseurs : ";
