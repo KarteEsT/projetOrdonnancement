@@ -9,9 +9,11 @@ import java.util.List;
 
 /**
  * Cette classe représente un événement dans un système d'ordonnancement.
- * Un événement est défini par un identifiant, des dates au plus tôt et au plus tard,
+ * Un événement est défini par un identifiant,
+ * des dates au plus tôt et au plus tard,
  * des prédécesseurs, des successeurs, et des tâches associées.
- * Elle permet de calculer les dates au plus tôt et au plus tard, ainsi que de vérifier
+ * Elle permet de calculer les dates au plus tôt et au plus tard, 
+ * ainsi que de vérifier
  * si un événement est critique.
  * 
  * @author Gabriel Robache
@@ -46,7 +48,8 @@ public class Evenement {
     
     /**
      * Constructeur pour un événement initial.
-     * Les valeurs de tâche au plus tôt et au plus tard sont initialisées à 0.0.
+     * Les valeurs de tâche au plus tôt et au plus tard 
+     * sont initialisées à 0.0.
      * @param id Identifiant de l'événement
      */
     public Evenement() {
@@ -58,70 +61,81 @@ public class Evenement {
     /**
      * Constructeur pour un événement.
      * @param id Identifiant de l'événement
-     * @param evenementPredecesseurList Liste des événements prédécesseurs
+     * @param evenementPredecesseurList Liste des événements 
+     *        prédécesseurs
      * @param tachePredecesseurList Liste des tâches prédécesseurs
-     * @throws IllegalArgumentException si une des listes est vide ou contient des éléments invalides
+     * @throws IllegalArgumentException si une des listes est 
+     *         vide ou contient des éléments invalides
      */
-    public Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, ArrayList<Tache> tachePredecesseurList) {
+    public Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, 
+                     ArrayList<Tache> tachePredecesseurList) {
     	
         if (evenementPredecesseurList.isEmpty()) {
-            throw new IllegalArgumentException("Un événement doit avoir au moins un événement prédécesseur.");
+            throw new IllegalArgumentException("Un événement doit avoir au " + 
+                                          "moins un événement prédécesseur.");
         }
         if (tachePredecesseurList.isEmpty()) {
-            throw new IllegalArgumentException("Un événement doit avoir au moins une tâche prédécesseur.");
+            throw new IllegalArgumentException("Un événement doit avoir au " + 
+                                               "moins une tâche prédécesseur.");
         }
         if (evenementPredecesseurList.size() != tachePredecesseurList.size()) {
-            throw new IllegalArgumentException("Le nombre de prédécesseurs doit correspondre au nombre de tâches.");
+            throw new IllegalArgumentException("Le nombre de prédécesseurs " + 
+                                      "doit correspondre au nombre de tâches.");
         }
         
         this.id = id;
-        this.dateAuPlusTot = 0.0; // Initialisation de la date au plus tôt qui sera calculée lors de l'ordonnancement
-        this.dateAuPlusTard = 0.0; // Initialisation de la date au plus tard qui sera calculée lors de l'ordonnancement
+        this.dateAuPlusTot = 0.0; 
+        this.dateAuPlusTard = 0.0; 
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
     }
     
     /**
-     * Cette méthode trouve tous les chemins critiques à partir d'un événement initial. 
+     * Cette méthode trouve tous les chemins critiques 
+     * à partir d'un événement initial. 
      * @param evenementInitial
      * @return une liste de chemins critiques
      */
-    public List<List<Evenement>> trouverCheminsCritiques(Evenement evenementInitial) {
+    public List<List<Evenement>> trouverCheminsCritiques(Evenement
+                                                         evenementInitial) {
         List<List<Evenement>> cheminsCritiques = new ArrayList<>();
         List<Evenement> cheminActuel = new ArrayList<>();
         List<Evenement> visites = new ArrayList<>();
 
-        parcourirCheminCritique(evenementInitial, cheminActuel, cheminsCritiques, visites);
+        parcourirCheminCritique(evenementInitial, cheminActuel, 
+                                cheminsCritiques, visites);
         return cheminsCritiques;
     }
     
-    private void parcourirCheminCritique(Evenement evenement, List<Evenement> cheminActuel,
-        List<List<Evenement>> cheminsCritiques, List<Evenement> visites) {
-			// Ajouter l'événement actuel au chemin
-			cheminActuel.add(evenement);
-			visites.add(evenement);
-			
-			// Vérifier si l'événement n'a pas de successeurs critiques
-			boolean aucunSuccesseurCritique = true;
-			for (Evenement successeur : evenement.getEvenementSuccesseurList()) {
-				if (successeur.estCritique() && !visites.contains(successeur)) {
-					aucunSuccesseurCritique = false;
-					parcourirCheminCritique(successeur, cheminActuel, cheminsCritiques, visites);
-				}
-			}
-			
-			// Si aucun successeur critique, ajouter le chemin actuel aux chemins critiques.
-			if (aucunSuccesseurCritique) {
-				cheminsCritiques.add(new ArrayList<>(cheminActuel));
-			}
+    private void parcourirCheminCritique(Evenement evenement, 
+            List<Evenement> cheminActuel,List<List<Evenement>> cheminsCritiques,
+            List<Evenement> visites) {
+        // Ajouter l'événement actuel au chemin
+        cheminActuel.add(evenement);
+        visites.add(evenement);
 
-		// Retirer l'événement actuel pour revenir en arrière
-		cheminActuel.remove(cheminActuel.size() - 1);
-		visites.remove(visites.size() - 1);
+        // Vérifier si l'événement n'a pas de successeurs critiques
+        boolean aucunSuccesseurCritique = true;
+        for (Evenement successeur : evenement.getEvenementSuccesseurList()) {
+            if (successeur.estCritique() && !visites.contains(successeur)) {
+                aucunSuccesseurCritique = false;
+                parcourirCheminCritique(successeur, cheminActuel, 
+                                        cheminsCritiques, visites);
+            }
+        }
+
+        //Aucun successeur critique => ajout chemin actuel aux chemins critiques
+        if (aucunSuccesseurCritique) {
+            cheminsCritiques.add(new ArrayList<>(cheminActuel));
+        }
+
+        // Retirer l'événement actuel pour revenir en arrière
+        cheminActuel.remove(cheminActuel.size() - 1);
+        visites.remove(visites.size() - 1);
     }
 
     /**
-	 * @return l'identifiant de l'événement
+     * @return l'identifiant de l'événement
      */
     public int getId() {
         return id;
@@ -154,126 +168,131 @@ public class Evenement {
     public ArrayList<Evenement> getEvenementSuccesseurList() {
         return evenementSuccesseurList;
     }
-    
-	/**
-	 * @return une liste des tâches prédécesseurs
-	 */
-	public ArrayList<Tache> getTachePredecesseurList() {
-		return tachePredecesseurList;
-	}
-	
-	/**
-	 * @return une liste des tâches successeurs
-	 */
-	public ArrayList<Tache> getTacheSuccesseurList() {
-		return tacheSuccesseurList;
-	}
-	
-	/**
-	 * Setter de la liste des événements successeurs.
-	 * @param evenementSuccesseurList Liste des événements successeurs
-	 */
-	public void setEvenementSuccesseurList(ArrayList<Evenement> evenementSuccesseurList) {
-		if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
-			throw new IllegalArgumentException("La liste des événements successeurs ne peut pas être vide.");
-		}
-		this.evenementSuccesseurList = evenementSuccesseurList;
-	}
-	
-	/**
-	 * Setter de la liste des taches successeurs.
-	 * @param tacheSuccesseurList Liste des tâches successeurs
-	 */
-	public void setTacheSuccesseurList(ArrayList<Tache> tacheSuccesseurList) {
-		if (tacheSuccesseurList == null || tacheSuccesseurList.isEmpty()) {
-			throw new IllegalArgumentException("La liste des tâches successeurs ne peut pas être vide.");
-		}
-		this.tacheSuccesseurList = tacheSuccesseurList;
-	}
-	
-	/**
-	 * Setter de la date au plus tôt.
-	 * @param dateAuPlusTot Date au plus tôt de l'événement
-	 */
-	public void setDatePlusTot(double dateAuPlusTot) {
-		this.dateAuPlusTot = dateAuPlusTot;
-	}
-	
-	/**
-	 * Setter de la date au plus tard.
-	 * @param dateAuPlusTard Date au plus tard de l'événement 
-	 */
-	public void setDatePlusTard(double dateAuPlusTard) {
-		this.dateAuPlusTard = dateAuPlusTard;
-	}
 
-	/**
-	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param tache Tâche à ajouter en tant que successeur
-	 */
-	public void addTacheSuccesseur(Tache tache) {
-		tacheSuccesseurList.add(tache);
-	}
+    /**
+     * @return une liste des tâches prédécesseurs
+     */
+    public ArrayList<Tache> getTachePredecesseurList() {
+        return tachePredecesseurList;
+    }
+
+    /**
+     * @return une liste des tâches successeurs
+     */
+    public ArrayList<Tache> getTacheSuccesseurList() {
+        return tacheSuccesseurList;
+    }
+
+    /**
+     * Setter de la liste des événements successeurs.
+     * @param evenementSuccesseurList Liste des événements successeurs
+     */
+    public void setEvenementSuccesseurList(
+                                ArrayList<Evenement> evenementSuccesseurList) {
+        if (    evenementSuccesseurList == null ||
+                evenementSuccesseurList.isEmpty()) {
+            throw new IllegalArgumentException("La liste des événements " +
+                                          "successeurs ne peut pas être vide.");
+        }
+        this.evenementSuccesseurList = evenementSuccesseurList;
+    }
 	
-	/**
-	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param tache Tâche à ajouter en tant que prédécesseur
-	 */
-	public void addTachePredecesseur(Tache tache) {
-		tachePredecesseurList.add(tache);
-	}
-	
-	/**
-	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param evenement Événement à ajouter en tant que successeur
-	 */
-	public void addEvenementSuccesseur(Evenement evenement) {
-		evenementSuccesseurList.add(evenement);
-	}
-	
-	/**
-	 * Ajout d'une tache dans la liste des tache successeur.
-	 * @param evenement Événement à ajouter en tant que prédécesseur
-	 */
-	public void addEvenementPredecesseur(Evenement evenement) {
-		evenementPredecesseurList.add(evenement);
-	}
-	
-	/**
-	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param tache Tâche à supprimer de la liste des successeurs
-	 */
-	public void delTacheSuccesseur(Tache tache) {
-		tacheSuccesseurList.remove(tache);
-	}
-	
-	/**
-	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param tache Tâche à supprimer de la liste des prédécesseurs
-	 */
-	public void delTachePredecesseur(Tache tache) {
-		tachePredecesseurList.remove(tache);
-	}
-	
-	/**
-	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param evenement à supprimer des evenements successeurs
-	 */
-	public void delEvenementSuccesseur(Evenement evenement) {
-		evenementSuccesseurList.remove(evenement);
-	}
-	
-	/**
-	 * Suppression d'une tache dans la liste des tache successeur.
-	 * @param evenement à supprimer des evenements prédécesseurs
-	 */
-	public void delEvenementPredecesseur(Evenement evenement) {
-		evenementPredecesseurList.remove(evenement);
-	}
+    /**
+     * Setter de la liste des taches successeurs.
+     * @param tacheSuccesseurList Liste des tâches successeurs
+     */
+    public void setTacheSuccesseurList(ArrayList<Tache> tacheSuccesseurList) {
+        if (tacheSuccesseurList == null || tacheSuccesseurList.isEmpty()) {
+            throw new IllegalArgumentException("La liste des tâches" + 
+                                         " successeurs ne peut pas être vide.");
+        }
+        this.tacheSuccesseurList = tacheSuccesseurList;
+    }
+
+    /**
+     * Setter de la date au plus tôt.
+     * @param dateAuPlusTot Date au plus tôt de l'événement
+     */
+    public void setDatePlusTot(double dateAuPlusTot) {
+        this.dateAuPlusTot = dateAuPlusTot;
+    }
+
+    /**
+     * Setter de la date au plus tard.
+     * @param dateAuPlusTard Date au plus tard de l'événement 
+     */
+    public void setDatePlusTard(double dateAuPlusTard) {
+        this.dateAuPlusTard = dateAuPlusTard;
+    }
+
+    /**
+     * Ajout d'une tache dans la liste des tache successeur.
+     * @param tache Tâche à ajouter en tant que successeur
+     */
+    public void addTacheSuccesseur(Tache tache) {
+        tacheSuccesseurList.add(tache);
+    }
+
+    /**
+     * Ajout d'une tache dans la liste des tache successeur.
+     * @param tache Tâche à ajouter en tant que prédécesseur
+     */
+    public void addTachePredecesseur(Tache tache) {
+        tachePredecesseurList.add(tache);
+    }
+
+    /**
+     * Ajout d'une tache dans la liste des tache successeur.
+     * @param evenement Événement à ajouter en tant que successeur
+     */
+    public void addEvenementSuccesseur(Evenement evenement) {
+        evenementSuccesseurList.add(evenement);
+    }
+
+    /**
+     * Ajout d'une tache dans la liste des tache successeur.
+     * @param evenement Événement à ajouter en tant que prédécesseur
+     */
+    public void addEvenementPredecesseur(Evenement evenement) {
+        evenementPredecesseurList.add(evenement);
+    }
+
+    /**
+     * Suppression d'une tache dans la liste des tache successeur.
+     * @param tache Tâche à supprimer de la liste des successeurs
+     */
+    public void delTacheSuccesseur(Tache tache) {
+        tacheSuccesseurList.remove(tache);
+    }
+
+    /**
+     * Suppression d'une tache dans la liste des tache successeur.
+     * @param tache Tâche à supprimer de la liste des prédécesseurs
+     */
+    public void delTachePredecesseur(Tache tache) {
+        tachePredecesseurList.remove(tache);
+    }
+
+    /**
+     * Suppression d'une tache dans la liste des tache successeur.
+     * @param evenement à supprimer des evenements successeurs
+     */
+    public void delEvenementSuccesseur(Evenement evenement) {
+        evenementSuccesseurList.remove(evenement);
+    }
+
+    /**
+     * Suppression d'une tache dans la liste des tache successeur.
+     * @param evenement à supprimer des evenements prédécesseurs
+     */
+    public void delEvenementPredecesseur(Evenement evenement) {
+        evenementPredecesseurList.remove(evenement);
+    }
 
     /**
      * Vérifie si cet événement est critique.
-     * Un événement est critique si la tâche au plus tôt et la tâche au plus tard sont égales.
+     * Un événement est critique si la tâche au plus tôt
+     * et la tâche au plus tard sont égales.
      * @return true si l'événement est critique, false sinon
      */
     public boolean estCritique() {
@@ -296,7 +315,8 @@ public class Evenement {
             Tache tachePredecesseur = tachePredecesseurList.get(i);
 
             // Calcule la date au plus tôt pour ce prédécesseur
-            double datePrecedente = predecesseur.getDateAuPlusTot() + tachePredecesseur.getDuree();
+            double datePrecedente = predecesseur.getDateAuPlusTot() 
+                                    + tachePredecesseur.getDuree();
 
             // Met à jour la date maximale
             if (datePrecedente > maxDate) {
@@ -319,8 +339,9 @@ public class Evenement {
      * @return la date au plus tard calculée pour cet événement
      */
     public double calculerDatePlusTard(double dateFinProjet) {
-        if (evenementSuccesseurList == null || evenementSuccesseurList.isEmpty()) {
-            // Si aucun successeur, la date au plus tard est la date de fin du projet
+        if (   evenementSuccesseurList == null || 
+               evenementSuccesseurList.isEmpty()) {
+            // Si aucun successeur, date au plus tard = fin du projet
             this.dateAuPlusTard = dateFinProjet;
         } else {
             double minDate = Double.MAX_VALUE;
@@ -331,7 +352,8 @@ public class Evenement {
                 Tache tacheSuccesseur = tacheSuccesseurList.get(i);
 
                 // Calcule la date au plus tard pour ce successeur
-                double dateSuivante = successeur.getDateAuPlusTard() - tacheSuccesseur.getDuree();
+                double dateSuivante = successeur.getDateAuPlusTard() 
+                                      - tacheSuccesseur.getDuree();
 
                 // Met à jour la date minimale
                 if (dateSuivante < minDate) {
@@ -339,7 +361,6 @@ public class Evenement {
                 }
             }
 
-            // Met à jour la date au plus tard de cet événement
             this.dateAuPlusTard = minDate;
         }
 
@@ -348,14 +369,15 @@ public class Evenement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true; // Vérifie si les deux références pointent vers le même objet
-        if (o == null || getClass() != o.getClass()) return false; // Vérifie la classe et si l'objet est null
+        if (this == o) return true; 
+        if (o == null || getClass() != o.getClass()) return false; 
         Evenement evenement = (Evenement) o;
         return id == evenement.id
-                && evenement.getDateAuPlusTot() == getDateAuPlusTot()
-                && evenement.getDateAuPlusTard() == getDateAuPlusTard()
-                && evenementPredecesseurList.equals(evenement.evenementPredecesseurList)
-                && tachePredecesseurList.equals(evenement.tachePredecesseurList);
+               && evenement.getDateAuPlusTot() == getDateAuPlusTot()
+               && evenement.getDateAuPlusTard() == getDateAuPlusTard()
+               && evenementPredecesseurList.equals(
+                                           evenement.evenementPredecesseurList)
+               && tachePredecesseurList.equals(evenement.tachePredecesseurList);
     }
     
     @Override

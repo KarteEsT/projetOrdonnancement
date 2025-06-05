@@ -5,7 +5,6 @@
 package iut.info1.ordonnancement;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Représenter et gère un graphe PERT 
@@ -42,7 +41,8 @@ public class Graphe {
      * @param listeEvenements composant le graphe
      * @throws NullPointerException si le titre ou l'unité est null
      */
-    public Graphe(String titre, String unite, ArrayList<Tache> taches, ArrayList<Evenement> listeEvenements) {
+    public Graphe(String titre, String unite, ArrayList<Tache> taches, 
+                  ArrayList<Evenement> listeEvenements) {
         if (titre == null || titre.isEmpty() || titre.isBlank()) {
             throw new NullPointerException("Le titre ne peut pas être null.");
         }
@@ -123,7 +123,8 @@ public class Graphe {
             for (Tache requise : tache.getTachesRequises()) {
                 if (!getTaches().contains(requise)) {
                     throw new IllegalArgumentException(
-                            "La tâche requise " + requise.getLibelle() + " n'existe pas dans le graphe.");
+                            "La tâche requise " + requise.getLibelle() + 
+                            " n'existe pas dans le graphe.");
                 }
             }
         }
@@ -132,8 +133,9 @@ public class Graphe {
             getTaches().add(tache);
         } else {
             if (getTaches().contains(tache)) {
-                throw new IllegalArgumentException("La tâche " + tache.getLibelle() +
-                        " existe déjà dans le graphe.");
+                throw new IllegalArgumentException("La tâche " + 
+                                                tache.getLibelle() +
+                                                " existe déjà dans le graphe.");
             }
 
             getTaches().add(tache);
@@ -147,7 +149,8 @@ public class Graphe {
      * 
      * @param taches les tâches à ajouter
      * @throws NullPointerException     si une des tâches est null
-     * @throws IllegalArgumentException si une des tâches existe déjà dans le graphe
+     * @throws IllegalArgumentException si une des tâches 
+     *         existe déjà dans le graphe
      */
     public void ajouterPlusieursTaches(Tache... taches) {
         for (Tache tache : taches) {
@@ -167,8 +170,9 @@ public class Graphe {
 
         // Parcourt tous les événements pour trouver ceux sans successeur
         for (Evenement evenement : getEvenement()) {
-            if (evenement.getEvenementSuccesseurList() == null || evenement.getEvenementSuccesseurList().isEmpty()) {
-                // La date de fin du projet est la plus grande date au plus tôt parmi les événements sans successeur
+            if ( evenement.getEvenementSuccesseurList() == null || 
+                 evenement.getEvenementSuccesseurList().isEmpty()) {
+                
                 dateFinProjet = evenement.getDateAuPlusTot();
             }
         }
@@ -182,11 +186,13 @@ public class Graphe {
      */
     public void supprimerTache(Tache tache) {
         if (tache == null) {
-            throw new NullPointerException("La tâche à supprimer ne peut pas être null.");
+            throw new NullPointerException("La tâche à supprimer " + 
+                                           "ne peut pas être null.");
         }
 
         if (!getTaches().contains(tache)) {
-            throw new IllegalArgumentException("La tâche " + tache.getLibelle() + " n'existe pas dans le graphe.");
+            throw new IllegalArgumentException("La tâche " + tache.getLibelle() 
+                                             + " n'existe pas dans le graphe.");
         }
 
         getTaches().remove(tache);
@@ -199,16 +205,19 @@ public class Graphe {
      * Cette méthode vérifie que l'évènement n'existe pas déjà
      * @param evenement l'évènement à ajouter
      * @throws NullPointerException si la tâche est null
-     * @throws IllegalArgumentException si l'évènement existe déjà dans le graphe
+     * @throws IllegalArgumentException si l'évènement 
+     *         existe déjà dans le graphe
      */
     public void ajouterEvenement(Evenement evenement) {
         if (evenement == null) {
-            throw new NullPointerException("Un évènement ne peut pas être null.");
+            throw new NullPointerException("Un évènement ne " +
+                                           "peut pas être null.");
         }
         for (Evenement event : getEvenement()) {
             if (evenement.equals(event)) {
-                throw new IllegalArgumentException("L'évènement " + event.getId() +
-                                                   " existe déjà dans le graphe.");
+                throw new IllegalArgumentException("L'évènement " + 
+                                                event.getId() +
+                                                " existe déjà dans le graphe.");
             }
         }
         
@@ -229,7 +238,8 @@ public class Graphe {
      */
     public void ordonnerTaches() {
         if (getTaches() == null || getTaches().isEmpty()) {
-            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+            throw new IllegalArgumentException("Le graphe ne" +
+                                               " contient pas de tâches.");
         }
         trierTaches();
             
@@ -266,17 +276,19 @@ public class Graphe {
      */
     public void trierTaches() {
         if (existeCircuit()) {
-            throw new IllegalStateException("Le graphe contient un circuit," 
-                                            + " l'ordonnancement est impossible.");
+            throw new IllegalStateException("Le graphe contient un circuit," + 
+                                          " l'ordonnancement est impossible.");
         }
         /* Tri ArrayList */
-        ArrayList<Tache> tachesTriees = new ArrayList<>(); // Liste des tâches triées
-        ArrayList<Tache> tachesNonTriees = new ArrayList<>(getTaches()); // Liste des tâches non triées
+        ArrayList<Tache> tachesTriees = new ArrayList<>(); 
+        ArrayList<Tache> tachesNonTriees = new ArrayList<>(getTaches()); 
         ArrayList<Tache> tachesAEnlever = new ArrayList<>(); 
         
         while (!tachesNonTriees.isEmpty()) {
             for (Tache aTrier : tachesNonTriees) {
-                if (aTrier.getTachesRequises().isEmpty() || tachesTriees.containsAll(aTrier.getTachesRequises())) {
+                if ( aTrier.getTachesRequises().isEmpty() || 
+                     tachesTriees.containsAll(aTrier.getTachesRequises())) {
+                    
                     tachesTriees.add(aTrier);
                     tachesAEnlever.add(aTrier);
                 }
@@ -349,12 +361,11 @@ public class Graphe {
                 }
 
                 if (ligneVide || colonneVide) {
-                    supprime[i] = true; // Marquer la ligne/colonne comme supprimée
+                    supprime[i] = true; // ligne/colonne comme supprimée
                     modification = true;
                 }
             }
 
-            // Si aucune modification n'a été faite, vérifier s'il reste des éléments
             if (!modification) {
                 for (int i = 0; i < nombreTaches; i++) {
                     if (!supprime[i]) {
@@ -377,7 +388,8 @@ public class Graphe {
      */
     public void creerEvenements() {
         if (getTaches() == null || getTaches().isEmpty()) {
-            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+            throw new IllegalArgumentException("Le graphe ne " +
+                                               "contient pas de tâches.");
         }
 
         // Nettoyage des anciens événements
@@ -408,7 +420,9 @@ public class Graphe {
                 for (Tache tacheRequise : tache.getTachesRequises()) {
                     int index = tachesCreees.indexOf(tacheRequise);
                     if (index == -1) {
-                        throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
+                        throw new IllegalStateException("Tâche requise non" +
+                                                     " encore traitée : " + 
+                                                     tacheRequise.getLibelle());
                     }
                     Evenement evenementFinRequise = evenementsFin.get(index);
                     evenementsPred.add(evenementFinRequise);
@@ -418,7 +432,8 @@ public class Graphe {
             }
 
             // Créer l'événement de fin pour la tâche courante
-            Evenement evenementFin = new Evenement(compteurId++, evenementsPred, tachesPred);
+            Evenement evenementFin = new Evenement(compteurId++, evenementsPred,
+                                                   tachesPred);
             evenementFin.addTachePredecesseur(tache);
 
             // Lier les prédécesseurs à ce nouvel événement

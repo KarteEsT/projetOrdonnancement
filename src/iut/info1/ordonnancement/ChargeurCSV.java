@@ -42,27 +42,34 @@ public class ChargeurCSV {
 
                 // Supprimer l'espace final
                 if (!dependances.isEmpty()) {
-                    dependances = dependances.substring(0, dependances.length() - 1);
+                    dependances = dependances.substring(0, 
+                                                      dependances.length() - 1);
                 }
 
-                writer.write(tache.getLibelle() + ";" + tache.getDescription() + ";" + 
-                        tache.getDuree() + ";" + dependances + "\n");
+                writer.write(tache.getLibelle() + ";" + tache.getDescription() + 
+                             ";" + tache.getDuree() + ";" + dependances + "\n");
             }
         }
     }
     
     /**
-     * Charge un graphe PERT depuis un fichier CSV. Le fichier doit respecter le
-     * format suivant : - La première ligne contient le titre du graphe. - La
-     * deuxième ligne contient l'unité de temps. - Les lignes suivantes contiennent
+     * Charge un graphe PERT depuis un fichier CSV. 
+     * Le fichier doit respecter le
+     * format suivant : 
+     * - La première ligne contient le titre du graphe. 
+     * - La deuxième ligne contient l'unité de temps. 
+     * - Les lignes suivantes contiennent
      * les tâches avec leur libellé, durée et dépendances.
      *
      * @param nomFichier le chemin du fichier CSV
      * @return un objet Graphe contenant les informations du fichier
+     * @throws FileNotFoundException si le fichier n'existe pas
      * @throws IOException si une erreur de lecture survient
      */
-    public static Graphe chargerGrapheDepuisCSV(String nomFichier) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
+    public static Graphe chargerGrapheDepuisCSV(String nomFichier) 
+                                    throws FileNotFoundException, IOException {
+        try (BufferedReader reader = 
+                            new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             String titre = null;
             String unite = null;
@@ -80,18 +87,20 @@ public class ChargeurCSV {
                 } else if (!ligne.isEmpty() && !ligne.startsWith("Libelle;")) {
                     String[] elements = ligne.split(";", -1);
                     if (elements.length < 3) {
-                        throw new IllegalArgumentException("Ligne de tâche mal formatée : " + ligne);
+                        throw new IllegalArgumentException("Ligne de tâche" +
+                                                    " mal formatée : " + ligne);
                     }
 
                     String libelle = elements[0];
                     String description = elements[1];
                     double duree = Double.parseDouble(elements[2]);
-                    String[] dependances = elements.length > 3 ? elements[3].split(" ") : new String[0];
 
-                    Tache nouvelleTache = new Tache(libelle, description, duree);
+                    Tache nouvelleTache = new Tache(libelle, description,duree);
                     taches.add(nouvelleTache);
 
-                    dependancesEnAttente.add(new String[] { libelle, elements.length > 3 ? elements[3] : "" });
+                    dependancesEnAttente.add(new String[] { 
+                        libelle, elements.length > 3 ? elements[3] : "" 
+                    });
                 }
             }
 
@@ -117,7 +126,8 @@ public class ChargeurCSV {
             }
 
             if (titre == null || unite == null) {
-                throw new IllegalArgumentException("Le fichier CSV est incomplet.");
+                throw new IllegalArgumentException("Le fichier CSV est " +
+                                                   "incomplet.");
             }
 
             return new Graphe(titre, unite, taches, new ArrayList<>());
@@ -125,7 +135,8 @@ public class ChargeurCSV {
     }
     
     /**
-     * Point d'entrée du programme pour tester le chargement d'un graphe depuis un fichier CSV.
+     * Point d'entrée du programme pour tester le chargement
+     * d'un graphe depuis un fichier CSV.
      * @param args non utilisé
      */
     public static void main(String[] args) {
@@ -138,14 +149,17 @@ public class ChargeurCSV {
             ChargeurCSV.exporterGrapheCSV(grapheSaisi, cheminFichier);
             System.out.println("Export terminé !");
 
-            Graphe grapheCharge = ChargeurCSV.chargerGrapheDepuisCSV(cheminFichier);
+            Graphe grapheCharge = ChargeurCSV.chargerGrapheDepuisCSV(
+                                                            cheminFichier);
             System.out.println("Chargement réussi !");
             System.out.println("Titre : " + grapheCharge.getTitre());
             System.out.println("Unité : " + grapheCharge.getUnite());
             System.out.println("Tâches :");
 
             for (Tache tache : grapheCharge.getTaches()) {
-                System.out.print("- " + tache.getLibelle() + " (" + tache.getDuree() + " " + grapheCharge.getUnite() + ")");
+                System.out.print("- " + tache.getLibelle() + " (" + 
+                                tache.getDuree() + " " + 
+                                grapheCharge.getUnite() + ")");
                 System.out.print(" | Dépendances : ");
                 for (Tache dep : tache.getTachesRequises()) {
                     System.out.print(dep.getLibelle() + " ");
@@ -156,10 +170,13 @@ public class ChargeurCSV {
             // Appeler des calculs sur grapheCharge
             
             
-            System.out.println("Fin du projet : " + grapheCharge.calculerFinProjet() + " " + grapheCharge.getUnite());
+            System.out.println("Fin du projet : " + 
+                               grapheCharge.calculerFinProjet() + " " + 
+                               grapheCharge.getUnite());
 
         } catch (IOException erreurImport) {
-            System.err.println("Erreur lors de l'export ou du chargement : " + erreurImport.getMessage());
+            System.err.println("Erreur lors de l'export ou du chargement : " + 
+                               erreurImport.getMessage());
         }
     }
 }

@@ -35,7 +35,8 @@ public class ChargeurConsole {
             System.out.print("Entrez l'unité de temps du graphe : ");
             unite = scanner.nextLine().strip();
             if (unite.isEmpty()) {
-                System.out.println("L'unité de temps du graphe ne peut pas être vide.");
+                System.out.println("L'unité de temps du graphe ne peut" +
+                                   " pas être vide.");
             }
         } while (unite.isEmpty());
 
@@ -53,7 +54,8 @@ public class ChargeurConsole {
                     System.out.print("Entrez le nom de la tâche : ");
                     nomTache = scanner.nextLine().strip();
                     if (nomTache.isEmpty()) {
-                        System.out.println("Le nom de la tâche ne peut pas être vide.");
+                        System.out.println("Le nom de la tâche ne peut pas " + 
+                                           "être vide.");
                     }
                 } while (nomTache.isEmpty());
 
@@ -63,7 +65,8 @@ public class ChargeurConsole {
                     System.out.print("Entrez la description de la tâche : ");
                     descriptionTache = scanner.nextLine().strip();
                     if (descriptionTache.isEmpty()) {
-                        System.out.println("La description de la tâche ne peut pas être vide.");
+                        System.out.println("La description de la tâche ne " + 
+                                           "peut pas être vide.");
                     }
                 } while (descriptionTache.isEmpty());
 
@@ -73,22 +76,29 @@ public class ChargeurConsole {
                 do {
                     System.out.print("Entrez la durée de la tâche : ");
                     try {
-                        dureeTache = Double.parseDouble(scanner.nextLine().strip());
+                        dureeTache = Double.parseDouble(
+                                                    scanner.nextLine().strip());
                         if (dureeTache <= 0) {
-                            System.out.println("La durée de la tâche doit être un nombre positif.");
+                            System.out.println("La durée de la tâche doit " + 
+                                               "être un nombre positif.");
                             dureeInvalide = true;
                         } else {
                             dureeInvalide = false;
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("Veuillez entrer un nombre valide pour la durée.");
+                        System.out.println("Veuillez entrer un nombre valide" + 
+                                           " pour la durée.");
                         dureeInvalide = true;
                     }
                 } while (dureeInvalide);
 
-                System.out.print("Entrez les noms des tâches prédécesseurs (séparés par des virgules, laissez vide si aucun) : ");
+                System.out.print("Entrez les noms des tâches prédécesseurs " + 
+                                 "(séparés par des virgules, " + 
+                                 "laissez vide si aucun) : ");
                 String input = scanner.nextLine().strip();
-                String[] nomsPredecesseurs = input.isEmpty() ? new String[0] : input.split(",");
+                String[] nomsPredecesseurs = input.isEmpty() ? 
+                                               new String[0] : 
+                                               input.split(",");
                 for (int i = 0; i < nomsPredecesseurs.length; i++) {
                     nomsPredecesseurs[i] = nomsPredecesseurs[i].strip();
                 }
@@ -96,14 +106,16 @@ public class ChargeurConsole {
                 ArrayList<Tache> tachesRequises = new ArrayList<>();
                 for (String nomPredecesseur : nomsPredecesseurs) {
                     for (Tache tacheExistante : taches) {
-                        if (tacheExistante.getLibelle().equals(nomPredecesseur)) {
+                        if (tacheExistante.getLibelle()
+                                          .equals(nomPredecesseur)) {
                             tachesRequises.add(tacheExistante);
                         }
                     }
                 }
 
                 // Ajoute les taches au graphes
-                Tache nouvelleTache = new Tache(nomTache, descriptionTache, dureeTache, tachesRequises);
+                Tache nouvelleTache = new Tache(nomTache, descriptionTache, 
+                                                dureeTache, tachesRequises);
                 taches.add(nouvelleTache);
             } else {
                 ajouterTache = false;

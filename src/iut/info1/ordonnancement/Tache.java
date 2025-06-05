@@ -45,7 +45,8 @@ public class Tache {
     private ArrayList<Tache> tachesRequises;
 
     /**
-     * Construit une tâche avec un libellé, une description, une durée, et une liste de tâches requises.
+     * Construit une tâche avec un libellé, une description, 
+     * une durée, et une liste de tâches requises.
      * Initialise tous les attributs de la tâche.
      *
      * @param libelle le nom de la tâche
@@ -53,15 +54,20 @@ public class Tache {
      * @param duree le temps estimé pour réaliser la tâche
      * @param tachesRequises les tâches devant être terminées avant celle-ci
      */
-    public Tache(String libelle, String description, double duree, ArrayList<Tache> tachesRequises) {
+    public Tache(String libelle, String description, double duree, 
+                 ArrayList<Tache> tachesRequises) {
         if (libelle == null || libelle.isEmpty() || libelle.strip().isEmpty()) {
-            throw new IllegalArgumentException("Le libellé de la tâche ne peut pas être vide.");
+            throw new IllegalArgumentException("Le libellé de la tâche ne " +
+                                               "peut pas être vide.");
         }
-        if (description == null || description.isEmpty() || description.strip().isEmpty()) {
-            throw new IllegalArgumentException("La description de la tâche ne peut pas être vide.");
+        if (description == null || description.isEmpty() || 
+                                   description.strip().isEmpty()) {
+            throw new IllegalArgumentException("La description de la tâche ne" +
+                                               " peut pas être vide.");
         }
         if (duree < 0) {
-            throw new IllegalArgumentException("La durée de la tâche doit être positive ou nulle.");
+            throw new IllegalArgumentException("La durée de la tâche doit " + 
+                                               "être positive ou nulle.");
         }
         
         this.libelle = libelle;
@@ -136,7 +142,8 @@ public class Tache {
             tachesRequises = new ArrayList<>();
         }
         if (getTachesRequises().contains(tache)) {
-            throw new IllegalArgumentException("La tâche " + libelle + " est déjà dans la liste des tâches requises.");
+            throw new IllegalArgumentException("La tâche " + libelle + 
+                                " est déjà dans la liste des tâches requises.");
         }
         getTachesRequises().add(tache);
     }
@@ -145,40 +152,50 @@ public class Tache {
      * Supprime une tâche requise de la liste des tâches requises.
      *
      * @param tache la tâche à supprimer
-     * @throws IllegalArgumentException si la tâche n'est pas dans la liste des
-     *         tâches requises
+     * @throws IllegalArgumentException si la tâche n'est 
+     *         pas dans la liste des tâches requises
      */
     public void supprimerTacheRequise(Tache tache) {
-        if (getTachesRequises() == null || !getTachesRequises().contains(tache)) {
+        if ( getTachesRequises() == null || 
+             !getTachesRequises().contains(tache)) {
             throw new IllegalArgumentException(
-                    "La tâche " + tache.getLibelle() + " n'est pas dans la liste des tâches requises.");
+                    "La tâche " + tache.getLibelle() + 
+                    " n'est pas dans la liste des tâches requises.");
         }
         getTachesRequises().remove(tache);
-    } // Peut-être renvoyer un boolean pour indiquer si la tâche a été supprimée ou non 
+    } 
+    //TODO réfléchir ci-dessous
+    // Peut-être renvoyer un boolean pour indiquer si la tâche a été supprimée ou non 
     
-	/**
-	 * Calcule la marge libre d'une tâche. La marge libre est la
-	 * différence entre la date au plus tôt de l'événement successeur et la date au
-	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
-	 * @param evenementPredecesseur 
-	 * @param evenementSuccesseur 
-	 * @return la marge totale
-	 */
-    public double calculerMargeLibre(Evenement evenementPredecesseur, Evenement evenementSuccesseur) {
-        this.margeLibre = evenementSuccesseur.getDateAuPlusTot() - evenementPredecesseur.getDateAuPlusTot() - this.duree;
+    /**
+     * Calcule la marge libre d'une tâche. La marge libre est la
+     * différence entre la date au plus tôt de 
+     * l'événement successeur et la date au
+     * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
+     * @param evenementPredecesseur 
+     * @param evenementSuccesseur 
+     * @return la marge totale
+     */
+    public double calculerMargeLibre(Evenement evenementPredecesseur, 
+                                     Evenement evenementSuccesseur) {
+        this.margeLibre = evenementSuccesseur.getDateAuPlusTot() - 
+                          evenementPredecesseur.getDateAuPlusTot() - this.duree;
         return margeLibre;
     }
     
 	/**
 	 * Calcule la marge totale d'une tâche. La marge totale est la
-	 * différence entre la date au plus tard de l'événement successeur et la date au
+	 * différence entre la date au plus tard de 
+	 * l'événement successeur et la date au
 	 * plus tôt de l'événement prédécesseur, moins la durée de la tâche.
 	 * @param evenementPredecesseur 
 	 * @param evenementSuccesseur 
 	 * @return la marge totale
 	 */
-    public double calculerMargeTotale(Evenement evenementPredecesseur,Evenement evenementSuccesseur) {
-        this.margeTotale = evenementSuccesseur.getDateAuPlusTard() - evenementPredecesseur.getDateAuPlusTot() - this.duree;
+    public double calculerMargeTotale(Evenement evenementPredecesseur, 
+                                      Evenement evenementSuccesseur) {
+        this.margeTotale = evenementSuccesseur.getDateAuPlusTard() - 
+                          evenementPredecesseur.getDateAuPlusTot() - this.duree;
         return margeTotale;
     }
     
@@ -197,7 +214,5 @@ public class Tache {
         String tache = getLibelle();
         
         return tache;
-        
-    }
-    
+    }   
 }
