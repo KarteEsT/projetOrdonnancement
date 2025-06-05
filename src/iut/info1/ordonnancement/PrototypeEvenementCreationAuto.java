@@ -38,14 +38,30 @@ public class PrototypeEvenementCreationAuto {
 
         // Affichage du graphe
         System.out.println(graphe);
+        
         for (Evenement evenement : graphe.getEvenement()) {
             System.out.println("Événement " + evenement.getId() + ": "
                     + evenement.getTachePredecesseurList());
-            if (evenement.getId() != 0) {
-
-                System.out.println(evenement.getTachePredecesseurList().get(0) == evenement.getTachePredecesseurList().get(1));
-            }
         }
+        //Essai d'un nouveau graphe
         
+        Tache tacheE = new Tache("A", "Description tacheE", 3.0);
+        Tache tacheF = new Tache("B", "Description tacheF", 6.0);
+        Tache tacheG = new Tache("C", "Description tacheG", 4.0);
+        Tache tacheH = new Tache("D", "Description tacheH", 5.0);
+        Tache tacheI = new Tache("E", "Description tacheI", 2.0);
+        
+        tacheG.ajouterTacheRequise(tacheE);
+        tacheH.ajouterTacheRequise(tacheF);
+        tacheI.ajouterTacheRequise(tacheG);
+        tacheI.ajouterTacheRequise(tacheH);
+        
+        Graphe graphe2 = new Graphe("Graphe Test 2", "jours",
+                new ArrayList<>(List.of(tacheE, tacheF, tacheG, tacheH, tacheI)), new ArrayList<>());
+        
+        // Initialisation automatique du graphe
+        graphe2.initialiserGraphe();
+        // Affichage du graphe
+        System.out.println("\n\n\n\n\n\n\n\n" + graphe2);
     }
 }

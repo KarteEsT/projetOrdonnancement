@@ -233,44 +233,6 @@ public class Graphe {
     }
     
     /**
-     * Ordonne les tâches du graphe en fonction de leurs dépendances.
-     * Va créer des événements et les associer au graphe.
-     * @throws  IllegalStateException si le graphe contient un circuit
-     */
-    public void ordonnerTaches() {
-        if (getTaches() == null || getTaches().isEmpty()) {
-            throw new IllegalArgumentException("Le graphe ne" +
-                                               " contient pas de tâches.");
-        }
-        trierTaches();
-            
-        /* Création des événements */
-        
-        creerEvenements();
-        
-        /* Association des tâches initiales à l'événement initial */
-        
-        Evenement evenementInitial = new Evenement();
-        for (Tache tache : getTaches()) {
-            if (tache.getTachesRequises().isEmpty()) {
-                evenementInitial.addTachePredecesseur(tache);
-            }
-        }
-        
-        
-        //Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, ArrayList<Tache> tachePredecesseurList) 
-        /*
-         * Créer un événement pour chaque tâche de la première couche
-         * 
-         * On créé un event à chaque fois, si l'évent existe déjà dans le graphe, 
-         * on le "fusionne" on ajoute ses tâches prédécesseurs et evénements prédécesseurs
-         * au nouvel événement créé et on supprime un des deux événements.
-         */
-        
-        
-    }
-    
-    /**
      * Trie la liste des tâches du graphe en fonction de leurs
      * taches requises (dépendances).
      * @throws IllegalStateException si le graphe contient un circuit
@@ -414,7 +376,7 @@ public class Graphe {
         }
 
         // Nettoyage des anciens événements
-        this.evenements.clear();
+        getEvenement().clear();
 
         // Étape 1 : Créer l'événement initial
         Evenement evenementInitial = new Evenement(); // id = 0 par défaut
@@ -430,13 +392,14 @@ public class Graphe {
             // Liste des événements prédécesseurs
             ArrayList<Evenement> evenementsPred = new ArrayList<>();
             ArrayList<Tache> tachesPred = new ArrayList<>();
+            
 
+            if (!tachesPred.contains(tache)) {
+                tachesPred.add(tache);
+            }
             if (tache.getTachesRequises().isEmpty()) {
                 // Dépend de l'événement initial
                 evenementsPred.add(evenementInitial);
-                if (!tachesPred.contains(tache)) {
-                    tachesPred.add(tache);
-                }
                 evenementInitial.addTacheSuccesseur(tache);
             } else {
                 // Dépend des événements de fin des tâches requises
@@ -447,9 +410,6 @@ public class Graphe {
                     }
                     Evenement evenementFinRequise = evenementsFin.get(index);
                     evenementsPred.add(evenementFinRequise);
-                    if (!tachesPred.contains(tacheRequise)) {
-                        tachesPred.add(tacheRequise);
-                    }
                     evenementFinRequise.addTacheSuccesseur(tache);
                 }
             }
@@ -470,12 +430,11 @@ public class Graphe {
         }
     }
 
-
-    
     @Override
     public String toString() {
         String graphe = getTitre();
         graphe += ", unite = " + getUnite();
+        graphe += "\nDate de fin de prokjet : " + calculerFinProjet();
         graphe += "\n" + getTaches();
         
         graphe += "\n" + getEvenement();
