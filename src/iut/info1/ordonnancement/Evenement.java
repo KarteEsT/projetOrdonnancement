@@ -33,6 +33,8 @@ public class Evenement {
 
     /** Tâche au plus tard d'un événement */
     private double dateAuPlusTard;
+    
+    private String identifiant;
 
     /** Ensemble des tâches prédécesseurs d'un événement */
     private ArrayList<Tache> tachePredecesseurList = new ArrayList<>();
@@ -54,6 +56,7 @@ public class Evenement {
      */
     public Evenement() {
         this.id = 0;
+        this.identifiant = "0";
         this.dateAuPlusTot = 0.0;
         this.dateAuPlusTard = 0.0;
     }
@@ -61,17 +64,32 @@ public class Evenement {
     /**
      * Constructeur pour un événement.
      * @param id Identifiant de l'événement
-     * @param evenementPredecesseurList Liste des événements 
-     *        prédécesseurs
-     * @param tachePredecesseurList Liste des tâches prédécesseurs
-     * @throws IllegalArgumentException si une des listes est 
-     *         vide ou contient des éléments invalides
      */
     public Evenement(int id) {
         
         this.id = id;
+        this.identifiant = String.valueOf(id);
         this.dateAuPlusTot = 0.0; 
         this.dateAuPlusTard = 0.0;
+    }
+    
+    /**
+     * Constructeur pour un événement.
+     * @param id Identifiant de l'événement
+     */
+    public Evenement(String id) {
+        
+        this.identifiant = id;
+        this.dateAuPlusTot = 0.0; 
+        this.dateAuPlusTard = 0.0;
+    }
+    
+    /**
+     * TODO commenter le rôle de cette méthode (SRP)
+     * @return l'identifiant de l'événement
+     */
+    public String getIdentifiant() {
+        return identifiant;
     }
     
     /**
@@ -96,6 +114,7 @@ public class Evenement {
         }
         
         this.id = id;
+        this.identifiant = String.valueOf(id);
         this.dateAuPlusTot = 0.0; 
         this.dateAuPlusTard = 0.0; 
         this.evenementPredecesseurList = evenementPredecesseurList;
@@ -253,14 +272,6 @@ public class Evenement {
         String evenement = "\n\nÉvénement " + id + " :\n";
         evenement += "  Date au plus tôt : " + dateAuPlusTot + "\n";
         evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
-        evenement += "  Prédécesseurs : ";
-        for (Evenement predecesseur : evenementPredecesseurList) {
-            evenement += predecesseur.getId() + ", ";
-        }
-        evenement += "\n  Successeurs : ";
-        for (Evenement successeur : evenementSuccesseurList) {
-            evenement += successeur.getId() + ", ";
-        }
         evenement += "\n  Tâches prédécesseurs : ";
         for (Tache tache : tachePredecesseurList) {
             evenement += tache.getLibelle() + ", ";
