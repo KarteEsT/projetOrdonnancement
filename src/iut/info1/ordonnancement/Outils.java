@@ -74,11 +74,11 @@ public class Outils {
      *
      * @param graphe le graphe contenant les événements
      */
+
     public static void calculerDatesAuPlusTard(Graphe graphe) {
-        
         double dateFinProjet = graphe.calculerFinProjet();
-        
-        // Étape 1 : parcourir les événements en ordre inverse
+
+        // Parcourt les événements en ordre inverse
         List<Evenement> evenements = graphe.getEvenements();
         for (int i = evenements.size() - 1; i >= 0; i--) {
             Evenement evenement = evenements.get(i);
@@ -90,28 +90,28 @@ public class Outils {
                 double minDate = Double.MAX_VALUE;
 
                 // Parcourt les successeurs et leurs tâches associées
-                for (int j = 0; j < evenement.getEvenementSuccesseurList()
-                                                                 .size(); j++) {
-                    Evenement successeur = evenement
-                                           .getEvenementSuccesseurList().get(j);
-                    try {
+                for (int j = 0; j < evenement.getEvenementSuccesseurList().size(); j++) {
+                    Evenement successeur = evenement.getEvenementSuccesseurList().get(j);
+
+                    if (j < evenement.getTacheSuccesseurList().size()) {
                         Tache tache = evenement.getTacheSuccesseurList().get(j);
 
-                        double dateSuivante = successeur.getDateAuPlusTard() 
-                                                - tache.getDuree();
+                        // Calcule la date au plus tard en fonction du successeur
+                        double dateSuivante = successeur.getDateAuPlusTard() - tache.getDuree();
                         if (dateSuivante < minDate) {
                             minDate = dateSuivante;
                         }
-                    } catch (Exception e) {
-                        
                     }
                 }
 
                 // Met à jour la date au plus tard
-                evenement.setDatePlusTard(minDate);
+                if (minDate != Double.MAX_VALUE) {
+                    evenement.setDatePlusTard(minDate);
+                }
             }
         }
     }
+
 
     
     /**
