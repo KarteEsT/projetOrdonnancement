@@ -182,7 +182,7 @@ public class ChargeurCSV {
                     System.out.println("- " + tache.getLibelle());
                 }
 
-                /** Créer les événements à partir des tâches
+                // Créer les événements à partir des tâches
                 graphe.creerEvenements();
                 System.out.println("\n--- Événements créés ---");
                 System.out.println(graphe.getEvenements().size() + " événements ont été générés.");
@@ -191,15 +191,15 @@ public class ChargeurCSV {
                 Outils.calculerDatesAuPlusTot(graphe);
 
                 // Dates au plus tard
-                Outils.calculerDatesAuPlusTard(graphe); */
+                Outils.calculerDatesAuPlusTard(graphe);
 
                 // Afficher les résultats
                 System.out.println("\n--- Résultats des Calculs ---");
                 for (Evenement evenement : graphe.getEvenements()) {
                     System.out.println("Événement " + evenement.getId() + " :");
-                    // System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
-                    // System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
-                    // System.out.println("  Est critique ? : " + evenement.estCritique());
+                    System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
+                    System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
+                    System.out.println("  Est critique ? : " + evenement.estCritique());
                 }
 
                 // Date de fin du projet

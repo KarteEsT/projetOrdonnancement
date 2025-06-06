@@ -121,8 +121,6 @@ public class ChargeurConsole {
                 ajouterTache = false;
             }
         }
-        
-        scanner.close();
         return new Graphe(titre, unite, taches);
     }
 }
