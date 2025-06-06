@@ -416,8 +416,41 @@ public class Graphe {
         int compteurId = 1;
 
         // Étape 2 : Créer les événements pour chaque tâche
-        for(compteurId = 1 ; compteurId < getNombreTaches() ; compteurId++ ) {
+        ArrayList<Evenement> evenementPredec = new ArrayList<>();
+        ArrayList<Tache> tachesPredec = new ArrayList<>();
+        for(compteurId = 1 ; compteurId <= getNombreTaches() ; compteurId++ ) {
+            /* Vérification si ce n'est pas une tâche initiale */
+            Tache tache = getTaches().get(compteurId - 1);
+            if (tache.getTachesRequises().isEmpty()) {
+                // Si la tâche n'a pas de tâches requises, elle dépend de l'événement initial
+                evenementInitial.addTacheSuccesseur(tache);
+                evenementPredec.add(evenementInitial);
+                
+            } else {
+                /* 
+                 * On ajoute les evenements prédécesseurs de la tâche ainsi que les
+                 * taches predecesseurs de l'event actuel
+                 * 
+                 * On parcourt tous les evenements du graphe pour retrouver ceux qui
+                 * on la tâche prédecesseur de notre tâche actuelle
+                 */
+                tachesPredec.addAll(tache.getTachesRequises());
+                for (Evenement evenement : getEvenements()) {
+                    for (Tache tachePredecesseur : evenement.getTachePredecesseurList()) {
+                        if (evenement.getTachePredecesseurList().contains(tachePredecesseur)) {
+                            evenement.addTacheSuccesseur(tachePredecesseur);
+                            evenementPredec.add(evenement);
+                        }
+                    }
+                }
+            }
             
+            
+            
+            /* Ajout des taches predecesseurs et des evenements prédecesseurs*/
+            Evenement evenement = new Evenement(compteurId, evenementPredec, tachesPredec);
+            evenement.addTacheSuccesseur(tache);
+            ajouterEvenement(evenement);
         }
         
         //Etape 3 : Créer événement de fin du projet
