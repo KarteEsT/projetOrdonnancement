@@ -7,6 +7,7 @@ package iut.info1.ordonnancement;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Programme permettant la lecture et l'écriture de fichiers
@@ -135,48 +136,79 @@ public class ChargeurCSV {
     }
     
     /**
-     * Point d'entrée du programme pour tester le chargement
-     * d'un graphe depuis un fichier CSV.
+     * Point d'entrée du programme pour tester le chargement et les calculs
+     * d'un graphe. Permet de choisir entre la saisie via console ou
+     * le chargement direct depuis un fichier CSV.
      * @param args non utilisé
      */
     public static void main(String[] args) {
-        ChargeurConsole chargeurConsole = new ChargeurConsole();
-        Graphe grapheSaisi = chargeurConsole.chargerDepuisConsole();
+        Scanner scanner = new Scanner(System.in);
+        Graphe graphe = null;
 
-        String cheminFichier = "C:\\Users\\esteb\\Desktop\\graphe.csv";
+        System.out.print("Voulez-vous charger un 'csv' "
+                        + " ou saisir via la 'console' ? ");
+        String choix = scanner.nextLine().strip().toLowerCase();
 
         try {
-            ChargeurCSV.exporterGrapheCSV(grapheSaisi, cheminFichier);
-            System.out.println("Export terminé !");
+            if ("csv".equals(choix)) {
+                System.out.print("Entrez le chemin du fichier CSV à charger : ");
+                String cheminFichier = scanner.nextLine().strip();
+                graphe = ChargeurCSV.chargerGrapheDepuisCSV(cheminFichier);
+                System.out.println("Chargement depuis " + cheminFichier + " réussi !");
 
-            Graphe grapheCharge = ChargeurCSV.chargerGrapheDepuisCSV(
-                                                            cheminFichier);
-            System.out.println("Chargement réussi !");
-            System.out.println("Titre : " + grapheCharge.getTitre());
-            System.out.println("Unité : " + grapheCharge.getUnite());
-            System.out.println("Tâches :");
+            } else if ("console".equals(choix)) {
+                graphe = ChargeurConsole.chargerDepuisConsole();
+                
+                System.out.print("Entrez le chemin du fichier CSV pour la sauvegarde : ");
+                String cheminFichier = scanner.nextLine().strip();
 
-            for (Tache tache : grapheCharge.getTaches()) {
-                System.out.print("- " + tache.getLibelle() + " (" + 
-                                tache.getDuree() + " " + 
-                                grapheCharge.getUnite() + ")");
-                System.out.print(" | Dépendances : ");
-                for (Tache dep : tache.getTachesRequises()) {
-                    System.out.print(dep.getLibelle() + " ");
-                }
-                System.out.println();
+                ChargeurCSV.exporterGrapheCSV(graphe, cheminFichier);
+                System.out.println("Export vers " + cheminFichier + " terminé !");
+                
+            } else {
+                System.out.println("Choix non valide. Fin du programme.");
             }
 
-            // Appeler des calculs sur grapheCharge
-            
-            
-            System.out.println("Fin du projet : " + 
-                               grapheCharge.calculerFinProjet() + " " + 
-                               grapheCharge.getUnite());
+            // Si un graphe a bien été chargé ou créé, on lance les calculs
+            if (graphe != null) {
+                System.out.println("\n--- Lancement des calculs sur le graphe ---");
+                System.out.println("Titre : " + graphe.getTitre());
+                System.out.println("Unité : " + graphe.getUnite());
 
-        } catch (IOException erreurImport) {
-            System.err.println("Erreur lors de l'export ou du chargement : " + 
-                               erreurImport.getMessage());
+                // Trier les tâches pour respecter les dépendances
+                graphe.trierTaches();
+                System.out.println("\n--- Tâches triées ---");
+                for (Tache tache : graphe.getTaches()) {
+                    System.out.println("- " + tache.getLibelle());
+                }
+
+                /** Créer les événements à partir des tâches
+                graphe.creerEvenements();
+                System.out.println("\n--- Événements créés ---");
+                System.out.println(graphe.getEvenements().size() + " événements ont été générés.");
+
+                // Dates au plus tôt
+                Outils.calculerDatesAuPlusTot(graphe);
+
+                // Dates au plus tard
+                Outils.calculerDatesAuPlusTard(graphe); */
+
+                // Afficher les résultats
+                System.out.println("\n--- Résultats des Calculs ---");
+                for (Evenement evenement : graphe.getEvenements()) {
+                    System.out.println("Événement " + evenement.getId() + " :");
+                    // System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
+                    // System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
+                    // System.out.println("  Est critique ? : " + evenement.estCritique());
+                }
+
+                // Date de fin du projet
+                System.out.println("\nFin du projet (calculée) : " + Outils.calculerFinProjet(graphe) + " " + graphe.getUnite());
+            }
+
+        } catch (IOException | IllegalStateException erreurEcriture) {
+            System.err.println("ERREUR : " + erreurEcriture.getMessage());
         }
+        scanner.close();
     }
 }

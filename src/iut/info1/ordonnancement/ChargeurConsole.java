@@ -48,7 +48,7 @@ public class ChargeurConsole {
             System.out.print("Voulez-vous ajouter une tâche ? (oui/non) : ");
             String reponse = scanner.nextLine().strip().toLowerCase();
 
-            if (reponse.equals("oui")) {
+            if (reponse.equals("oui") || reponse.equals("o")) {
                 String nomTache;
                 do {
                     System.out.print("Entrez le nom de la tâche : ");
