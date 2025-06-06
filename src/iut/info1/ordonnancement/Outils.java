@@ -19,7 +19,7 @@ public class Outils {
      *
      * @param graphe le graphe contenant les événements
      */
-    public void calculerDatesAuPlusTot(Graphe graphe) {
+    public static void calculerDatesAuPlusTot(Graphe graphe) {
         // Parcourt tous les événements du graphe
         for (Evenement evenement : graphe.getEvenements()) {
             double maxDate = 0.0;
@@ -43,43 +43,68 @@ public class Outils {
         }
     }
 
-
+    
     /**
-     * Calcule la date au plus tard d'un événement.
-     * La date au plus tard est déterminée en fonction des dates au plus tard
-     * des événements successeurs et des durées des tâches associées.
+     * Calcule la date de fin de projet.
+     * La date de fin de projet correspond à la date au plus tôt
+     * de l'unique événement sans successeur.
+     * @param graphe 
      *
-     * @param dateFinProjet la date de fin du projet
-     * @return la date au plus tard calculée pour cet événement
+     * @return la date de fin du projet
      */
-    public double calculerDatePlusTard(double dateFinProjet) {
-        if (   evenementSuccesseurList == null || 
-               evenementSuccesseurList.isEmpty()) {
-            // Si aucun successeur, date au plus tard = fin du projet
-            this.dateAuPlusTard = dateFinProjet;
-        } else {
-            double minDate = Double.MAX_VALUE;
-
-            // Parcourt les successeurs et leurs tâches associées
-            for (int i = 0; i < evenementSuccesseurList.size(); i++) {
-                Evenement successeur = evenementSuccesseurList.get(i);
-                Tache tacheSuccesseur = tacheSuccesseurList.get(i);
-
-                // Calcule la date au plus tard pour ce successeur
-                double dateSuivante = successeur.getDateAuPlusTard() 
-                                      - tacheSuccesseur.getDuree();
-
-                // Met à jour la date minimale
-                if (dateSuivante < minDate) {
-                    minDate = dateSuivante;
-                }
+    public double calculerFinProjet(Graphe graphe) {
+        double dateFinProjet = 0.0;
+        for (Evenement evenement : graphe.getEvenements()) {
+            if (evenement.getDateAuPlusTot() > dateFinProjet) {
+                dateFinProjet = evenement.getDateAuPlusTot();
             }
-
-            this.dateAuPlusTard = minDate;
         }
 
-        return dateAuPlusTard;
+        return dateFinProjet;
+    }    
+
+    /**
+     * Calcule les dates au plus tard pour tous les événements dans un graphe
+     * d'ordonnancement. La date au plus tard d'un événement est déterminée par
+     * la date au plus tard de ses successeurs et la durée des tâches associées.
+     *
+     * @param graphe le graphe contenant les événements
+     */
+    public static void calculerDatesAuPlusTard(Graphe graphe) {
+        
+        double dateFinProjet = graphe.calculerFinProjet();
+        
+        // Étape 1 : parcourir les événements en ordre inverse
+        List<Evenement> evenements = graphe.getEvenements();
+        for (int i = evenements.size() - 1; i >= 0; i--) {
+            Evenement evenement = evenements.get(i);
+
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                // Aucun successeur => date au plus tard = fin du projet
+                evenement.setDatePlusTard(dateFinProjet);
+            } else {
+                double minDate = Double.MAX_VALUE;
+
+                // Parcourt les successeurs et leurs tâches associées
+                for (int j = 0; j < evenement.getEvenementSuccesseurList()
+                                                                 .size(); j++) {
+                    Evenement successeur = evenement
+                                           .getEvenementSuccesseurList().get(j);
+                    Tache tache = evenement.getTacheSuccesseurList().get(j);
+
+                    double dateSuivante = successeur.getDateAuPlusTard() 
+                                            - tache.getDuree();
+                    if (dateSuivante < minDate) {
+                        minDate = dateSuivante;
+                    }
+                }
+
+                // Met à jour la date au plus tard
+                evenement.setDatePlusTard(minDate);
+            }
+        }
     }
+
     
     /**
      * Parcourt récursivement les événements pour trouver
