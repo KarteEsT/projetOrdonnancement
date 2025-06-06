@@ -52,7 +52,7 @@ public class Outils {
      *
      * @return la date de fin du projet
      */
-    public double calculerFinProjet(Graphe graphe) {
+    public static double calculerFinProjet(Graphe graphe) {
         double dateFinProjet = 0.0;
         for (Evenement evenement : graphe.getEvenements()) {
             if (evenement.getDateAuPlusTot() > dateFinProjet) {
