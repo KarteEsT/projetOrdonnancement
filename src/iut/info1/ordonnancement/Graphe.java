@@ -171,27 +171,7 @@ public class Graphe {
         }
 
         return dateFinProjet;
-    }
-    
-    /**
-     * Supprime une tâche du graphe.
-     * @param tache la tâche à supprimer
-     */
-    public void supprimerTache(Tache tache) {
-        if (tache == null) {
-            throw new NullPointerException("La tâche à supprimer " + 
-                                           "ne peut pas être null.");
-        }
-
-        if (!getTaches().contains(tache)) {
-            throw new IllegalArgumentException("La tâche " + tache.getLibelle() 
-                                             + " n'existe pas dans le graphe.");
-        }
-
-        getTaches().remove(tache);
-        
-    }
-    
+    }    
 
     /**
      * Ajoute un évènement au graphe.
@@ -206,12 +186,10 @@ public class Graphe {
             throw new NullPointerException("Un évènement ne " +
                                            "peut pas être null.");
         }
-        for (Evenement event : getEvenements()) {
-            if (evenement.equals(event)) {
-                throw new IllegalArgumentException("L'évènement " + 
-                                                event.getId() +
-                                                " existe déjà dans le graphe.");
-            }
+        if (getEvenements().contains(evenement)) {
+            throw new IllegalArgumentException("L'évènement " + 
+                    evenement.getId() +
+                    " existe déjà dans le graphe.");
         }
         
         getEvenements().add(evenement);
@@ -346,17 +324,11 @@ public class Graphe {
         creerEvenements();
 
         // Étape 2 : Calcul des dates au plus tôt
-        for (Evenement evenement : evenements) {
-            evenement.calculerDatePlusTot();
-        }
 
         // Étape 3 : Calcul de la date de fin du projet
         double dateFinProjet = calculerFinProjet();
 
         // Étape 4 : Calcul des dates au plus tard
-        for (int i = evenements.size() - 1; i >= 0; i--) {
-            evenements.get(i).calculerDatePlusTard(dateFinProjet);
-        }
     }
     
     /**
