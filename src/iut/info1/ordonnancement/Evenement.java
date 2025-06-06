@@ -254,38 +254,6 @@ public class Evenement {
     }
 
     /**
-     * Suppression d'une tache dans la liste des tache successeur.
-     * @param tache Tâche à supprimer de la liste des successeurs
-     */
-    public void delTacheSuccesseur(Tache tache) {
-        tacheSuccesseurList.remove(tache);
-    }
-
-    /**
-     * Suppression d'une tache dans la liste des tache successeur.
-     * @param tache Tâche à supprimer de la liste des prédécesseurs
-     */
-    public void delTachePredecesseur(Tache tache) {
-        tachePredecesseurList.remove(tache);
-    }
-
-    /**
-     * Suppression d'une tache dans la liste des tache successeur.
-     * @param evenement à supprimer des evenements successeurs
-     */
-    public void delEvenementSuccesseur(Evenement evenement) {
-        evenementSuccesseurList.remove(evenement);
-    }
-
-    /**
-     * Suppression d'une tache dans la liste des tache successeur.
-     * @param evenement à supprimer des evenements prédécesseurs
-     */
-    public void delEvenementPredecesseur(Evenement evenement) {
-        evenementPredecesseurList.remove(evenement);
-    }
-
-    /**
      * Vérifie si cet événement est critique.
      * Un événement est critique si la tâche au plus tôt
      * et la tâche au plus tard sont égales.
@@ -293,74 +261,6 @@ public class Evenement {
      */
     public boolean estCritique() {
         return dateAuPlusTot == dateAuPlusTard;
-    }
-
-    /**
-     * Calcule la date au plus tôt de cet événement.
-     * La date au plus tôt est déterminée en fonction des dates au plus tôt
-     * des événements prédécesseurs et des durées des tâches associées.
-     *
-     * @return la date au plus tôt calculée pour cet événement
-     */
-    public double calculerDatePlusTot() {
-        double maxDate = 0.0;
-
-        // Parcourt les prédécesseurs et leurs tâches associées
-        for (int i = 0; i < evenementPredecesseurList.size(); i++) {
-            Evenement predecesseur = evenementPredecesseurList.get(i);
-            Tache tachePredecesseur = tachePredecesseurList.get(i);
-
-            // Calcule la date au plus tôt pour ce prédécesseur
-            double datePrecedente = predecesseur.getDateAuPlusTot() 
-                                    + tachePredecesseur.getDuree();
-
-            // Met à jour la date maximale
-            if (datePrecedente > maxDate) {
-                maxDate = datePrecedente;
-            }
-        }
-
-        // Met à jour la date au plus tôt de cet événement
-        this.dateAuPlusTot = maxDate;
-
-        return dateAuPlusTot;
-    }
-
-    /**
-     * Calcule la date au plus tard d'un événement.
-     * La date au plus tard est déterminée en fonction des dates au plus tard
-     * des événements successeurs et des durées des tâches associées.
-     *
-     * @param dateFinProjet la date de fin du projet
-     * @return la date au plus tard calculée pour cet événement
-     */
-    public double calculerDatePlusTard(double dateFinProjet) {
-        if (   evenementSuccesseurList == null || 
-               evenementSuccesseurList.isEmpty()) {
-            // Si aucun successeur, date au plus tard = fin du projet
-            this.dateAuPlusTard = dateFinProjet;
-        } else {
-            double minDate = Double.MAX_VALUE;
-
-            // Parcourt les successeurs et leurs tâches associées
-            for (int i = 0; i < evenementSuccesseurList.size(); i++) {
-                Evenement successeur = evenementSuccesseurList.get(i);
-                Tache tacheSuccesseur = tacheSuccesseurList.get(i);
-
-                // Calcule la date au plus tard pour ce successeur
-                double dateSuivante = successeur.getDateAuPlusTard() 
-                                      - tacheSuccesseur.getDuree();
-
-                // Met à jour la date minimale
-                if (dateSuivante < minDate) {
-                    minDate = dateSuivante;
-                }
-            }
-
-            this.dateAuPlusTard = minDate;
-        }
-
-        return dateAuPlusTard;
     }
 
     @Override
@@ -383,19 +283,19 @@ public class Evenement {
         evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
         evenement += "  Prédécesseurs : ";
         for (Evenement predecesseur : evenementPredecesseurList) {
-            evenement += predecesseur.getId() + " ";
+            evenement += predecesseur.getId() + ", ";
         }
         evenement += "\n  Successeurs : ";
         for (Evenement successeur : evenementSuccesseurList) {
-            evenement += successeur.getId() + " ";
+            evenement += successeur.getId() + ", ";
         }
         evenement += "\n  Tâches prédécesseurs : ";
         for (Tache tache : tachePredecesseurList) {
-            evenement += tache.getLibelle() + " ";
+            evenement += tache.getLibelle() + ", ";
         }
         evenement += "\n  Tâches successeurs : ";
         for (Tache tache : tacheSuccesseurList) {
-            evenement += tache.getLibelle() + " ";
+            evenement += tache.getLibelle() + ", ";
         }
         return evenement;
     }
