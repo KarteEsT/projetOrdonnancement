@@ -84,26 +84,7 @@ public class Evenement {
         this.dateAuPlusTard = 0.0; 
         this.evenementPredecesseurList = evenementPredecesseurList;
         this.tachePredecesseurList = tachePredecesseurList;
-    }
-    
-    /**
-     * Cette méthode trouve tous les chemins critiques 
-     * à partir d'un événement initial. 
-     * @param evenementInitial
-     * @return une liste de chemins critiques
-     */
-    public List<List<Evenement>> trouverCheminsCritiques(Evenement
-                                                         evenementInitial) {
-        List<List<Evenement>> cheminsCritiques = new ArrayList<>();
-        List<Evenement> cheminActuel = new ArrayList<>();
-        List<Evenement> visites = new ArrayList<>();
-
-        parcourirCheminCritique(evenementInitial, cheminActuel, 
-                                cheminsCritiques, visites);
-        return cheminsCritiques;
-    }
-    
-    
+    }   
 
     /**
      * @return l'identifiant de l'événement

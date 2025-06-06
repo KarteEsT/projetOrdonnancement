@@ -181,7 +181,7 @@ public class Graphe {
      * @throws IllegalArgumentException si l'évènement 
      *         existe déjà dans le graphe
      */
-    public void ajouterEvenement(Evenement evenement) {
+    private void ajouterEvenement(Evenement evenement) {
         if (evenement == null) {
             throw new NullPointerException("Un évènement ne " +
                                            "peut pas être null.");
@@ -325,16 +325,13 @@ public class Graphe {
 
         // Étape 2 : Calcul des dates au plus tôt
 
-        // Étape 3 : Calcul de la date de fin du projet
-        double dateFinProjet = calculerFinProjet();
-
-        // Étape 4 : Calcul des dates au plus tard
+        // Étape 3 : Calcul des dates au plus tard
     }
     
     /**
      * Crée les événements du graphe en fonction des tâches.
      */
-    public void creerEvenements() {
+    public void creerEvenements2() {
         if (getTaches() == null || getTaches().isEmpty()) {
             throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
         }
@@ -396,6 +393,44 @@ public class Graphe {
             evenementsFin.add(evenementFin);
             ajouterEvenement(evenementFin);
         }
+    }
+    
+    /**
+     * Crée les événements du graphe en fonction des tâches.
+     * Cette méthode crée un événement initial,
+     * un événement de fin pour chaque tâche,
+     * puis un événement de fin de projet
+     */
+    public void creerEvenements() {
+        if (getTaches() == null || getTaches().isEmpty()) {
+            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+        }
+
+        // Nettoyage des anciens événements
+        getEvenements().clear();
+
+        // Étape 1 : Créer l'événement initial
+        Evenement evenementInitial = new Evenement(); // id = 0 par défaut
+        ajouterEvenement(evenementInitial);
+
+        int compteurId = 1;
+
+        // Étape 2 : Créer les événements pour chaque tâche
+        for(compteurId = 1 ; compteurId < getNombreTaches() ; compteurId++ ) {
+            
+        }
+        
+        //Etape 3 : Créer événement de fin du projet
+        Evenement evenementFinProjet = new Evenement(compteurId++, new ArrayList<>(), new ArrayList<>());
+        
+        // Ajouter toutes les events n'ayant pas de successeur à eventFin
+        for (Evenement evenement : getEvenements()) {
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                evenementFinProjet.addEvenementPredecesseur(evenement);
+                evenement.addEvenementSuccesseur(evenementFinProjet);
+            }
+        }
+        
     }
 
     @Override
