@@ -55,6 +55,7 @@ public class Evenement {
      * @param id Identifiant de l'événement
      */
     public Evenement() {
+        
         this.id = 0;
         this.identifiant = "0";
         this.dateAuPlusTot = 0.0;
