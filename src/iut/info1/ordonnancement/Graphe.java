@@ -328,10 +328,12 @@ public class Graphe {
             } else {
                 // Ajout des événements de fin des tâches requises
                 for (Tache tacheRequise : tache.getTachesRequises()) {
-                    Evenement evenementFinRequise = trouverEvenementParTache(tacheRequise);
+                    Evenement evenementFinRequise = 
+                            trouverEvenementParTache(tacheRequise);
                     if (evenementFinRequise == null) {
                         /* Nous avons trié le graphe avant */
-                        throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
+                        throw new IllegalStateException("Tâche requise non " + 
+                               "encore traitée : " + tacheRequise.getLibelle());
                     }
                     evenementPredec.add(evenementFinRequise);
                     evenementFinRequise.addTacheSuccesseur(tache);
@@ -339,7 +341,8 @@ public class Graphe {
             }
     
             // Création de l'événement de fin pour la tâche courante
-            Evenement evenementFin = new Evenement(compteurId++, evenementPredec, new ArrayList<>(List.of(tache)));
+            Evenement evenementFin = new Evenement(compteurId++, 
+                             evenementPredec, new ArrayList<>(List.of(tache)));
             for (Evenement evenement : evenementPredec) {
                 evenement.addEvenementSuccesseur(evenementFin);
             }
@@ -380,32 +383,50 @@ public class Graphe {
             }
             ArrayList<Tache> tachesSuccesseurs = event.getTacheSuccesseurList();
             for (Evenement autreEvent : getEvenements()) {
-                if (event != autreEvent && !evenementsFusionnes.contains(autreEvent)) {
-                    ArrayList<Tache> autresTachesSuccesseurs = autreEvent.getTacheSuccesseurList();
+                if (event != autreEvent && !evenementsFusionnes
+                                            .contains(autreEvent)) {
+                    ArrayList<Tache> autresTachesSuccesseurs = autreEvent
+                                                      .getTacheSuccesseurList();
                     if (tachesSuccesseurs.equals(autresTachesSuccesseurs)) {
                         // Fusion des événements
-                        event.setDatePlusTot(Math.max(event.getDateAuPlusTot(), autreEvent.getDateAuPlusTot()));
-                        event.setDatePlusTard(Math.min(event.getDateAuPlusTard(), autreEvent.getDateAuPlusTard()));
-                        event.addEvenementPredecesseur(autreEvent.getEvenementPredecesseurList());
-                        event.addEvenementSuccesseur(autreEvent.getEvenementSuccesseurList());
+                        event.setDatePlusTot(Math.max(event.getDateAuPlusTot(),
+                                                autreEvent.getDateAuPlusTot()));
+                        event.setDatePlusTard(Math.min(event.getDateAuPlusTard()
+                                             , autreEvent.getDateAuPlusTard()));
+                        event.addEvenementPredecesseur(autreEvent
+                                               .getEvenementPredecesseurList());
+                        event.addEvenementSuccesseur(autreEvent
+                                                 .getEvenementSuccesseurList());
 
                         // Marquer l'autre événement comme fusionné
                         evenementsFusionnes.add(autreEvent);
                         
-                        // Supprimer l'autre événement de la liste des événements successeurs et le remplacer par l'event non fusionné suivant et inversement
-                        for (Evenement successeur : autreEvent.getEvenementSuccesseurList()) {
-                            if (!event.getEvenementSuccesseurList().contains(successeur)) {
+                        /*
+                         * Supprimer l'autre événement de la liste des 
+                         * événements successeurs et le remplacer par l'event
+                         * non fusionné suivant et inversement
+                         */
+                        for (Evenement successeur : autreEvent
+                                                .getEvenementSuccesseurList()) {
+                            if (!event.getEvenementSuccesseurList()
+                                                        .contains(successeur)) {
                                 event.addEvenementSuccesseur(successeur);
                             }
 
-                            if (!successeur.getEvenementPredecesseurList().contains(event)) {
+                            if (!successeur.getEvenementPredecesseurList()
+                                                             .contains(event)) {
                                 successeur.addEvenementPredecesseur(event);
                             }
                         }
                         
-                        //ajouter la tache de l'event fusionné aux taches predecesseur de l'event courant
-                        for (Tache tache : autreEvent.getTachePredecesseurList()) {
-                            if (!event.getTachePredecesseurList().contains(tache)) {
+                        /*
+                         * ajouter la tache de l'event fusionné aux
+                         *  taches predecesseur de l'event courant
+                         */
+                        for (Tache tache : autreEvent
+                                                .getTachePredecesseurList()) {
+                            if (!event.getTachePredecesseurList()
+                                                            .contains(tache)) {
                                 event.addTachePredecesseur(tache);
                             }
                         }
@@ -418,13 +439,17 @@ public class Graphe {
         // Supprimer les événements fusionnés de la liste originale
         getEvenements().removeAll(evenementsFusionnes);
         
-        // Suppression des evenement successeur et prédecesseurs en lien avec des événements fusionnés
+        /*
+         * Suppression des evenement successeur et prédecesseurs 
+         * en lien avec des événements fusionnés
+         */
         for (Evenement evenement : getEvenements()) {
-            evenement.getEvenementPredecesseurList().removeAll(evenementsFusionnes);
-            evenement.getEvenementSuccesseurList().removeAll(evenementsFusionnes);
+            evenement.getEvenementPredecesseurList()
+                                                .removeAll(evenementsFusionnes);
+            evenement.getEvenementSuccesseurList()
+                                                .removeAll(evenementsFusionnes);
         }
         
-        // Ajout des événements successeurss aux événements fusionnés à la liste des successeurs
     }
 
     /**
@@ -444,7 +469,8 @@ public class Graphe {
      */
     public void creerEvenements2() {
         if (getTaches() == null || getTaches().isEmpty()) {
-            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+            throw new IllegalArgumentException("Le graphe ne contient " + 
+                                               "pas de tâches.");
         }
     
     
