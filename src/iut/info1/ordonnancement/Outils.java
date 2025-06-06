@@ -20,30 +20,25 @@ public class Outils {
      * @param graphe le graphe contenant les événements
      */
     public static void calculerDatesAuPlusTot(Graphe graphe) {
-        // Parcourt tous les événements du graphe
+     // S'assurer que les tâches sont triées topologiquement avant de créer les événements dans le main
         for (Evenement evenement : graphe.getEvenements()) {
-            double maxDate = 0.0;
+            double maxDatePredecesseurs = 0.0;
 
-            // Calcule la date au plus tôt en fonction des prédécesseurs
-            for (int i = 0; i < evenement.getEvenementPredecesseurList().size();
-                                                                          i++) {
-                Evenement predecesseur = evenement
-                                        .getEvenementPredecesseurList().get(i);
-                try {
-                    Tache tache = evenement.getTachePredecesseurList().get(i);
-
-                    double datePrecedente = predecesseur.getDateAuPlusTot() 
-                                            + tache.getDuree();
-                    if (datePrecedente > maxDate) {
-                        maxDate = datePrecedente;
-                    }
-                } catch (Exception e) {
-                    
+            // Trouver la date maximale parmi tous les événements prédécesseurs
+            for (Evenement predecesseur : evenement.getEvenementPredecesseurList()) {
+                if (predecesseur.getDateAuPlusTot() > maxDatePredecesseurs) {
+                    maxDatePredecesseurs = predecesseur.getDateAuPlusTot();
                 }
             }
 
-            // Met à jour la date au plus tôt de l'événement courant
-            evenement.setDatePlusTot(maxDate);
+            // Obtenir la durée de la seule tâche qui se termine à cet événement
+            double dureeTache = 0.0;
+            if (!evenement.getTachePredecesseurList().isEmpty()) {
+                // Un événement est le résultat de sa ou ses tâches prédécesseurs
+                dureeTache = evenement.getTachePredecesseurList().get(0).getDuree();
+            }
+
+            evenement.setDatePlusTot(maxDatePredecesseurs + dureeTache);
         }
     }
 
@@ -76,36 +71,35 @@ public class Outils {
      */
     public static void calculerDatesAuPlusTard(Graphe graphe) {
         double dateFinProjet = calculerFinProjet(graphe);
-
-        // Parcourt les événements en ordre inverse
         List<Evenement> evenements = graphe.getEvenements();
+
+        // Initialiser toutes les dates à la date de fin du projet
+        for (Evenement evenement : evenements) {
+            evenement.setDatePlusTard(dateFinProjet);
+        }
+
+        // Itérer à l'envers sur la liste d'événements (supposée triée topologiquement)
         for (int i = evenements.size() - 1; i >= 0; i--) {
             Evenement evenement = evenements.get(i);
 
-            if (evenement.getEvenementSuccesseurList().isEmpty()) {
-                // Aucun successeur => date au plus tard = fin du projet
-                evenement.setDatePlusTard(dateFinProjet);
-            } else {
-                double minDate = Double.MAX_VALUE;
+            // Pour chaque tâche qui COMMENCE à cet événement
+            for (Tache tacheSuccesseur : evenement.getTacheSuccesseurList()) {
 
-                // Parcourt les successeurs et leurs tâches associées
-                for (int j = 0; j < evenement.getEvenementSuccesseurList().size(); j++) {
-                    Evenement successeur = evenement.getEvenementSuccesseurList().get(j);
-
-                    if (j < evenement.getTacheSuccesseurList().size()) {
-                        Tache tache = evenement.getTacheSuccesseurList().get(j);
-
-                        // Calcule la date au plus tard en fonction du successeur
-                        double dateSuivante = successeur.getDateAuPlusTard() - tache.getDuree();
-                        if (dateSuivante < minDate) {
-                            minDate = dateSuivante;
-                        }
+                // Trouver l'événement où cette tâche successeur se TERMINE
+                Evenement evenementFinTache = null;
+                for(Evenement e : graphe.getEvenements()) {
+                    if(e.getTachePredecesseurList().contains(tacheSuccesseur)) {
+                        evenementFinTache = e;
+                        break;
                     }
                 }
 
-                // Met à jour la date au plus tard
-                if (minDate != Double.MAX_VALUE) {
-                    evenement.setDatePlusTard(minDate);
+                if (evenementFinTache != null) {
+                     // La date au plus tard de l'événement actuel est influencée par la date au plus tard de son successeur
+                    double nouvelleDatePossible = evenementFinTache.getDateAuPlusTard() - tacheSuccesseur.getDuree();
+                    if (nouvelleDatePossible < evenement.getDateAuPlusTard()) {
+                        evenement.setDatePlusTard(nouvelleDatePossible);
+                    }
                 }
             }
         }
@@ -166,6 +160,68 @@ public class Outils {
         }
 
         return cheminsCritiques;
+    }
+    
+    /**
+     * Calcule les marges libres pour toutes les tâches d'un graphe.
+     * La marge libre d'une tâche est le délai maximum qu'elle peut prendre
+     * sans retarder la date de début au plus tôt de ses successeurs.
+     *
+     * @param graphe Le graphe contenant les tâches et les événements.
+     */
+    public static void calculerMargesLibres(Graphe graphe) {
+        double dateFinProjet = calculerFinProjet(graphe);
+
+        for (Tache tache : graphe.getTaches()) {
+            // 1. Trouver l'événement de fin de la tâche actuelle
+            Evenement eventFinTache = null;
+            for (Evenement e : graphe.getEvenements()) {
+                if (e.getTachePredecesseurList().contains(tache)) {
+                    eventFinTache = e;
+                    break;
+                }
+            }
+
+            if (eventFinTache == null) continue;
+
+            double dateFinAuPlusTotTache = eventFinTache.getDateAuPlusTot();
+
+            // 2. Trouver la date de début au plus tôt minimale de toutes les tâches successeurs
+            double minDateDebutSuccesseurs = dateFinProjet; // Initialiser avec la fin du projet
+
+            if (eventFinTache.getTacheSuccesseurList().isEmpty()) {
+                // Si pas de successeur, la marge libre va jusqu'à la fin du projet
+                minDateDebutSuccesseurs = dateFinProjet;
+            } else {
+                for (Tache tacheSuccesseur : eventFinTache.getTacheSuccesseurList()) {
+                    // Trouver l'événement de fin de la tâche successeur
+                    Evenement eventFinSuccesseur = null;
+                    for (Evenement e : graphe.getEvenements()) {
+                        if (e.getTachePredecesseurList().contains(tacheSuccesseur)) {
+                            eventFinSuccesseur = e;
+                            break;
+                        }
+                    }
+                    if (eventFinSuccesseur == null) continue;
+
+                    // Calculer la date de DEBUT au plus tôt du successeur
+                    double dateDebutSuccesseur = eventFinSuccesseur.getDateAuPlusTot() 
+                                               - tacheSuccesseur.getDuree();
+                    
+                    if (dateDebutSuccesseur < minDateDebutSuccesseurs) {
+                        minDateDebutSuccesseurs = dateDebutSuccesseur;
+                    }
+                }
+            }
+
+            // 3. Calculer et stocker la marge libre
+            double margeLibre = minDateDebutSuccesseurs - dateFinAuPlusTotTache;
+            
+            // Assigner la marge à la tâche (nécessite d'ajouter un setter dans Tache.java)
+            // Par exemple : tache.setMargeLibre(margeLibre); 
+            // Pour l'instant, nous allons l'afficher directement.
+            // Vous devrez modifier la classe Tache pour stocker cette valeur.
+        }
     }
 
 }

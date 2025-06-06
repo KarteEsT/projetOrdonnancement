@@ -134,81 +134,148 @@ public class ChargeurCSV {
             return new Graphe(titre, unite, taches);
         }
     }
-    
-    /**
-     * Point d'entrée du programme pour tester le chargement et les calculs
-     * d'un graphe. Permet de choisir entre la saisie via console ou
-     * le chargement direct depuis un fichier CSV.
-     * @param args non utilisé
-     */
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Graphe graphe = null;
 
-        System.out.print("Voulez-vous charger un 'csv' "
-                        + " ou saisir via la 'console' ? ");
-        String choix = scanner.nextLine().strip().toLowerCase();
+        /**
+         * Point d'entrée du programme pour tester le chargement et les calculs
+         * d'un graphe. Permet de choisir entre la saisie via console ou
+         * le chargement direct depuis un fichier CSV.
+         * @param args non utilisé
+         */
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            Graphe graphe = null;
+            double dateFinProjet = 0.0;
 
-        try {
-            if ("csv".equals(choix)) {
-                System.out.print("Entrez le chemin du fichier CSV à charger : ");
-                String cheminFichier = scanner.nextLine().strip();
-                graphe = ChargeurCSV.chargerGrapheDepuisCSV(cheminFichier);
-                System.out.println("Chargement depuis " + cheminFichier + " réussi !");
+            System.out.print("Voulez-vous charger un 'csv' "
+                            + " ou saisir via la 'console' ? ");
+            String choix = scanner.nextLine().strip().toLowerCase();
 
-            } else if ("console".equals(choix)) {
-                graphe = ChargeurConsole.chargerDepuisConsole();
-                
-                System.out.print("Entrez le chemin du fichier CSV pour la sauvegarde : ");
-                String cheminFichier = scanner.nextLine().strip();
+            try {
+                if ("csv".equals(choix)) {
+                    System.out.print("Entrez le chemin du fichier CSV à charger : ");
+                    String cheminFichier = scanner.nextLine().strip();
+                    graphe = chargerGrapheDepuisCSV(cheminFichier);
+                    System.out.println("Chargement depuis " + cheminFichier + " réussi !");
 
-                ChargeurCSV.exporterGrapheCSV(graphe, cheminFichier);
-                System.out.println("Export vers " + cheminFichier + " terminé !");
-                
-            } else {
-                System.out.println("Choix non valide. Fin du programme.");
-            }
+                } else if ("console".equals(choix)) {
+                    graphe = ChargeurConsole.chargerDepuisConsole();
+                    
+                    System.out.print("Entrez le chemin du fichier CSV pour la sauvegarde : ");
+                    String cheminFichier = scanner.nextLine().strip();
 
-            // Si un graphe a bien été chargé ou créé, on lance les calculs
-            if (graphe != null) {
-                System.out.println("\n--- Lancement des calculs sur le graphe ---");
-                System.out.println("Titre : " + graphe.getTitre());
-                System.out.println("Unité : " + graphe.getUnite());
-
-                // Trier les tâches pour respecter les dépendances
-                graphe.trierTaches();
-                System.out.println("\n--- Tâches triées ---");
-                for (Tache tache : graphe.getTaches()) {
-                    System.out.println("- " + tache.getLibelle());
+                    exporterGrapheCSV(graphe, cheminFichier);
+                    System.out.println("Export vers " + cheminFichier + " terminé !");
+                    
+                } else {
+                    System.out.println("Choix non valide. Fin du programme.");
                 }
 
-                // Créer les événements à partir des tâches
-                graphe.creerEvenements();
-                System.out.println("\n--- Événements créés ---");
-                System.out.println(graphe.getEvenements().size() + " événements ont été générés.");
+                // Si un graphe a bien été chargé ou créé, on lance les calculs
+                if (graphe != null) {
+                    System.out.println("\n--- Lancement des calculs sur le graphe ---");
+                    System.out.println("Titre : " + graphe.getTitre());
+                    System.out.println("Unité : " + graphe.getUnite());
 
-                // Dates au plus tôt
-                Outils.calculerDatesAuPlusTot(graphe);
+                    // Trier les tâches pour respecter les dépendances
+                    graphe.trierTaches();
+                    System.out.println("\n--- Tâches triées ---");
+                    for (Tache tache : graphe.getTaches()) {
+                        System.out.println("- " + tache.getLibelle());
+                    }
 
-                // Dates au plus tard
-                Outils.calculerDatesAuPlusTard(graphe);
+                    // Créer les événements à partir des tâches
+                    graphe.creerEvenements();
+                    System.out.println("\n--- Événements créés ---");
+                    System.out.println(graphe.getEvenements().size() + " événements ont été générés.");
 
-                // Afficher les résultats
-                System.out.println("\n--- Résultats des Calculs ---");
-                for (Evenement evenement : graphe.getEvenements()) {
-                    System.out.println("Événement " + evenement.getId() + " :");
-                    System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
-                    System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
-                    System.out.println("  Est critique ? : " + evenement.estCritique());
+                    // Calculs des dates depuis la classe Outils
+                    Outils.calculerDatesAuPlusTot(graphe);
+                    Outils.calculerDatesAuPlusTard(graphe);
+                    dateFinProjet = Outils.calculerFinProjet(graphe);
+
+
+                    // Afficher les résultats des événements
+                    System.out.println("\n--- Résultats des Calculs d'Événements ---");
+                    for (Evenement evenement : graphe.getEvenements()) {
+                        System.out.println("Événement " + evenement.getIdentifiant() + " :");
+                        System.out.println("  Date au plus tôt : " + evenement.getDateAuPlusTot());
+                        System.out.println("  Date au plus tard : " + evenement.getDateAuPlusTard());
+                        System.out.println("  Est critique ? : " + evenement.estCritique());
+                    }
+                    
+                    // ----- SECTION MISE À JOUR POUR LE CHEMIN CRITIQUE -----
+                    System.out.println("\n--- Chemin(s) Critique(s) ---");
+                    java.util.List<java.util.List<Evenement>> cheminsCritiques = Outils.trouverCheminsCritiques(graphe); //
+
+                    if (cheminsCritiques.isEmpty()) {
+                        System.out.println("Présence de chemin critique : Non");
+                    } else {
+                        System.out.println("Présence de chemin critique : Oui"); // Ligne ajoutée
+                        int cheminIndex = 1;
+                        for (java.util.List<Evenement> chemin : cheminsCritiques) {
+                            System.out.print("  Chemin " + cheminIndex++ + " : ");
+                            String cheminStr = chemin.stream()
+                                                     .map(e -> e.getIdentifiant()) //
+                                                     .collect(java.util.stream.Collectors.joining(" -> "));
+                            System.out.println(cheminStr);
+                        }
+                    }
+                    // ---------------------------------------------------------
+
+
+                    // Calcul et affichage des marges pour chaque tâche
+                    System.out.println("\n--- Marges des Tâches ---");
+                    System.out.printf("%-10s | %-12s | %-12s\n", "Tâche", "Marge Totale", "Marge Libre");
+                    System.out.println("-----------+--------------+--------------");
+
+                    for (Tache tache : graphe.getTaches()) { //
+                        Evenement eventFin = null;
+                        for (Evenement e : graphe.getEvenements()) { //
+                            if (e.getTachePredecesseurList().contains(tache)) { //
+                                eventFin = e;
+                                break;
+                            }
+                        }
+
+                        if (eventFin != null) {
+                            // Calcul Marge Totale
+                            double dateDebutTot = eventFin.getDateAuPlusTot() - tache.getDuree();
+                            double margeTotale = eventFin.getDateAuPlusTard() - dateDebutTot - tache.getDuree();
+                            
+                            // Calcul Marge Libre
+                            double minDateDebutSuccesseurs = dateFinProjet;
+                            if (eventFin.getTacheSuccesseurList().isEmpty()) { //
+                                minDateDebutSuccesseurs = dateFinProjet;
+                            } else {
+                                for (Tache tacheSucc : eventFin.getTacheSuccesseurList()) {
+                                     Evenement eventFinSucc = null;
+                                     for(Evenement e : graphe.getEvenements()) {
+                                         if(e.getTachePredecesseurList().contains(tacheSucc)) {
+                                             eventFinSucc = e;
+                                             break;
+                                         }
+                                     }
+                                     if (eventFinSucc != null) {
+                                        double dateDebutSucc = eventFinSucc.getDateAuPlusTot() - tacheSucc.getDuree();
+                                        if (dateDebutSucc < minDateDebutSuccesseurs) {
+                                            minDateDebutSuccesseurs = dateDebutSucc;
+                                        }
+                                     }
+                                }
+                            }
+                            double margeLibre = minDateDebutSuccesseurs - eventFin.getDateAuPlusTot();
+                            
+                            System.out.printf("%-10s | %-12.1f | %-12.1f\n", tache.getLibelle(), margeTotale, margeLibre);
+                        }
+                    }
+
+                    // Date de fin du projet
+                    System.out.println("\nFin du projet (calculée) : " + dateFinProjet + " " + graphe.getUnite());
                 }
 
-                // Date de fin du projet
-                System.out.println("\nFin du projet (calculée) : " + Outils.calculerFinProjet(graphe) + " " + graphe.getUnite());
+            } catch (java.io.IOException | IllegalStateException erreur) {
+                System.err.println("ERREUR : " + erreur.getMessage());
             }
-
-        } catch (IOException | IllegalStateException erreurEcriture) {
-            System.err.println("ERREUR : " + erreurEcriture.getMessage());
+            scanner.close();
         }
-        scanner.close();
-    }
 }
