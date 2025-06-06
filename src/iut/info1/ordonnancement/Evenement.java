@@ -255,6 +255,32 @@ public class Evenement {
         return dateAuPlusTot == dateAuPlusTard;
     }
 
+    /**
+     * Ajoute une liste d'événements prédécesseurs à la liste actuelle.
+     * @param evenementPredecesseurListAAjouter
+     */
+    public void addEvenementPredecesseur(ArrayList<Evenement> evenementPredecesseurListAAjouter) {
+        for (Evenement evenement : evenementPredecesseurListAAjouter) {
+            if (!evenementPredecesseurList.contains(evenement)) {
+                evenementPredecesseurList.add(evenement);
+            }
+        }
+        
+    }
+
+    /**
+     * Ajoute une liste d'événements successeurs à la liste actuelle.
+     * @param evenementSuccesseurListAAjouter 
+     */
+    public void addEvenementSuccesseur(ArrayList<Evenement> evenementSuccesseurListAAjouter) {
+        for (Evenement evenement : evenementSuccesseurListAAjouter) {
+            if (!evenementSuccesseurList.contains(evenement)) {
+                evenementSuccesseurList.add(evenement);
+            }
+        }
+        
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true; 
@@ -273,12 +299,20 @@ public class Evenement {
         String evenement = "\n\nÉvénement " + id + " :\n";
         evenement += "  Date au plus tôt : " + dateAuPlusTot + "\n";
         evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
+        evenement += "  Evenements prédécesseurs : ";
+        for (Evenement event : getEvenementPredecesseurList()) {
+            evenement += event.getId() + ", ";
+        }
+        evenement += "\n  Evenements successeurs : ";
+        for (Evenement event : getEvenementSuccesseurList()) {
+            evenement += event.getId() + ", ";
+        }
         evenement += "\n  Tâches prédécesseurs : ";
-        for (Tache tache : tachePredecesseurList) {
+        for (Tache tache : getTachePredecesseurList()) {
             evenement += tache.getLibelle() + ", ";
         }
         evenement += "\n  Tâches successeurs : ";
-        for (Tache tache : tacheSuccesseurList) {
+        for (Tache tache : getTacheSuccesseurList()) {
             evenement += tache.getLibelle() + ", ";
         }
         return evenement;

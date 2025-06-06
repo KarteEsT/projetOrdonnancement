@@ -74,7 +74,6 @@ public class Outils {
      *
      * @param graphe le graphe contenant les événements
      */
-
     public static void calculerDatesAuPlusTard(Graphe graphe) {
         double dateFinProjet = calculerFinProjet(graphe);
 

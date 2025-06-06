@@ -301,6 +301,8 @@ public class Graphe {
         
         // Étape 2 : Calcul des dates au plus tôt
         Outils.calculerDatesAuPlusTot(this);
+        
+        fusionEvenements();
     
         // Étape 3 : Calcul des dates au plus tard
         Outils.calculerDatesAuPlusTard(this);
@@ -361,6 +363,40 @@ public class Graphe {
                 evenementFinal.addEvenementPredecesseur(evenement);
             }
         }
+    }
+    
+    /**
+     * Fusionne les événements du graphe.
+     * Les événements à fusionner sont ceux qui
+     * ont les mêmes Taches successeurs.
+     * On prendre alors la date au plus tôt maximale
+     */
+    public void fusionEvenements() {
+        ArrayList<Evenement> evenementsFusionnes = new ArrayList<>();
+        
+        for (Evenement event : getEvenements()) {
+            if (evenementsFusionnes.contains(event)) {
+                continue; // Événement déjà fusionné
+            }
+            ArrayList<Tache> tachesSuccesseurs = event.getTacheSuccesseurList();
+            for (Evenement autreEvent : getEvenements()) {
+                if (event != autreEvent && !evenementsFusionnes.contains(autreEvent)) {
+                    ArrayList<Tache> autresTachesSuccesseurs = autreEvent.getTacheSuccesseurList();
+                    if (tachesSuccesseurs.equals(autresTachesSuccesseurs)) {
+                        // Fusion des événements
+                        event.setDatePlusTot(Math.max(event.getDateAuPlusTot(), autreEvent.getDateAuPlusTot()));
+                        event.setDatePlusTard(Math.min(event.getDateAuPlusTard(), autreEvent.getDateAuPlusTard()));
+                        event.addEvenementPredecesseur(autreEvent.getEvenementPredecesseurList());
+                        event.addEvenementSuccesseur(autreEvent.getEvenementSuccesseurList());
+
+                        // Marquer l'autre événement comme fusionné
+                        evenementsFusionnes.add(autreEvent);
+                    }
+                }
+            }
+        }
+        // Supprimer les événements fusionnés de la liste originale
+        getEvenements().removeAll(evenementsFusionnes);
     }
 
     /**
