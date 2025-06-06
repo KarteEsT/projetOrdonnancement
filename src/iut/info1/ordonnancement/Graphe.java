@@ -392,6 +392,17 @@ public class Graphe {
                         // Marquer l'autre événement comme fusionné
                         evenementsFusionnes.add(autreEvent);
                         
+                        // Supprimer l'autre événement de la liste des événements successeurs et le remplacer par l'event non fusionné suivant et inversement
+                        for (Evenement successeur : autreEvent.getEvenementSuccesseurList()) {
+                            if (!event.getEvenementSuccesseurList().contains(successeur)) {
+                                event.addEvenementSuccesseur(successeur);
+                            }
+
+                            if (!successeur.getEvenementPredecesseurList().contains(event)) {
+                                successeur.addEvenementPredecesseur(event);
+                            }
+                        }
+                        
                         //ajouter la tache de l'event fusionné aux taches predecesseur de l'event courant
                         for (Tache tache : autreEvent.getTachePredecesseurList()) {
                             if (!event.getTachePredecesseurList().contains(tache)) {

@@ -299,14 +299,6 @@ public class Evenement {
         String evenement = "\n\nÉvénement " + id + " :\n";
         evenement += "  Date au plus tôt : " + dateAuPlusTot + "\n";
         evenement += "  Date au plus tard : " + dateAuPlusTard + "\n";
-        evenement += "  Evenements prédécesseurs : ";
-        for (Evenement event : getEvenementPredecesseurList()) {
-            evenement += event.getId() + ", ";
-        }
-        evenement += "\n  Evenements successeurs : ";
-        for (Evenement event : getEvenementSuccesseurList()) {
-            evenement += event.getId() + ", ";
-        }
         evenement += "\n  Tâches prédécesseurs : ";
         for (Tache tache : getTachePredecesseurList()) {
             evenement += tache.getLibelle() + ", ";
