@@ -14,8 +14,8 @@ public class Outils {
     
     /**
      * Calcule les dates au plus tôt pour tous les événements dans un graphe
-     * d'ordonnancement. La date au plus tôt d'un événement est déterminée parla
-     * date au plus tôt de ses prédécesseurs et la durée des tâches associées.
+     * d'ordonnancement. La date au plus tôt d'un événement est déterminée par
+     * la date au plus tôt de ses prédécesseurs et la durée des tâches associées
      *
      * @param graphe le graphe contenant les événements
      */
@@ -142,19 +142,23 @@ public class Outils {
     }
     
     /**
-     * Cette méthode trouve tous les chemins critiques 
-     * à partir d'un événement initial. 
-     * @param evenementInitial
-     * @return une liste de chemins critiques
+     * Trouve les chemins critiques dans un graphe d'ordonnancement.
+     * @param graphe
+     * @return la liste des chemins critiques
      */
-    public static List<List<Evenement>> trouverCheminsCritiques(Evenement
-                                                         evenementInitial) {
+    public static List<List<Evenement>> trouverCheminsCritiques(Graphe graphe) {
         List<List<Evenement>> cheminsCritiques = new ArrayList<>();
-        List<Evenement> cheminActuel = new ArrayList<>();
-        List<Evenement> visites = new ArrayList<>();
 
-        parcourirCheminCritique(evenementInitial, cheminActuel, 
-                                cheminsCritiques, visites);
+        for (Evenement evenement : graphe.getEvenements()) {
+            // On commence uniquement depuis l'event initial
+            if (evenement.getEvenementPredecesseurList().isEmpty() 
+                                                   && evenement.estCritique()) {
+                parcourirCheminCritique(evenement, new ArrayList<>(),
+                                           cheminsCritiques, new ArrayList<>());
+            }
+        }
+
         return cheminsCritiques;
     }
+
 }
