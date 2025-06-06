@@ -116,13 +116,13 @@ public class Tache {
     public double getMargeLibre() {
         return margeLibre;
     }
-    
-	/**
-	 * @return la marge totale de la tâche
-	 */
-	public double getMargeTotale() {
-		return margeTotale;
-	}
+
+    /**
+     * @return la marge totale de la tâche
+     */
+    public double getMargeTotale() {
+        return margeTotale;
+    }
 
     /**
      * @return un ArrayList<Tache> des tâches à réaliser avant celle-ci
