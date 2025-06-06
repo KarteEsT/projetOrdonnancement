@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1.0">
-  <zoom_level>10</zoom_level>
+  <zoom_level>11</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>200</y>
-      <w>380</w>
-      <h>430</h>
+      <x>0</x>
+      <y>143</y>
+      <w>418</w>
+      <h>550</h>
     </coordinates>
     <panel_attributes>Graphe
 --
@@ -19,32 +19,37 @@
 
 --
 
-+ Graphe(String titre, String unite, ArrayList&lt;Tache&gt; taches, 
-                ArrayList&lt;Evenement&gt; listeEvenements)
++ Graphe(String titre, String unite, ArrayList&lt;Tache&gt; taches)
 
 + getTitre : String
 + getUnite : String
 + getTaches : ArrayList&lt;Tache&gt;
 + getEvenement : ArrayList&lt;Evenement&gt;
++ getNombreTaches : int
+
++ setTaches(ArrayList&lt;Tache&gt; taches)
 
 + ajouterTache(Tache tache)
 + ajouterPlusieursTaches(Tache... taches)
-+ calculerFinProjet() : double
-+ supprimerTache(Tache tache)
 + ajouterEvenement(Evenement evenement)
++ trierTaches()
++ existeCircuit()
++ initialiserGraphe()
++ creerEvenements()
++ creerEvenementFinal()
++ fusionEvenement()
++ trouverEvenementParTache(Tache tache)
 
-+ getNombreTaches : int
-
-+ existeCircuit() : boolean</panel_attributes>
++ toString : String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>510</x>
-      <y>400</y>
-      <w>380</w>
-      <h>430</h>
+      <x>550</x>
+      <y>363</y>
+      <w>418</w>
+      <h>528</h>
     </coordinates>
     <panel_attributes>Tache
 --
@@ -52,6 +57,8 @@
 - libelle : String
 - description : String
 - duree : double
+- margeLibre : double
+- margeTotale : double
 - tachesRequises : ArrayList&lt;Tache&gt;
 
 --
@@ -63,10 +70,15 @@
 + getLibelle : String
 + getDescription : String
 + getDuree : double
++ getMargeLibre : double
++ getMargeTotale : double
 + getTachesRequises : ArrayList&lt;Tache&gt;
 
 + ajouterTacheRequise(Tache tache)
-+ supprimerTacheRequise(Tache tache)
++ calculerMargeLibre(Evenement evenementPredeceseur,
+                                   Evenement evenementSuccesseur)
++ calculerMargeTotale(Evenement evenementPredecesseur,
+                                     Evenement evenementSuccesseur)
 
 + equals() : boolean
 + toString : String</panel_attributes>
@@ -75,10 +87,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1010</x>
-      <y>200</y>
-      <w>380</w>
-      <h>430</h>
+      <x>1100</x>
+      <y>143</y>
+      <w>649</w>
+      <h>781</h>
     </coordinates>
     <panel_attributes>Evenement
 --
@@ -86,18 +98,21 @@
 - id : int
 - dateAuPlusTot : double
 - dateAuPlusTard : double
+- identifiant : String
 - tachePredecesseurList : ArrayList&lt;Tache&gt;
 - tacheSuccesseurList : ArrayList&lt;Tache&gt;
 - evenementPredecesseurList : ArrayList&lt;Evenement&gt;
 - evenementSuccesseurList : ArrayList&lt;Evenement&gt;
-- EVENEMENT_INITIAL : Evenement
 
 --
 
 + Evenement()
++ Evenement(int id)
++ Evenement(String id)
 + Evenement(int id, ArrayList&lt;Evenement&gt; evenementPredecesseurList,
-                        ArrayList&lt;Tache&gt; tachePredecesseurList)
+                      ArrayList&lt;Tache&gt; tachePredecesseurList)
 
++ getIdentifiant : String
 + getId : int
 + getDateAuPlusTot : double
 + getDateAuPlusTard : double
@@ -106,17 +121,31 @@
 + getTachePredecesseurList : ArrayList&lt;Tache&gt;
 + getTacheSuccesseurList : ArrayList&lt;Tache&gt;
 
++ setEvenementSuccesseurList(ArrayList&lt;Evenement&gt; evenementSuccesseurList)
++ setTacheSuccesseurList(ArrayList&lt;Tache&gt; tacheSuccesseurList)
++ setDatePlusTot(double dateAuPlusTot)
++ setDatePlusTard(double dateAuPlusTard)
+
++ addTachePredecesseur(Tache tache)
++ addEvenementSuccesseur(Evenement evenement)
++ addEvenementPredecesseur(Evenement evenement)
++ addEvenementPredecesseur(ArrayList&lt;Evenement&gt; evenementPredecesseurListAAjouter)
++ addEvenementSucesseur(ArrayList&lt;Evenement&gt; evenementSuccesseurListAAjouter)
+
+
 + estCritique() : boolean
-+ calculerDatePlusTot(double)</panel_attributes>
+
++ equals(Object o) : boolean
++ toString() : String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>70</y>
-      <w>1050</w>
-      <h>150</h>
+      <x>198</x>
+      <y>0</y>
+      <w>1155</w>
+      <h>165</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
@@ -126,10 +155,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>270</y>
-      <w>340</w>
-      <h>150</h>
+      <x>748</x>
+      <y>220</y>
+      <w>374</w>
+      <h>165</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
@@ -139,10 +168,10 @@ m2=1..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>340</y>
-      <w>150</w>
-      <h>230</h>
+      <x>407</x>
+      <y>297</y>
+      <w>165</w>
+      <h>253</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..1
