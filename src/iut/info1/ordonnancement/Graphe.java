@@ -150,28 +150,6 @@ public class Graphe {
             ajouterTache(tache);
         }
     }
-    
-    /**
-     * Calcule la date de fin de projet.
-     * La date de fin de projet correspond à la date au plus tôt
-     * de l'unique événement sans successeur.
-     *
-     * @return la date de fin du projet
-     */
-    public double calculerFinProjet() {
-        double dateFinProjet = 0.0;
-
-        // Parcourt tous les événements pour trouver ceux sans successeur
-        for (Evenement evenement : getEvenements()) {
-            if ( evenement.getEvenementSuccesseurList() == null || 
-                 evenement.getEvenementSuccesseurList().isEmpty()) {
-                
-                dateFinProjet = evenement.getDateAuPlusTot();
-            }
-        }
-
-        return dateFinProjet;
-    }    
 
     /**
      * Ajoute un évènement au graphe.
@@ -675,9 +653,8 @@ public class Graphe {
     public String toString() {
         String graphe = getTitre();
         graphe += ", unite = " + getUnite();
-        graphe += "\nDate de fin de projet : " + calculerFinProjet();
+        graphe += "\nDate de fin de projet : " + Outils.calculerFinProjet(this);
         graphe += "\n" + getTaches();
-        
         graphe += "\n" + getEvenements();
         return graphe;
     }

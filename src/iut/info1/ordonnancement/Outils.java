@@ -76,7 +76,7 @@ public class Outils {
      */
 
     public static void calculerDatesAuPlusTard(Graphe graphe) {
-        double dateFinProjet = graphe.calculerFinProjet();
+        double dateFinProjet = calculerFinProjet(graphe);
 
         // Parcourt les événements en ordre inverse
         List<Evenement> evenements = graphe.getEvenements();
