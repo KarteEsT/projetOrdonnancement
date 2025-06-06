@@ -399,7 +399,7 @@ public class Graphe {
      * Crée les événements du graphe en fonction des tâches.
      * Cette méthode crée un événement initial,
      * un événement de fin pour chaque tâche,
-     * puis un événement de fin de projet
+     * puis un événement de fin de projet.
      */
     public void creerEvenements() {
         if (getTaches() == null || getTaches().isEmpty()) {
@@ -416,54 +416,60 @@ public class Graphe {
         int compteurId = 1;
 
         // Étape 2 : Créer les événements pour chaque tâche
-        ArrayList<Evenement> evenementPredec = new ArrayList<>();
-        ArrayList<Tache> tachesPredec = new ArrayList<>();
-        for(compteurId = 1 ; compteurId <= getNombreTaches() ; compteurId++ ) {
-            /* Vérification si ce n'est pas une tâche initiale */
-            Tache tache = getTaches().get(compteurId - 1);
+        ArrayList<Tache> tachesCreees = new ArrayList<>();
+        ArrayList<Evenement> evenementsFin = new ArrayList<>();
+
+        for (Tache tache : getTaches()) {
+            ArrayList<Evenement> evenementPredec = new ArrayList<>();
+            ArrayList<Tache> tachesPredec = new ArrayList<>();
+
             if (tache.getTachesRequises().isEmpty()) {
                 // Si la tâche n'a pas de tâches requises, elle dépend de l'événement initial
-                evenementInitial.addTacheSuccesseur(tache);
                 evenementPredec.add(evenementInitial);
-                
+                evenementInitial.addTacheSuccesseur(tache);
             } else {
-                /* 
-                 * On ajoute les evenements prédécesseurs de la tâche ainsi que les
-                 * taches predecesseurs de l'event actuel
-                 * 
-                 * On parcourt tous les evenements du graphe pour retrouver ceux qui
-                 * on la tâche prédecesseur de notre tâche actuelle
-                 */
-                tachesPredec.addAll(tache.getTachesRequises());
-                for (Evenement evenement : getEvenements()) {
-                    for (Tache tachePredecesseur : evenement.getTachePredecesseurList()) {
-                        if (evenement.getTachePredecesseurList().contains(tachePredecesseur)) {
-                            evenement.addTacheSuccesseur(tachePredecesseur);
-                            evenementPredec.add(evenement);
-                        }
+                // Dépend des événements de fin des tâches requises
+                for (Tache tacheRequise : tache.getTachesRequises()) {
+                    int index = tachesCreees.indexOf(tacheRequise);
+                    if (index == -1) {
+                        throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
                     }
+                    Evenement evenementFinRequise = evenementsFin.get(index);
+                    evenementPredec.add(evenementFinRequise);
+                    evenementFinRequise.addTacheSuccesseur(tache);
                 }
             }
-            
-            
-            
-            /* Ajout des taches predecesseurs et des evenements prédecesseurs*/
-            Evenement evenement = new Evenement(compteurId, evenementPredec, tachesPredec);
-            evenement.addTacheSuccesseur(tache);
-            ajouterEvenement(evenement);
+
+            // Vérification de la synchronisation des listes
+            tachesPredec.add(tache);
+            if (evenementPredec.size() != tachesPredec.size()) {
+                throw new IllegalStateException("Les listes des prédécesseurs ne sont pas synchronisées.");
+            }
+
+            // Créer l'événement de fin pour la tâche courante
+            Evenement evenementFin = new Evenement(compteurId++, evenementPredec, new ArrayList<>(List.of(tache)));
+            evenementFin.addTachePredecesseur(tache);
+
+            // Lier les prédécesseurs à ce nouvel événement
+            for (Evenement evenement : evenementPredec) {
+                evenement.addEvenementSuccesseur(evenementFin);
+            }
+
+            // Enregistrer la tâche et son événement de fin
+            tachesCreees.add(tache);
+            evenementsFin.add(evenementFin);
+            ajouterEvenement(evenementFin);
         }
-        
-        //Etape 3 : Créer événement de fin du projet
+
+        // Étape 3 : Créer l'événement de fin du projet
         Evenement evenementFinProjet = new Evenement(compteurId++, new ArrayList<>(), new ArrayList<>());
-        
-        // Ajouter toutes les events n'ayant pas de successeur à eventFin
         for (Evenement evenement : getEvenements()) {
             if (evenement.getEvenementSuccesseurList().isEmpty()) {
                 evenementFinProjet.addEvenementPredecesseur(evenement);
                 evenement.addEvenementSuccesseur(evenementFinProjet);
             }
         }
-        
+        ajouterEvenement(evenementFinProjet);
     }
 
     @Override
