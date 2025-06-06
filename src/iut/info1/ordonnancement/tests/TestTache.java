@@ -28,7 +28,6 @@ import iut.info1.ordonnancement.Tache;
  */
 
 class TestTache {
-    //TODO Créer nouveau test constructeur invalide !
     
     /**
      * Test method for {@link iut.info1.ordonnancement.Tache#Tache(java.lang.String, java.lang.String, double, iut.info1.ordonnancement.Tache[])}.
