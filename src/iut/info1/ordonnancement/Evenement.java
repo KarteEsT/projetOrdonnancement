@@ -103,32 +103,7 @@ public class Evenement {
         return cheminsCritiques;
     }
     
-    private void parcourirCheminCritique(Evenement evenement, 
-            List<Evenement> cheminActuel,List<List<Evenement>> cheminsCritiques,
-            List<Evenement> visites) {
-        // Ajouter l'événement actuel au chemin
-        cheminActuel.add(evenement);
-        visites.add(evenement);
-
-        // Vérifier si l'événement n'a pas de successeurs critiques
-        boolean aucunSuccesseurCritique = true;
-        for (Evenement successeur : evenement.getEvenementSuccesseurList()) {
-            if (successeur.estCritique() && !visites.contains(successeur)) {
-                aucunSuccesseurCritique = false;
-                parcourirCheminCritique(successeur, cheminActuel, 
-                                        cheminsCritiques, visites);
-            }
-        }
-
-        //Aucun successeur critique => ajout chemin actuel aux chemins critiques
-        if (aucunSuccesseurCritique) {
-            cheminsCritiques.add(new ArrayList<>(cheminActuel));
-        }
-
-        // Retirer l'événement actuel pour revenir en arrière
-        cheminActuel.remove(cheminActuel.size() - 1);
-        visites.remove(visites.size() - 1);
-    }
+    
 
     /**
      * @return l'identifiant de l'événement
