@@ -67,6 +67,22 @@ public class Evenement {
      * @throws IllegalArgumentException si une des listes est 
      *         vide ou contient des éléments invalides
      */
+    public Evenement(int id) {
+        
+        this.id = id;
+        this.dateAuPlusTot = 0.0; 
+        this.dateAuPlusTard = 0.0;
+    }
+    
+    /**
+     * Constructeur pour un événement.
+     * @param id Identifiant de l'événement
+     * @param evenementPredecesseurList Liste des événements 
+     *        prédécesseurs
+     * @param tachePredecesseurList Liste des tâches prédécesseurs
+     * @throws IllegalArgumentException si une des listes est 
+     *         vide ou contient des éléments invalides
+     */
     public Evenement(int id, ArrayList<Evenement> evenementPredecesseurList, 
                      ArrayList<Tache> tachePredecesseurList) {
     	

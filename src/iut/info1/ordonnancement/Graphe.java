@@ -322,10 +322,65 @@ public class Graphe {
     public void initialiserGraphe() {
         // Étape 1 : Créer les événements
         creerEvenements();
+        creerEvenementFinal();
 
         // Étape 2 : Calcul des dates au plus tôt
 
         // Étape 3 : Calcul des dates au plus tard
+    }
+    
+    /**
+     * TODO commenter le rôle de cette méthode (SRP)
+     */
+    public void creerEvenements() {
+        getEvenements().clear();
+        Evenement eventInitial = new Evenement();
+        ajouterEvenement(eventInitial);
+
+        for (Tache tache : getTaches()) {
+            if (tache.getTachesRequises().isEmpty()) {
+                eventInitial.addTacheSuccesseur(tache);
+                continue;
+            }
+            for (int i = 0; i < tache.getTachesRequises().size(); i++) {
+                Evenement evenement;
+                Tache predecesseur = tache.getTachesRequises().get(i);
+                boolean aAjouter = false;
+                if (i == 0) {
+                    for (Evenement evt : getEvenements()) {
+                        if (evt.getId() == 0) {
+                            evenement = evt;
+                            break;
+                        }
+                    }
+                    evenement = trouverEtape(
+                        "Etape_" + predecesseur.getIdentifiant()
+                    );
+
+                    if (evenement == null) {
+                        evenement = new Evenement(
+                            "Etape_" + predecesseur.getIdentifiant()
+                        );
+                        etapes.add(evenement);
+                        aAjouter = true;
+                    }
+                    evenement.ajouterTacheSortante(tache);
+                    if (aAjouter) {
+                        evenement.ajouterTacheEntrante(predecesseur);
+                    }
+                } else {
+                    evenement = trouverEtape(
+                        "Etape_" + tache.getPredecesseurs()
+                            .getFirst().getIdentifiant()
+                    );
+                    if (evenement == null) {
+                        return;
+                    }
+                    evenement.ajouterTacheEntrante(predecesseur);
+                }
+            }
+        }
+        System.out.println("\n\n");
     }
     
     /**
@@ -401,7 +456,7 @@ public class Graphe {
      * un événement de fin pour chaque tâche,
      * puis un événement de fin de projet.
      */
-    public void creerEvenements() {
+    public void creerEvenements22() {
         if (getTaches() == null || getTaches().isEmpty()) {
             throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
         }
@@ -471,6 +526,102 @@ public class Graphe {
         }
         ajouterEvenement(evenementFinProjet);
     }
+    
+    /**
+     * TODO commenter le rôle de cette méthode (SRP)
+     */
+    public void creerEvenements222() {
+        if (getTaches() == null || getTaches().isEmpty()) {
+            throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
+        }
+
+        // 1) On vide la liste des événements s'il en existe déjà
+        getEvenements().clear();
+
+        // 2) Créer l'événement initial (ID = 0) via le constructeur par défaut
+        Evenement evenementInitial = new Evenement(); // id = 0
+        ajouterEvenement(evenementInitial);
+
+        int compteurId = 1;
+        // Pour mémoriser, pour chaque tâche, l'événement de fin créé
+        ArrayList<Tache>   tachesCreees = new ArrayList<>();
+        ArrayList<Evenement> evtsFin    = new ArrayList<>();
+
+        // 3) Pour chaque tâche du graphe, créer son événement de fin
+        for (Tache tache : getTaches()) {
+            // 3.a) Construire la liste des événements prédécesseurs pour cette tâche
+            ArrayList<Evenement> listePred = new ArrayList<>();
+
+            if (tache.getTachesRequises().isEmpty()) {
+                // Si la tâche n'a pas de dépendance, elle part de l'événementInitial
+                listePred.add(evenementInitial);
+                // On rattache la tâche à l'événementInitial pour la navigation
+                evenementInitial.addTacheSuccesseur(tache);
+            } else {
+                // Sinon, on récupère, pour chaque tâche requise, son événement de fin précédent
+                for (Tache tReq : tache.getTachesRequises()) {
+                    int index = tachesCreees.indexOf(tReq);
+                    if (index == -1) {
+                        throw new IllegalStateException(
+                            "Tâche requise non encore traitée : " + tReq.getLibelle()
+                        );
+                    }
+                    Evenement evtFinReq = evtsFin.get(index);
+                    listePred.add(evtFinReq);
+                    // On rattache la tâche comme successeur de evtFinReq
+                    evtFinReq.addTacheSuccesseur(tache);
+                }
+            }
+
+            // 3.b) Créer l'événement de fin pour cette tâche (avec au moins un prédécesseur)
+            Evenement evtFinTache = new Evenement(
+                compteurId++,
+                listePred,
+                new ArrayList<>(List.of(tache))
+            );
+
+            // 3.c) Pour chaque prédécesseur, lier son successeur
+            for (Evenement pred : listePred) {
+                pred.addEvenementSuccesseur(evtFinTache);
+            }
+            // 3.d) Dans l'événement de fin, faire le lien retour vers la tâche
+            evtFinTache.addTachePredecesseur(tache);
+
+            // 3.e) Sauvegarder la tâche et son événement pour les prochaines itérations
+            tachesCreees.add(tache);
+            evtsFin.add(evtFinTache);
+            ajouterEvenement(evtFinTache);
+        }
+
+        // 4) Construire l'événement final du projet
+        //    – On récupère d'abord la liste de tous les événements qui n'ont PAS de successeur
+        ArrayList<Evenement> listePredFinal = new ArrayList<>();
+        for (Evenement e : getEvenements()) {
+            if (e.getEvenementSuccesseurList().isEmpty()) {
+                listePredFinal.add(e);
+            }
+        }
+
+        //    – On vérifie qu'il y a au moins un « feuille »
+        if (listePredFinal.isEmpty()) {
+            throw new IllegalStateException("Impossible de créer l'événement final : pas de feuille détectée.");
+        }
+
+        // 4.a) Créer l'événement final AVEC la liste de prédécesseurs non vide
+        Evenement evtFinProjet = new Evenement(
+            compteurId++,
+            listePredFinal,
+            new ArrayList<>() // pas de tâche associée au final
+        );
+
+        // 4.b) Pour chaque roue d'où on provenait, lier ce nouvel événement comme successeur
+        for (Evenement pred : listePredFinal) {
+            pred.addEvenementSuccesseur(evtFinProjet);
+        }
+
+        ajouterEvenement(evtFinProjet);
+    }
+
 
     @Override
     public String toString() {
