@@ -391,12 +391,29 @@ public class Graphe {
 
                         // Marquer l'autre événement comme fusionné
                         evenementsFusionnes.add(autreEvent);
+                        
+                        //ajouter la tache de l'event fusionné aux taches predecesseur de l'event courant
+                        for (Tache tache : autreEvent.getTachePredecesseurList()) {
+                            if (!event.getTachePredecesseurList().contains(tache)) {
+                                event.addTachePredecesseur(tache);
+                            }
+                        }
                     }
                 }
             }
         }
+        
+        
         // Supprimer les événements fusionnés de la liste originale
         getEvenements().removeAll(evenementsFusionnes);
+        
+        // Suppression des evenement successeur et prédecesseurs en lien avec des événements fusionnés
+        for (Evenement evenement : getEvenements()) {
+            evenement.getEvenementPredecesseurList().removeAll(evenementsFusionnes);
+            evenement.getEvenementSuccesseurList().removeAll(evenementsFusionnes);
+        }
+        
+        // Ajout des événements successeurss aux événements fusionnés à la liste des successeurs
     }
 
     /**
