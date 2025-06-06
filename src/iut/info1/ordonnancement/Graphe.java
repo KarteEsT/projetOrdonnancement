@@ -164,15 +164,7 @@ public class Graphe {
             throw new NullPointerException("Un évènement ne " +
                                            "peut pas être null.");
         }
-        if (getEvenements().contains(evenement)) {
-            System.out.println("L'évènement " + evenement.getId() + " existe déjà dans le graphe.");
-            /*
-             * throw new IllegalArgumentException("L'évènement " + 
-                    evenement.getId() +
-                    " existe déjà dans le graphe.");
-                    */
-        } else {
-                
+        if (!getEvenements().contains(evenement)) {
             getEvenements().add(evenement);
         }
         
@@ -306,9 +298,7 @@ public class Graphe {
     public void initialiserGraphe() {
         // Étape 1 : Créer les événements
         creerEvenements();
-        creerEvenementFinal();
-        //creerTachesFictives();
-    
+        
         // Étape 2 : Calcul des dates au plus tôt
         Outils.calculerDatesAuPlusTot(this);
     
@@ -321,7 +311,7 @@ public class Graphe {
      */
     public void creerEvenements() {
         getEvenements().clear();
-        Evenement evenementInitial = new Evenement(); // Événement initial
+        Evenement evenementInitial = new Evenement();
         ajouterEvenement(evenementInitial);
     
         int compteurId = 1;
@@ -330,7 +320,7 @@ public class Graphe {
             ArrayList<Evenement> evenementPredec = new ArrayList<>();
     
             if (tache.getTachesRequises().isEmpty()) {
-                // Si aucune tâche requise, dépend de l'événement initial
+
                 evenementPredec.add(evenementInitial);
                 evenementInitial.addTacheSuccesseur(tache);
             } else {
@@ -338,6 +328,7 @@ public class Graphe {
                 for (Tache tacheRequise : tache.getTachesRequises()) {
                     Evenement evenementFinRequise = trouverEvenementParTache(tacheRequise);
                     if (evenementFinRequise == null) {
+                        /* Nous avons trié le graphe avant */
                         throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
                     }
                     evenementPredec.add(evenementFinRequise);
@@ -352,6 +343,8 @@ public class Graphe {
             }
             ajouterEvenement(evenementFin);
         }
+        
+        creerEvenementFinal();
     }
 
     /**
@@ -371,31 +364,6 @@ public class Graphe {
     }
 
     /**
-     * Crée des tâches fictives pour résoudre les conflits entre événements.
-     */
-    public void creerTachesFictives() {
-        for (Evenement evenementA : getEvenements()) {
-            for (Tache tache : evenementA.getTacheSuccesseurList()) {
-                for (Evenement evenementB : getEvenements()) {
-                    if (evenementA != evenementB && evenementB.getTacheSuccesseurList().contains(tache)) {
-                        Tache tacheFictive = new Tache(
-                                "Fictive_" + evenementA.getIdentifiant() + "_" + evenementB.getIdentifiant(),
-                                "Tâche fictive",
-                                0
-                                );
-    
-                        evenementA.addTacheSuccesseur(tacheFictive);
-                        evenementB.addTachePredecesseur(tacheFictive);
-    
-                        evenementA.getTacheSuccesseurList().remove(tache);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Trouve l'événement correspondant à une tâche donnée.
      */
     private Evenement trouverEvenementParTache(Tache tache) {
@@ -406,8 +374,6 @@ public class Graphe {
         }
         return null;
     }
-
-
     
     /**
      * Crée les événements du graphe en fonction des tâches.
