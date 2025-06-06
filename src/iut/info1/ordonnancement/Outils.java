@@ -29,12 +29,16 @@ public class Outils {
                                                                           i++) {
                 Evenement predecesseur = evenement
                                         .getEvenementPredecesseurList().get(i);
-                Tache tache = evenement.getTachePredecesseurList().get(i);
+                try {
+                    Tache tache = evenement.getTachePredecesseurList().get(i);
 
-                double datePrecedente = predecesseur.getDateAuPlusTot() 
-                                        + tache.getDuree();
-                if (datePrecedente > maxDate) {
-                    maxDate = datePrecedente;
+                    double datePrecedente = predecesseur.getDateAuPlusTot() 
+                                            + tache.getDuree();
+                    if (datePrecedente > maxDate) {
+                        maxDate = datePrecedente;
+                    }
+                } catch (Exception e) {
+                    
                 }
             }
 
@@ -90,12 +94,16 @@ public class Outils {
                                                                  .size(); j++) {
                     Evenement successeur = evenement
                                            .getEvenementSuccesseurList().get(j);
-                    Tache tache = evenement.getTacheSuccesseurList().get(j);
+                    try {
+                        Tache tache = evenement.getTacheSuccesseurList().get(j);
 
-                    double dateSuivante = successeur.getDateAuPlusTard() 
-                                            - tache.getDuree();
-                    if (dateSuivante < minDate) {
-                        minDate = dateSuivante;
+                        double dateSuivante = successeur.getDateAuPlusTard() 
+                                                - tache.getDuree();
+                        if (dateSuivante < minDate) {
+                            minDate = dateSuivante;
+                        }
+                    } catch (Exception e) {
+                        
                     }
                 }
 

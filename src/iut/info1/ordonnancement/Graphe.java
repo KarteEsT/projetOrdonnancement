@@ -187,12 +187,17 @@ public class Graphe {
                                            "peut pas être null.");
         }
         if (getEvenements().contains(evenement)) {
-            throw new IllegalArgumentException("L'évènement " + 
+            System.out.println("L'évènement " + evenement.getId() + " existe déjà dans le graphe.");
+            /*
+             * throw new IllegalArgumentException("L'évènement " + 
                     evenement.getId() +
                     " existe déjà dans le graphe.");
+                    */
+        } else {
+                
+            getEvenements().add(evenement);
         }
         
-        getEvenements().add(evenement);
     }
     
     /**
@@ -318,70 +323,113 @@ public class Graphe {
     
     /**
      * Initialise le graphe en créant les événements,
+     * les tâches fictives et en calculant les dates.
      */
     public void initialiserGraphe() {
         // Étape 1 : Créer les événements
         creerEvenements();
         creerEvenementFinal();
-
-        // Étape 2 : Calcul des dates au plus tôt
-
-        // Étape 3 : Calcul des dates au plus tard
-    }
+        //creerTachesFictives();
     
+        // Étape 2 : Calcul des dates au plus tôt
+        Outils.calculerDatesAuPlusTot(this);
+    
+        // Étape 3 : Calcul des dates au plus tard
+        Outils.calculerDatesAuPlusTard(this);
+    }
+
     /**
-     * TODO commenter le rôle de cette méthode (SRP)
+     * Crée les événements du graphe en fonction des tâches.
      */
     public void creerEvenements() {
         getEvenements().clear();
-        Evenement eventInitial = new Evenement();
-        ajouterEvenement(eventInitial);
-
+        Evenement evenementInitial = new Evenement(); // Événement initial
+        ajouterEvenement(evenementInitial);
+    
+        int compteurId = 1;
+    
         for (Tache tache : getTaches()) {
+            ArrayList<Evenement> evenementPredec = new ArrayList<>();
+    
             if (tache.getTachesRequises().isEmpty()) {
-                eventInitial.addTacheSuccesseur(tache);
-                continue;
+                // Si aucune tâche requise, dépend de l'événement initial
+                evenementPredec.add(evenementInitial);
+                evenementInitial.addTacheSuccesseur(tache);
+            } else {
+                // Ajout des événements de fin des tâches requises
+                for (Tache tacheRequise : tache.getTachesRequises()) {
+                    Evenement evenementFinRequise = trouverEvenementParTache(tacheRequise);
+                    if (evenementFinRequise == null) {
+                        throw new IllegalStateException("Tâche requise non encore traitée : " + tacheRequise.getLibelle());
+                    }
+                    evenementPredec.add(evenementFinRequise);
+                    evenementFinRequise.addTacheSuccesseur(tache);
+                }
             }
-            for (int i = 0; i < tache.getTachesRequises().size(); i++) {
-                Evenement evenement;
-                Tache predecesseur = tache.getTachesRequises().get(i);
-                boolean aAjouter = false;
-                if (i == 0) {
-                    for (Evenement evt : getEvenements()) {
-                        if (evt.getId() == 0) {
-                            evenement = evt;
-                            break;
-                        }
-                    }
-                    evenement = trouverEtape(
-                        "Etape_" + predecesseur.getIdentifiant()
-                    );
+    
+            // Création de l'événement de fin pour la tâche courante
+            Evenement evenementFin = new Evenement(compteurId++, evenementPredec, new ArrayList<>(List.of(tache)));
+            for (Evenement evenement : evenementPredec) {
+                evenement.addEvenementSuccesseur(evenementFin);
+            }
+            ajouterEvenement(evenementFin);
+        }
+    }
 
-                    if (evenement == null) {
-                        evenement = new Evenement(
-                            "Etape_" + predecesseur.getIdentifiant()
-                        );
-                        etapes.add(evenement);
-                        aAjouter = true;
+    /**
+     * Crée une étape finale qui regroupe toutes les tâches qui n'ont pas
+     * d'étape sortante.
+     */
+    private void creerEvenementFinal() {
+        Evenement evenementFinal = new Evenement("Fin");
+        ajouterEvenement(evenementFinal);
+    
+        for (Evenement evenement : getEvenements()) {
+            if (evenement.getEvenementSuccesseurList().isEmpty()) {
+                evenement.addEvenementSuccesseur(evenementFinal);
+                evenementFinal.addEvenementPredecesseur(evenement);
+            }
+        }
+    }
+
+    /**
+     * Crée des tâches fictives pour résoudre les conflits entre événements.
+     */
+    public void creerTachesFictives() {
+        for (Evenement evenementA : getEvenements()) {
+            for (Tache tache : evenementA.getTacheSuccesseurList()) {
+                for (Evenement evenementB : getEvenements()) {
+                    if (evenementA != evenementB && evenementB.getTacheSuccesseurList().contains(tache)) {
+                        Tache tacheFictive = new Tache(
+                                "Fictive_" + evenementA.getIdentifiant() + "_" + evenementB.getIdentifiant(),
+                                "Tâche fictive",
+                                0
+                                );
+    
+                        evenementA.addTacheSuccesseur(tacheFictive);
+                        evenementB.addTachePredecesseur(tacheFictive);
+    
+                        evenementA.getTacheSuccesseurList().remove(tache);
+                        break;
                     }
-                    evenement.ajouterTacheSortante(tache);
-                    if (aAjouter) {
-                        evenement.ajouterTacheEntrante(predecesseur);
-                    }
-                } else {
-                    evenement = trouverEtape(
-                        "Etape_" + tache.getPredecesseurs()
-                            .getFirst().getIdentifiant()
-                    );
-                    if (evenement == null) {
-                        return;
-                    }
-                    evenement.ajouterTacheEntrante(predecesseur);
                 }
             }
         }
-        System.out.println("\n\n");
     }
+
+    /**
+     * Trouve l'événement correspondant à une tâche donnée.
+     */
+    private Evenement trouverEvenementParTache(Tache tache) {
+        for (Evenement evenement : getEvenements()) {
+            if (evenement.getTachePredecesseurList().contains(tache)) {
+                return evenement;
+            }
+        }
+        return null;
+    }
+
+
     
     /**
      * Crée les événements du graphe en fonction des tâches.
@@ -390,27 +438,27 @@ public class Graphe {
         if (getTaches() == null || getTaches().isEmpty()) {
             throw new IllegalArgumentException("Le graphe ne contient pas de tâches.");
         }
-        
-
+    
+    
         // Nettoyage des anciens événements
         getEvenements().clear();
-
+    
         // Étape 1 : Créer l'événement initial
         Evenement evenementInitial = new Evenement(); // id = 0 par défaut
         ajouterEvenement(evenementInitial);
-
+    
         int compteurId = 1;
-
+    
         // Stocke les événements de fin pour chaque tâche
         ArrayList<Tache> tachesCreees = new ArrayList<>();
         ArrayList<Evenement> evenementsFin = new ArrayList<>();
-
+    
         for (Tache tache : getTaches()) {
             // Liste des événements prédécesseurs
             ArrayList<Evenement> evenementsPred = new ArrayList<>();
             ArrayList<Tache> tachesPred = new ArrayList<>();
-            
-
+    
+    
             if (!tachesPred.contains(tache)) {
                 tachesPred.add(tache);
             }
@@ -433,16 +481,16 @@ public class Graphe {
             if (evenementsPred.size() != tachesPred.size()) {
                 throw new IllegalStateException("Les listes des prédécesseurs ne sont pas synchronisées.");
             }
-
+    
             // Créer l'événement de fin pour la tâche courante
             Evenement evenementFin = new Evenement(compteurId++, evenementsPred, new ArrayList<>(List.of(tache)));
             evenementFin.addTachePredecesseur(tache);
-
+    
             // Lier les prédécesseurs à ce nouvel événement
             for (Evenement e : evenementsPred) {
                 e.addEvenementSuccesseur(evenementFin);
             }
-
+    
             // Enregistrer la tâche et son événement de fin
             tachesCreees.add(tache);
             evenementsFin.add(evenementFin);

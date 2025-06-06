@@ -36,12 +36,12 @@ public class PrototypeEvenementCreationAuto {
         tacheC.ajouterTacheRequise(tacheB);
         tacheD.ajouterTacheRequise(tacheC);
         tacheG.ajouterTacheRequise(tacheE);
-        //tacheG.ajouterTacheRequise(tacheF);
+        tacheG.ajouterTacheRequise(tacheF);
         tacheH.ajouterTacheRequise(tacheE);
-        //tacheH.ajouterTacheRequise(tacheF);
+        tacheH.ajouterTacheRequise(tacheF);
         tacheI.ajouterTacheRequise(tacheH);
-        //tacheJ.ajouterTacheRequise(tacheG);
-        //tacheJ.ajouterTacheRequise(tacheI);
+        tacheJ.ajouterTacheRequise(tacheG);
+        tacheJ.ajouterTacheRequise(tacheI);
         tacheJ.ajouterTacheRequise(tacheD);
 
         ArrayList<Tache> taches = new ArrayList<>(List.of(tacheA, tacheB, tacheC, tacheD, tacheE, tacheF, tacheG, tacheH, tacheI, tacheJ));
