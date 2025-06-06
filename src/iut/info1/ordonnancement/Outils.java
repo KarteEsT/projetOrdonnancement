@@ -11,38 +11,38 @@ import java.util.List;
  * Cette classe contient des méthodes utilitaires pour l'ordonnancement.
  */
 public class Outils {
-
-    /**
-     * Calcule la date au plus tôt de cet événement.
-     * La date au plus tôt est déterminée en fonction des dates au plus tôt
-     * des événements prédécesseurs et des durées des tâches associées.
-     *
-     * @return la date au plus tôt calculée pour cet événement
-     */
-    public double calculerDatePlusTot() {
-        double maxDate = 0.0;
-
-        // Parcourt les prédécesseurs et leurs tâches associées
-        for (int i = 0; i < evenementPredecesseurList.size(); i++) {
-            Evenement predecesseur = evenementPredecesseurList.get(i);
-            Tache tachePredecesseur = tachePredecesseurList.get(i);
-
-            // Calcule la date au plus tôt pour ce prédécesseur
-            double datePrecedente = predecesseur.getDateAuPlusTot() 
-                                    + tachePredecesseur.getDuree();
-
-            // Met à jour la date maximale
-            if (datePrecedente > maxDate) {
-                maxDate = datePrecedente;
-            }
-        }
-
-        // Met à jour la date au plus tôt de cet événement
-        this.dateAuPlusTot = maxDate;
-
-        return dateAuPlusTot;
-    }
     
+    /**
+     * Calcule les dates au plus tôt pour tous les événements dans un graphe
+     * d'ordonnancement. La date au plus tôt d'un événement est déterminée parla
+     * date au plus tôt de ses prédécesseurs et la durée des tâches associées.
+     *
+     * @param graphe le graphe contenant les événements
+     */
+    public void calculerDatesAuPlusTot(Graphe graphe) {
+        // Parcourt tous les événements du graphe
+        for (Evenement evenement : graphe.getEvenements()) {
+            double maxDate = 0.0;
+
+            // Calcule la date au plus tôt en fonction des prédécesseurs
+            for (int i = 0; i < evenement.getEvenementPredecesseurList().size();
+                                                                          i++) {
+                Evenement predecesseur = evenement
+                                        .getEvenementPredecesseurList().get(i);
+                Tache tache = evenement.getTachePredecesseurList().get(i);
+
+                double datePrecedente = predecesseur.getDateAuPlusTot() 
+                                        + tache.getDuree();
+                if (datePrecedente > maxDate) {
+                    maxDate = datePrecedente;
+                }
+            }
+
+            // Met à jour la date au plus tôt de l'événement courant
+            evenement.setDatePlusTot(maxDate);
+        }
+    }
+
 
     /**
      * Calcule la date au plus tard d'un événement.
